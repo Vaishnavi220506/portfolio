@@ -492,17 +492,21 @@
     padding-block: clamp(72px, 8vw, 120px) clamp(90px, 10vw, 150px);
   }
   .about-label {
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    gap: 16px;
+    gap: 14px;
     margin-bottom: clamp(40px, 5vw, 72px);
-    font: 500 13px/1 var(--mono);
-    letter-spacing: .26em;
+    padding: 10px 18px;
+    border: 1px solid rgba(18, 18, 18, 0.14);
+    border-radius: 999px;
+    background: var(--about-bg);
+    font: 600 14px/1 var(--mono);
+    letter-spacing: .2em;
     text-transform: uppercase;
-    color: var(--about-mute);
+    color: var(--about-ink);
   }
-  .about-label .num { color: var(--about-accent); letter-spacing: .1em; }
-  .about-label .rule { width: 48px; height: 1px; background: var(--about-accent); }
+  .about-label .num { letter-spacing: .06em; }
+  .about-label .rule { width: 36px; height: 1.5px; background: var(--about-ink); }
 
   .about-grid {
     display: grid;
