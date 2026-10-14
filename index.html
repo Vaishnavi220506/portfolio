@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Vaishnavi Devulapalli</title>
+<script>document.documentElement.classList.add('js');</script>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="Vaishnavi — CSE student at VIT Vellore building across AI/ML, computer vision, full-stack products, and developer tools.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -139,7 +140,7 @@
     white-space: nowrap;
     transition: transform .3s, background .3s;
   }
-  .cta:hover { transform: translateY(-1px); background: #fff; }
+  .cta:hover { transform: translateY(-1px); }
   .cta svg { transition: transform .3s; }
   .cta:hover svg { transform: translate(2px, -2px); }
 
@@ -208,6 +209,7 @@
     pointer-events: none;
   }
   .stage {
+    will-change: transform;
     display: grid;
     place-items: center;
     perspective: 2000px;
@@ -403,6 +405,228 @@
   @media (prefers-reduced-motion: reduce) {
     h1 .line > span, .status::before, .scroll svg { animation: none; }
   }
+
+  /* ---------- Smooth scroll (Lenis) ---------- */
+  html.lenis, html.lenis body { height: auto; }
+  .lenis.lenis-smooth { scroll-behavior: auto !important; }
+  .lenis.lenis-stopped { overflow: hidden; }
+
+  /* ---------- Header on light sections ---------- */
+  .site-header { color: var(--paper); transition: background-color .6s, color .6s, border-color .6s; }
+  .site-header .cta, .site-header .menu-btn { transition: background-color .6s, color .6s, border-color .6s, transform .3s; }
+  .site-header.is-light {
+    --ink: #efeee9;
+    --paper: #141414;
+    --mute: #6d6a64;
+    --line: rgba(20, 20, 20, 0.12);
+    --chip: rgba(20, 20, 20, 0.05);
+  }
+
+  /* ---------- Hero pin + pixel curtain ---------- */
+  .curtain {
+    position: absolute;
+    inset: 0;
+    z-index: 6;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+  @media (min-width: 761px) {
+    .hero-pin { height: calc(100vh - var(--header-h) + 90vh); }
+    .hero {
+      position: sticky;
+      top: calc(var(--header-h) + env(safe-area-inset-top, 0px));
+      height: calc(100vh - var(--header-h));
+      min-height: 0;
+    }
+  }
+
+  /* ---------- About ---------- */
+  .about {
+    --about-bg: #efeee9;
+    --about-ink: #121212;
+    --about-body: #2b2a27;
+    --about-mute: #66625b;
+    --about-accent: #c4213a;
+    --card: #151514;
+    --card-fg: #f3f2ef;
+    --card-mute: #a9a59d;
+    --ease: cubic-bezier(.16, 1, .3, 1);
+
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+    background: var(--about-bg);
+    color: var(--about-ink);
+    color-scheme: light;
+  }
+  .about-doodle {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    --mx: -999px;
+    --my: -999px;
+  }
+  .doodle-track { position: absolute; inset: -12% 0 0; will-change: transform; }
+  .doodle {
+    position: absolute;
+    inset: 0;
+    background: url("content/assets/doodle.webp") center top / max(1500px, 110%) auto repeat-x;
+    -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 55%, transparent 96%);
+    mask-image: linear-gradient(to bottom, #000 0%, #000 55%, transparent 96%);
+  }
+  .doodle.base { opacity: 0.17; }
+  .doodle.lit {
+    opacity: 0.7;
+    -webkit-mask-image: radial-gradient(240px circle at var(--mx) var(--my), #000 0%, rgba(0,0,0,.5) 45%, transparent 75%);
+    mask-image: radial-gradient(240px circle at var(--mx) var(--my), #000 0%, rgba(0,0,0,.5) 45%, transparent 75%);
+  }
+
+  .about-inner {
+    position: relative;
+    max-width: 1500px;
+    margin: 0 auto;
+    padding-block: clamp(90px, 11vw, 170px) clamp(90px, 10vw, 150px);
+  }
+  .about-label {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: clamp(40px, 5vw, 72px);
+    font: 500 13px/1 var(--mono);
+    letter-spacing: .26em;
+    text-transform: uppercase;
+    color: var(--about-mute);
+  }
+  .about-label .num { color: var(--about-accent); letter-spacing: .1em; }
+  .about-label .rule { width: 48px; height: 1px; background: var(--about-accent); }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    gap: clamp(40px, 6vw, 110px);
+    align-items: start;
+  }
+  .about-head {
+    position: sticky;
+    top: calc(var(--header-h) + 48px);
+    display: flex;
+    flex-direction: column;
+    gap: clamp(36px, 4vw, 56px);
+  }
+  .about h2 {
+    margin: 0;
+    font-weight: 400;
+    font-size: clamp(2.7rem, 5.2vw, 5.8rem);
+    line-height: 1;
+    letter-spacing: -0.05em;
+    color: var(--about-ink);
+  }
+  .about h2 .line { display: block; overflow: hidden; padding-bottom: .1em; margin-bottom: -.04em; }
+  .about h2 .line > span { display: inline-block; }
+  .about h2 em {
+    font-family: var(--serif);
+    font-style: italic;
+    letter-spacing: -0.02em;
+    padding-right: .05em;
+  }
+
+  .polaroid {
+    align-self: flex-start;
+    margin: 0;
+    width: 200px;
+    padding: 10px 10px 0;
+    background: #fff;
+    border-radius: 3px;
+    box-shadow: 0 1px 2px rgba(0,0,0,.08), 0 18px 40px -16px rgba(0,0,0,.28);
+    transform: rotate(-3.5deg);
+    transition: transform .8s var(--ease);
+  }
+  .polaroid:hover { transform: rotate(0deg) translateY(-4px); }
+  .polaroid img { display: block; width: 100%; height: auto; aspect-ratio: 1; object-fit: cover; border-radius: 1px; }
+  .polaroid figcaption {
+    padding: 10px 2px 12px;
+    font: italic 400 19px/1.2 var(--serif);
+    color: var(--about-body);
+    text-align: center;
+  }
+
+  .about-copy { display: flex; flex-direction: column; gap: 28px; min-width: 0; }
+  .about-copy p {
+    margin: 0;
+    max-width: 60ch;
+    font-size: clamp(17px, 1.3vw, 20px);
+    line-height: 1.7;
+    color: var(--about-body);
+  }
+  .about-copy p.lead {
+    font-size: clamp(20px, 1.75vw, 26px);
+    line-height: 1.5;
+    letter-spacing: -0.015em;
+    color: var(--about-ink);
+  }
+  .about-copy p.sign {
+    font: italic 400 clamp(24px, 2vw, 30px)/1 var(--serif);
+    color: var(--about-ink);
+  }
+
+  .focus {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    margin: clamp(24px, 3vw, 44px) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .focus li {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 6px 16px;
+    padding: 26px 26px 28px 22px;
+    border-radius: 18px;
+    background: var(--card);
+    color: var(--card-fg);
+    transition: transform .6s var(--ease), box-shadow .6s var(--ease);
+  }
+  .focus li:hover { transform: translateY(-4px); box-shadow: 0 22px 40px -22px rgba(0,0,0,.55); }
+  .focus .fnum { grid-row: span 2; padding-top: 6px; font: 500 12px/1 var(--mono); color: #ff5a73; }
+  .focus h3 {
+    margin: 0;
+    font: 400 clamp(25px, 2vw, 30px)/1.1 var(--serif);
+    letter-spacing: -0.01em;
+  }
+  .focus p { margin: 0; font-size: 15.5px; line-height: 1.55; color: var(--card-mute); }
+
+  /* Scroll reveals — only when JS is running, so the page still reads without it. */
+  html.js .reveal {
+    opacity: 0;
+    transform: translateY(36px);
+    transition: opacity 1.2s var(--ease, ease), transform 1.2s var(--ease, ease);
+    transition-delay: var(--d, 0s);
+  }
+  html.js .reveal.in { opacity: 1; transform: none; }
+  html.js .split .line > span { transform: translateY(112%); transition: transform 1.3s cubic-bezier(.16, 1, .3, 1); }
+  html.js .split.in .line > span { transform: none; }
+  html.js .split .line:nth-child(2) > span { transition-delay: .08s; }
+  html.js .split .line:nth-child(3) > span { transition-delay: .16s; }
+  html.js .split .line:nth-child(4) > span { transition-delay: .24s; }
+  html.js .polaroid.reveal { transform: translateY(36px) rotate(-8deg); }
+  html.js .polaroid.reveal.in { transform: rotate(-3.5deg); }
+  html.js .polaroid.reveal.in:hover { transform: rotate(0deg) translateY(-4px); }
+
+  @media (max-width: 960px) {
+    .about-grid { grid-template-columns: 1fr; }
+    .about-head { position: static; flex-direction: row; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; }
+    .polaroid { width: 160px; }
+  }
+  @media (max-width: 640px) {
+    .focus { grid-template-columns: 1fr; }
+    .polaroid { width: 140px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html.js .reveal, html.js .split .line > span { transition: none; opacity: 1; transform: none; }
+  }
 </style>
 </head>
 <body>
@@ -427,7 +651,9 @@
 </header>
 
 <main id="top">
+  <div class="hero-pin" id="hero-pin">
   <section class="hero pad" aria-labelledby="hero-title">
+    <canvas class="curtain" id="curtain" aria-hidden="true"></canvas>
     <div class="meta-row">
       <span class="pin">VIT Vellore, India</span>
       <span class="tagline">CSE student · Builder · Open source</span>
@@ -467,6 +693,49 @@
           <a class="scroll" href="#about">( Scroll )
             <svg width="12" height="14" viewBox="0 0 12 14" fill="none" aria-hidden="true"><path d="M6 1v12M1 8l5 5 5-5" stroke="currentColor" stroke-width="1.3"/></svg>
           </a>
+        </div>
+      </div>
+    </div>
+  </section>
+  </div>
+
+  <section class="about" id="about" aria-labelledby="about-title">
+    <div class="about-doodle" id="about-doodle" aria-hidden="true">
+      <div class="doodle-track" id="doodle-track">
+        <div class="doodle base"></div>
+        <div class="doodle lit"></div>
+      </div>
+    </div>
+
+    <div class="about-inner pad">
+      <div class="about-label reveal"><span class="num">01</span><span class="rule"></span><span>A little context</span></div>
+
+      <div class="about-grid">
+        <div class="about-head">
+          <h2 id="about-title" class="split reveal-split">
+            <span class="line"><span>Curious about</span></span>
+            <span class="line"><span>how things <em>work</em></span></span>
+            <span class="line"><span>— and how to</span></span>
+            <span class="line"><span>make them <em>better.</em></span></span>
+          </h2>
+          <figure class="polaroid reveal" style="--d:.35s">
+            <img src="content/assets/github-avatar.jpg" alt="Vaishnavi" width="460" height="460" loading="lazy">
+            <figcaption>Vaishnavi, VIT Vellore</figcaption>
+          </figure>
+        </div>
+
+        <div class="about-copy">
+          <p class="lead reveal">I’m a CSE student at VIT Vellore, and I learn best by making. My projects move between AI systems, computer vision, web products, and tools that help people learn, work, or respond to real problems.</p>
+          <p class="reveal">I enjoy taking a project from the first sketch to a working version, then making it clearer through feedback. Readable code, simple interfaces, and useful outcomes matter to me more than making a demo look impressive for a minute.</p>
+          <p class="reveal">Open source is where that habit becomes a conversation. I contribute fixes, read unfamiliar code, and try to leave a project a little easier for the next person to work with.</p>
+          <p class="sign reveal">— Vaishnavi</p>
+
+          <ul class="focus" aria-label="What I focus on">
+            <li class="reveal"><span class="fnum">01</span><h3>Machine learning</h3><p>Deep learning, computer vision, transformers, and practical model building.</p></li>
+            <li class="reveal" style="--d:.08s"><span class="fnum">02</span><h3>AI systems</h3><p>Agent tooling, inference, evaluation, and reliable developer workflows.</p></li>
+            <li class="reveal"><span class="fnum">03</span><h3>Product engineering</h3><p>Full-stack apps that make everyday problems easier to handle.</p></li>
+            <li class="reveal" style="--d:.08s"><span class="fnum">04</span><h3>Open source</h3><p>Learning in public, reviewing code, and contributing fixes upstream.</p></li>
+          </ul>
         </div>
       </div>
     </div>
@@ -542,5 +811,131 @@
     })(t0);
   })();
 </script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+<script>
+  // Smooth scrolling, the pixel curtain between hero and About, header theme,
+  // scroll reveals, and the doodle spotlight + parallax.
+  (function () {
+    const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const headerEl = document.querySelector('.site-header');
+    const headerH = () => headerEl.getBoundingClientRect().height;
+
+    // Smooth scroll
+    let lenis = null;
+    if (!still && window.Lenis) {
+      lenis = new Lenis({ lerp: 0.09, smoothWheel: true, wheelMultiplier: 0.95 });
+      (function raf(t) { lenis.raf(t); requestAnimationFrame(raf); })(performance.now());
+    }
+    document.querySelectorAll('a[href^="#"]').forEach(function (a) {
+      a.addEventListener('click', function (e) {
+        const id = a.getAttribute('href').slice(1);
+        const target = id === 'top' ? document.body : document.getElementById(id);
+        if (!target) return;
+        e.preventDefault();
+        const y = id === 'top' ? 0 : target.getBoundingClientRect().top + window.scrollY - headerH() + 1;
+        if (lenis) lenis.scrollTo(y, { duration: 1.6 });
+        else window.scrollTo({ top: y, behavior: still ? 'auto' : 'smooth' });
+      });
+    });
+
+    // Pixel curtain: square blocks in the About colour step across the hero,
+    // bottom-right first, as you scroll through the pinned hero.
+    const pin = document.getElementById('hero-pin');
+    const hero = pin.querySelector('.hero');
+    const heroBody = hero.querySelector('.hero-body');
+    const stage = document.getElementById('stage');
+    const canvas = document.getElementById('curtain');
+    const ctx = canvas.getContext('2d');
+    const about = document.getElementById('about');
+    const FILL = getComputedStyle(about).getPropertyValue('--about-bg').trim() || '#efeee9';
+    let blocks = [], cw = 0, ch = 0, lastP = -1;
+
+    function build() {
+      const r = hero.getBoundingClientRect();
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      cw = r.width; ch = r.height;
+      canvas.width = Math.round(cw * dpr); canvas.height = Math.round(ch * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      const cols = cw > 1200 ? 16 : cw > 760 ? 12 : 7;
+      const size = cw / cols, rows = Math.ceil(ch / size);
+      let seed = 11;
+      const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+      blocks = [];
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          const d = ((rows - 1 - r) / Math.max(rows - 1, 1)) * 0.62 + ((cols - 1 - c) / Math.max(cols - 1, 1)) * 0.38;
+          blocks.push({ x: c * size, y: r * size, s: size, t: d * 0.78 + rnd() * 0.16 });
+        }
+      }
+      lastP = -1;
+    }
+
+    function progress() {
+      if (window.innerWidth <= 760) {
+        return 0;   // phones skip the pinned curtain and scroll straight on
+      }
+      const run = pin.offsetHeight - hero.offsetHeight;
+      const y = window.scrollY - (pin.getBoundingClientRect().top + window.scrollY);
+      return run > 0 ? Math.min(Math.max(y / run, 0), 1) : 0;
+    }
+
+    function draw(p) {
+      ctx.clearRect(0, 0, cw, ch);
+      if (p <= 0) return;
+      ctx.fillStyle = FILL;
+      for (const b of blocks) {
+        const a = Math.min(Math.max((p - b.t) / 0.025, 0), 1);
+        if (a <= 0) continue;
+        ctx.globalAlpha = a;
+        ctx.fillRect(b.x - 0.5, b.y - 0.5, b.s + 1, b.s + 1);
+      }
+      ctx.globalAlpha = 1;
+    }
+
+    // Reveals
+    const io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { rootMargin: '0px 0px -12% 0px', threshold: 0.12 });
+    document.querySelectorAll('.reveal, .reveal-split').forEach(function (el) { io.observe(el); });
+
+    // Doodle spotlight follows the cursor across the About section
+    const doodle = document.getElementById('about-doodle');
+    const track = document.getElementById('doodle-track');
+    let mx = -999, my = -999, sx = -999, sy = -999;
+    about.addEventListener('pointermove', function (e) {
+      const r = doodle.getBoundingClientRect();
+      mx = e.clientX - r.left; my = e.clientY - r.top;
+      if (sx < -900) { sx = mx; sy = my; }
+    });
+    about.addEventListener('pointerleave', function () { mx = my = -999; sx = sy = -999; });
+
+    function tick() {
+      const p = progress();
+      if (Math.abs(p - lastP) > 0.0005) {
+        draw(p);
+        if (!still) {
+          heroBody.style.transform = 'translateY(' + (-p * 70).toFixed(1) + 'px)';
+          heroBody.style.opacity = (1 - p * 0.6).toFixed(3);
+          stage.style.transform = 'scale(' + (1 - p * 0.1).toFixed(4) + ')';
+        }
+        lastP = p;
+      }
+      const aboutTop = about.getBoundingClientRect().top;
+      headerEl.classList.toggle('is-light', p > 0.9 || aboutTop <= headerH());
+
+      if (!still) {
+        track.style.transform = 'translate3d(0,' + (aboutTop * -0.12).toFixed(1) + 'px,0)';
+      }
+      if (mx > -900) { sx += (mx - sx) * 0.14; sy += (my - sy) * 0.14; }
+      doodle.style.setProperty('--mx', sx.toFixed(1) + 'px');
+      doodle.style.setProperty('--my', (sy - (still ? 0 : aboutTop * -0.12) + doodle.offsetHeight * 0.12).toFixed(1) + 'px');
+      requestAnimationFrame(tick);
+    }
+    build();
+    window.addEventListener('resize', build);
+    requestAnimationFrame(tick);
+  })();
+</script>
+
 </body>
 </html>
