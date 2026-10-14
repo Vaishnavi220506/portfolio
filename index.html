@@ -871,9 +871,6 @@
   .pipe { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font: 500 11.5px/1 var(--mono); color: #c9c6bf; }
   .pipe span { padding: 8px 10px; border: 1px solid rgba(243,242,239,.18); border-radius: 8px; background: rgba(243,242,239,.04); }
   .pipe i { font-style: normal; color: #6d6a64; }
-  .meter { display: flex; align-items: flex-end; gap: 5px; height: 64px; }
-  .meter b { flex: 1; border-radius: 3px 3px 0 0; background: #f3f2ef; opacity: .85; }
-  .meter b.hot { background: #8d8b87; opacity: .5; }
 
   .info { display: flex; flex-direction: column; gap: 16px; min-width: 0; position: relative; }
   .info .idx {
@@ -979,6 +976,148 @@
     .steps span { padding: 9px 10px; font-size: 13px; }
     .info .idx { font-size: 56px; }
   }
+
+  /* ---------- Projects → Open source pixel edge ---------- */
+  .proj-tail { position: relative; height: 40vh; }
+  .proj-tail canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+
+  /* ---------- Open source ---------- */
+  .oss {
+    --o-bg: #efeee9;
+    --o-ink: #121212;
+    --o-body: #2b2a27;
+    --o-mute: #66625b;
+    --o-line: rgba(18, 18, 18, 0.14);
+    --o-card: #f8f7f3;
+    --ease: cubic-bezier(.16, 1, .3, 1);
+    position: relative;
+    z-index: 2;
+    overflow: hidden;
+    background: var(--o-bg);
+    color: var(--o-ink);
+    color-scheme: light;
+  }
+  .oss-cells { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+  .oss-inner { position: relative; max-width: 1500px; margin: 0 auto; padding-block: clamp(30px, 4vw, 60px) clamp(90px, 10vw, 150px); }
+  .oss .label-pill { color: var(--o-ink); border-color: var(--o-line); background: var(--o-bg); }
+  .oss-head { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 32px 64px; align-items: end; }
+  .oss h2 { margin: 0; font-weight: 400; font-size: clamp(2.6rem, 5vw, 5.6rem); line-height: 1; letter-spacing: -0.05em; }
+  .split .line { display: block; overflow: hidden; padding-bottom: .1em; margin-bottom: -.04em; }
+  .split .line > span { display: inline-block; }
+  .oss h2 em { font-family: var(--serif); font-style: italic; letter-spacing: -0.02em; }
+  .oss-head p { margin: 0; max-width: 46ch; font-size: clamp(17px, 1.3vw, 20px); line-height: 1.65; color: var(--o-body); }
+
+  .oss-stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin-top: clamp(40px, 5vw, 70px);
+    border-top: 1px solid var(--o-line);
+    border-bottom: 1px solid var(--o-line);
+  }
+  .oss-stats div { padding: clamp(18px, 2.4vw, 32px) 0; }
+  .oss-stats div + div { padding-left: clamp(16px, 2.4vw, 36px); border-left: 1px solid var(--o-line); }
+  .oss-stats b { display: block; font-weight: 400; font-size: clamp(3rem, 7vw, 7rem); line-height: .9; letter-spacing: -0.06em; font-variant-numeric: tabular-nums; }
+  .oss-stats span { display: block; margin-top: 10px; font: 600 12.5px/1.3 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--o-mute); }
+
+  .marquee {
+    position: relative;
+    margin: clamp(36px, 4vw, 60px) calc(-1 * max(var(--gutter-x), env(safe-area-inset-left, 0px)));
+    overflow: hidden;
+    white-space: nowrap;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  }
+  .marquee-row { display: inline-flex; gap: 0.5em; will-change: transform; font: italic 400 clamp(3rem, 7vw, 7.5rem)/1.05 var(--serif); letter-spacing: -0.02em; }
+  .marquee-row span { color: transparent; -webkit-text-stroke: 1px rgba(18,18,18,.42); }
+  .marquee-row span:nth-child(odd) { color: var(--o-ink); -webkit-text-stroke: 0; }
+  .marquee-row i { font-style: normal; color: var(--o-mute); }
+
+  .oss-filter { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: clamp(30px, 3.5vw, 50px); }
+  .oss-filter button {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    height: 42px;
+    padding: 0 18px;
+    border: 1px solid var(--o-line);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--o-ink);
+    font: 500 15px/1 var(--sans);
+    cursor: pointer;
+    transition: background .35s, color .35s, border-color .35s;
+  }
+  .oss-filter button small { font: 600 11px/1 var(--mono); color: var(--o-mute); transition: color .35s; }
+  .oss-filter button:hover { border-color: var(--o-ink); }
+  .oss-filter button[aria-pressed="true"] { background: var(--o-ink); color: var(--o-bg); border-color: var(--o-ink); }
+  .oss-filter button[aria-pressed="true"] small { color: #b9b5ad; }
+
+  .graph { position: relative; }
+  .graph > svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+  .graph .main { stroke: var(--o-ink); stroke-width: 2; fill: none; }
+  .graph .br { stroke: var(--o-ink); stroke-width: 1.6; fill: none; }
+  .graph .br.open { stroke-opacity: .45; }
+  .graph .dot { fill: var(--o-ink); }
+  .graph .dot.open { fill: var(--o-bg); stroke: var(--o-ink); stroke-width: 1.6; }
+  .prs {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 120px minmax(0, 1fr);
+    row-gap: clamp(18px, 2vw, 28px);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .pr { grid-column: 1; will-change: transform, opacity; }
+  .pr.right { grid-column: 3; }
+  .pr[hidden] { display: none; }
+  .pr a {
+    display: grid;
+    gap: 12px;
+    padding: 22px 24px 24px;
+    border: 1px solid var(--o-line);
+    border-radius: 18px;
+    background: var(--o-card);
+    transition: transform .5s var(--ease), border-color .5s, box-shadow .5s var(--ease);
+  }
+  .pr a:hover { transform: translateY(-4px); border-color: var(--o-ink); box-shadow: 0 22px 40px -26px rgba(0,0,0,.35); }
+  .pr-top { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; font: 500 12.5px/1 var(--mono); color: var(--o-mute); }
+  .pr-top .num { color: var(--o-ink); font-weight: 600; }
+  .status {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    margin-left: auto;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font: 600 11px/1 var(--mono);
+    letter-spacing: .12em;
+    text-transform: uppercase;
+  }
+  .status.merged { background: var(--o-ink); color: var(--o-bg); }
+  .status.open { border: 1px solid var(--o-ink); color: var(--o-ink); }
+  .status.open::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--o-ink); animation: pulse-ink 2s ease-out infinite; }
+  @keyframes pulse-ink { 0% { box-shadow: 0 0 0 0 rgba(18,18,18,.45); } 70%, 100% { box-shadow: 0 0 0 7px transparent; } }
+  .pr h3 { margin: 0; font: 400 clamp(26px, 2.2vw, 34px)/1.05 var(--serif); letter-spacing: -0.01em; }
+  .pr p { margin: 0; font-size: 16px; line-height: 1.6; color: var(--o-body); }
+  .pr-foot { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+  .pr-foot li { list-style: none; padding: 6px 10px; border: 1px solid var(--o-line); border-radius: 999px; font: 500 11.5px/1 var(--mono); color: var(--o-body); }
+  .pr-foot ul { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 0; }
+  .pr-foot .go { margin-left: auto; display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 500; }
+  .pr a:hover .go svg { transform: translate(2px, -2px); }
+  .pr .go svg { transition: transform .3s; }
+
+  @media (max-width: 960px) {
+    .oss-head { grid-template-columns: 1fr; }
+    .prs { grid-template-columns: 44px minmax(0, 1fr); }
+    .pr, .pr.right { grid-column: 2; }
+  }
+  @media (max-width: 560px) {
+    .oss-stats { grid-template-columns: 1fr; }
+    .oss-stats div + div { padding-left: 0; border-left: 0; border-top: 1px solid var(--o-line); }
+    .status { margin-left: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) { .status.open::before { animation: none; } }
 </style>
 </head>
 <body>
@@ -1109,7 +1248,7 @@
           </a>
           <div class="info">
             <span class="idx" aria-hidden="true">01</span>
-            <span class="eyebrow">01 / Computer vision systems</span>
+            <span class="eyebrow">01 / Computer vision</span>
             <h3>KAVACH</h3>
             <p class="desc">An explainable video-intelligence prototype that turns warehouse footage into tracked objects, evidence-backed safety events, and replayable incident records.</p>
             <p class="detail">I built it around structured evidence first: YOLO perception, ByteTrack identities, temporal behaviour rules, SQLite incident history, and a grounded assistant that explains only what the evidence supports.</p>
@@ -1125,7 +1264,7 @@
           </a>
           <div class="info">
             <span class="idx" aria-hidden="true">02</span>
-            <span class="eyebrow">02 / Social impact product</span>
+            <span class="eyebrow">02 / Social impact</span>
             <h3>STEMPulse</h3>
             <p class="desc">A women-first STEM pathways platform for learning, opportunities, evidence-aware confidence, and career re-entry support.</p>
             <p class="detail">The product maps people to a practical next step instead of treating confidence or career breaks as missing potential: profile evidence, skill freshness, opportunity matching, and a shortest-path plan.</p>
@@ -1141,7 +1280,7 @@
           </a>
           <div class="info">
             <span class="idx" aria-hidden="true">03</span>
-            <span class="eyebrow">03 / Product engineering</span>
+            <span class="eyebrow">03 / Full-stack product</span>
             <h3>RescueLink</h3>
             <p class="desc">A real-time emergency coordination platform that helps people request support, offer resources, and share trusted local updates.</p>
             <p class="detail">I designed it around a calm response workspace: role-aware access, a clear request lifecycle, location-aware maps, community confirmation, and atomic volunteer claims.</p>
@@ -1157,7 +1296,7 @@
           </a>
           <div class="info">
             <span class="idx" aria-hidden="true">04</span>
-            <span class="eyebrow">04 / AI systems</span>
+            <span class="eyebrow">04 / AI agents</span>
             <h3>ClarityLoop</h3>
             <p class="desc">An open-source workspace that stress-tests a project idea before time, money, and effort are spent building it.</p>
             <p class="detail">Six focused agents examine requirements, evidence, resources, risks, and scope before turning the result into confidence scores, tasks, and an honest project plan.</p>
@@ -1173,7 +1312,7 @@
           </a>
           <div class="info">
             <span class="idx" aria-hidden="true">05</span>
-            <span class="eyebrow">05 / Experimental ML</span>
+            <span class="eyebrow">05 / ML + games</span>
             <h3>RaceVerse</h3>
             <p class="desc">A browser-based 3D racing prototype with procedural tracks, local multiplayer, AI opponents, and a trained racing policy.</p>
             <p class="detail">Tracks are created from seeds, while the AI learns in a small simulator and runs locally in the browser. The project is a practical way to explore games, reinforcement learning, and interaction design together.</p>
@@ -1189,29 +1328,13 @@
           </a>
           <div class="info">
             <span class="idx" aria-hidden="true">06</span>
-            <span class="eyebrow">06 / Compilers & ML systems</span>
+            <span class="eyebrow">06 / Compilers & systems</span>
             <h3>ModelForge</h3>
             <p class="desc">A C++17 tensor compiler for small neural-network models that checks every optimization before it keeps it.</p>
             <p class="detail">It loads .mforge models, rewrites the graph, and emits standalone C++ inference code. A built-in validator, Guardian-APC+, tests each rewrite with inputs placed on the model’s ReLU boundaries and rolls back any change that alters behaviour, with a replayable counterexample.</p>
             <ul class="hl"><li>99.2% of injected faults caught with 128 inputs</li><li>Shrink check for float16, int8, int4 and pruning</li><li>Model diff checker with terminal and browser dashboards</li></ul>
             <ul class="tags" aria-label="Built with"><li>C++17</li><li>CMake</li><li>Compilers</li><li>ML systems</li></ul>
             <div class="links"><a class="solid" href="https://vaishnavi220506.github.io/ModelForge/" target="_blank" rel="noopener">Live demo <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a><a class="line" href="https://github.com/Vaishnavi220506/ModelForge" target="_blank" rel="noopener"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg> GitHub repo <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a></div>
-          </div>
-        </article>
-        <article class="panel" data-name="SmartSwap" aria-label="SmartSwap">
-          <a class="media" href="https://github.com/Vaishnavi220506/SmartSwap" target="_blank" rel="noopener" aria-label="Open SmartSwap">
-            <div class="frame-bar"><i></i><i></i><i></i><span>github.com/Vaishnavi220506/SmartSwap</span></div>
-            <div class="shot"><div class="cover"><span class="ck">MEASURE / ATTRIBUTE / MITIGATE</span><div class="meter" aria-hidden="true"><b class="" style="height:22%"></b><b class="" style="height:30%"></b><b class="" style="height:26%"></b><b class="hot" style="height:78%"></b><b class="hot" style="height:92%"></b><b class="hot" style="height:84%"></b><b class="" style="height:34%"></b><b class="" style="height:28%"></b><b class="" style="height:24%"></b><b class="hot" style="height:70%"></b><b class="hot" style="height:88%"></b><b class="" style="height:30%"></b><b class="" style="height:22%"></b><b class="" style="height:26%"></b><b class="" style="height:20%"></b><b class="" style="height:24%"></b></div><div class="stat">87–94%</div><p class="cap">lower p95 latency under CPU and mixed contention, measured on one hybrid-core laptop.</p></div><span class="glare"></span><span class="view-chip">View code <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></span></div>
-          </a>
-          <div class="info">
-            <span class="idx" aria-hidden="true">07</span>
-            <span class="eyebrow">07 / Systems & performance</span>
-            <h3>SmartSwap</h3>
-            <p class="desc">A Windows tool that measures how much background work slows down the apps you are using, then quietly reduces it.</p>
-            <p class="detail">A small canary process times its own stalls to build a Windows Stall Index, names the cause (CPU, memory bandwidth, or storage), and applies the cheapest fix that works: lower priority, efficiency-core steering, or a tuned CPU cap. Every change is read back and rolled back if it does not help.</p>
-            <ul class="hl"><li>Stall index tracks felt latency (Spearman ρ = 0.96)</li><li>Cause attribution across CPU, memory and storage</li><li>Verified, reversible actions with no admin rights</li></ul>
-            <ul class="tags" aria-label="Built with"><li>Python</li><li>Windows</li><li>Performance</li><li>pytest</li></ul>
-            <div class="links"><a class="line" href="https://github.com/Vaishnavi220506/SmartSwap" target="_blank" rel="noopener"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg> GitHub repo <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a></div>
           </div>
         </article>
         <article class="panel end" data-name="More on GitHub" aria-label="More on GitHub">
@@ -1222,10 +1345,122 @@
         </article>
         </div>
         <div class="proj-progress pad" aria-hidden="true">
-          <span><b id="proj-count">01</b> / 07</span>
+          <span><b id="proj-count">01</b> / 06</span>
           <span class="bar"><i id="proj-bar"></i></span>
           <span class="name" id="proj-name">KAVACH</span>
         </div>
+      </div>
+    </div>
+    <div class="proj-tail" id="proj-tail"><canvas id="proj-tail-canvas" aria-hidden="true"></canvas></div>
+  </section>
+
+  <section class="oss" id="open-source" aria-labelledby="oss-title">
+    <canvas class="oss-cells" id="oss-cells" aria-hidden="true"></canvas>
+    <div class="oss-inner pad">
+      <div class="label-pill"><span>03</span><span class="rule"></span><span>Open source</span></div>
+      <div class="oss-head">
+        <h2 id="oss-title" class="split"><span class="line"><span>Small fixes can make</span></span><span class="line"><span>a <em>big difference.</em></span></span></h2>
+        <p class="reveal">I’m learning in public by working upstream. Here are a few contributions across AI, inference, accessibility, developer tooling, and compilers.</p>
+      </div>
+
+      <div class="oss-stats" id="oss-stats">
+        <div><b data-count="3">0</b><span>Merged upstream</span></div>
+        <div><b data-count="7">0</b><span>In review</span></div>
+        <div><b data-count="9">0</b><span>Repositories touched</span></div>
+      </div>
+
+      <div class="marquee" aria-hidden="true"><div class="marquee-row" id="marquee-row"><span>ONNX</span><i>·</i><span>Microsoft PyRIT</span><i>·</i><span>CrewAI</span><i>·</i><span>vLLM</span><i>·</i><span>OpenHands</span><i>·</i><span>AirLLM</span><i>·</i><span>Ersilia</span><i>·</i><span>blind-assist</span><i>·</i><span>ONNX</span><i>·</i><span>Microsoft PyRIT</span><i>·</i><span>CrewAI</span><i>·</i><span>vLLM</span><i>·</i><span>OpenHands</span><i>·</i><span>AirLLM</span><i>·</i><span>Ersilia</span><i>·</i><span>blind-assist</span><i>·</i><span>ONNX</span><i>·</i><span>Microsoft PyRIT</span><i>·</i><span>CrewAI</span><i>·</i><span>vLLM</span><i>·</i><span>OpenHands</span><i>·</i><span>AirLLM</span><i>·</i><span>Ersilia</span><i>·</i><span>blind-assist</span><i>·</i></div></div>
+
+      <div class="oss-filter" role="group" aria-label="Filter contributions">
+        <button type="button" data-filter="all" aria-pressed="true">All <small>10</small></button>
+        <button type="button" data-filter="merged" aria-pressed="false">Merged <small>03</small></button>
+        <button type="button" data-filter="open" aria-pressed="false">In review <small>07</small></button>
+      </div>
+
+      <div class="graph" id="graph">
+        <svg id="graph-svg" aria-hidden="true"></svg>
+        <ol class="prs" id="prs">
+        <li class="pr" data-status="merged">
+          <a href="https://github.com/onnx/onnx/pull/8448" target="_blank" rel="noopener">
+            <div class="pr-top"><span>onnx/onnx</span><span class="num">#8448</span><span class="status merged">Merged</span></div>
+            <h3>ONNX</h3>
+            <p>Fixed custom callback lifetime handling in shape inference so callbacks remain valid for the full inference operation.</p>
+            <div class="pr-foot"><ul aria-label="Topics"><li>C++</li><li>ONNX</li><li>Memory safety</li></ul><span class="go">View PR <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></span></div>
+          </a>
+        </li>
+        <li class="pr" data-status="merged">
+          <a href="https://github.com/microsoft/PyRIT/pull/2356" target="_blank" rel="noopener">
+            <div class="pr-top"><span>microsoft/PyRIT</span><span class="num">#2356</span><span class="status merged">Merged</span></div>
+            <h3>PyRIT</h3>
+            <p>Fixed stereo audio frequency conversion so multi-channel WAV input no longer causes NumPy broadcasting failures.</p>
+            <div class="pr-foot"><ul aria-label="Topics"><li>Python</li><li>NumPy</li><li>Audio</li></ul><span class="go">View PR <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></span></div>
+          </a>
+        </li>
+        <li class="pr" data-status="merged">
+          <a href="https://github.com/crewAIInc/crewAI/pull/6881" target="_blank" rel="noopener">
+            <div class="pr-top"><span>crewAIInc/crewAI</span><span class="num">#6881</span><span class="status merged">Merged</span></div>
+            <h3>CrewAI</h3>
+            <p>Made the project’s pre-commit hooks portable on Windows by removing Unix-only environment activation.</p>
+            <div class="pr-foot"><ul aria-label="Topics"><li>Python</li><li>AI agents</li><li>Developer tools</li></ul><span class="go">View PR <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></span></div>
+          </a>
+        </li>
+        <li class="pr" data-status="open">
+          <a href="https://github.com/vllm-project/vllm/pull/56444" target="_blank" rel="noopener">
+            <div class="pr-top"><span>vllm-project/vllm</span><span class="num">#56444</span><span class="status open">In review</span></div>
+            <h3>vLLM</h3>
+            <p>Proposed a bugfix for N-gram PLE with pipeline parallelism.</p>
+            <div class="pr-foot"><ul aria-label="Topics"><li>PyTorch</li><li>CUDA</li><li>Inference</li></ul><span class="go">View PR <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></span></div>
+          </a>
+        </li>
+        <li class="pr" data-status="open">
+          <a href="https://github.com/vllm-project/vllm/pull/56413" target="_blank" rel="noopener">
+            <div class="pr-top"><span>vllm-project/vllm</span><span class="num">#56413</span><span class="status open">In review</span></div>
+            <h3>vLLM</h3>
+            <p>Proposed avoiding duplicate host allocation for UVA weights.</p>
+            <div class="pr-foot"><ul aria-label="Topics"><li>PyTorch</li><li>CUDA</li><li>Memory</li></ul><span class="go">View PR <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></span></div>
+          </a>
+        </li>
+        <li class="pr" data-status="open">
+          <a href="https://github.com/OpenHands/software-agent-sdk/pull/4878" target="_blank" rel="noopener">
+            <div class="pr-top"><span>OpenHands/software-agent-sdk</span><span class="num">#4878</span><span class="status open">In review</span></div>
+            <h3>OpenHands SDK</h3>
+            <p>Proposed agent-server proxy support for cloud runtime requests.</p>
+            <div class="pr-foot"><ul aria-label="Topics"><li>TypeScript</li><li>Agentic systems</li><li>Cloud API</li></ul><span class="go">View PR <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></span></div>
+          </a>
+        </li>
+        <li class="pr" data-status="open">
+          <a href="https://github.com/lyogavin/airllm/pull/363" target="_blank" rel="noopener">
+            <div class="pr-top"><span>lyogavin/airllm</span><span class="num">#363</span><span class="status open">In review</span></div>
+            <h3>AirLLM</h3>
+            <p>Proposed support for PyTorch tokenizer inputs in the MLX generation pipeline.</p>
+            <div class="pr-foot"><ul aria-label="Topics"><li>PyTorch</li><li>MLX</li><li>Inference</li></ul><span class="go">View PR <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></span></div>
+          </a>
+        </li>
+        <li class="pr" data-status="open">
+          <a href="https://github.com/violetljj/blind-assist/pull/49" target="_blank" rel="noopener">
+            <div class="pr-top"><span>violetljj/blind-assist</span><span class="num">#49</span><span class="status open">In review</span></div>
+            <h3>blind-assist</h3>
+            <p>Proposed accessibility hardening for the default flow at large font sizes.</p>
+            <div class="pr-foot"><ul aria-label="Topics"><li>Android</li><li>Accessibility</li><li>UI</li></ul><span class="go">View PR <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></span></div>
+          </a>
+        </li>
+        <li class="pr" data-status="open">
+          <a href="https://github.com/ersilia-os/eos-template/pull/95" target="_blank" rel="noopener">
+            <div class="pr-top"><span>ersilia-os/eos-template</span><span class="num">#95</span><span class="status open">In review</span></div>
+            <h3>Ersilia model template</h3>
+            <p>Proposed automatic model releases when generated outputs change.</p>
+            <div class="pr-foot"><ul aria-label="Topics"><li>GitHub Actions</li><li>Release automation</li><li>Python</li></ul><span class="go">View PR <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></span></div>
+          </a>
+        </li>
+        <li class="pr" data-status="open">
+          <a href="https://github.com/ersilia-os/ersilia-model-workflows/pull/7" target="_blank" rel="noopener">
+            <div class="pr-top"><span>ersilia-os/ersilia-model-workflows</span><span class="num">#7</span><span class="status open">In review</span></div>
+            <h3>Ersilia workflows</h3>
+            <p>Proposed reusable workflow automation for model releases when outputs change.</p>
+            <div class="pr-foot"><ul aria-label="Topics"><li>GitHub Actions</li><li>CI/CD</li><li>Automation</li></ul><span class="go">View PR <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></span></div>
+          </a>
+        </li>
+        </ol>
       </div>
     </div>
   </section>
@@ -1424,7 +1659,7 @@
       return { el: el, lag: (parseFloat(el.style.getPropertyValue('--d')) || 0) * 1.5 };
     });
     const lineEls = Array.from(document.querySelectorAll('.split .line > span'));
-    const splitEl = document.querySelector('.split');
+    const splits = Array.from(document.querySelectorAll('.split'));
     function scrub() {
       const vh = window.innerHeight;
       revealEls.forEach(function (r) {
@@ -1433,13 +1668,13 @@
         r.el.style.opacity = t.toFixed(3);
         r.el.style.transform = t >= 1 ? 'none' : 'translate3d(0,' + ((1 - t) * 48).toFixed(1) + 'px,0)';
       });
-      if (splitEl) {
-        const top = splitEl.getBoundingClientRect().top;
-        lineEls.forEach(function (span, i) {
+      splits.forEach(function (sp) {
+        const top = sp.getBoundingClientRect().top;
+        sp.querySelectorAll('.line > span').forEach(function (span, i) {
           const t = ease(clamp01((vh - top) / (vh * 0.4) - i * 0.14));
           span.style.transform = t >= 1 ? 'none' : 'translate3d(0,' + ((1 - t) * 112).toFixed(1) + '%,0)';
         });
-      }
+      });
     }
     if (still) {
       revealEls.forEach(function (r) { r.el.style.opacity = 1; r.el.style.transform = 'none'; });
@@ -1621,13 +1856,207 @@
       // header: light only while the light part of About sits under it
       const ar = about.getBoundingClientRect();
       const lightBottom = ar.bottom - er.height * 0.55 * q;
-      header.classList.toggle('is-light', ar.top <= hh() + vh * 0.5 && lightBottom > hh());
+      const osr = document.getElementById('open-source').getBoundingClientRect();
+      const tailH = document.getElementById('proj-tail').offsetHeight;
+      header.classList.toggle('is-light', (ar.top <= hh() + vh * 0.5 && lightBottom > hh()) || (osr.top - tailH * 0.45 <= hh() && osr.bottom > hh()));
       requestAnimationFrame(tick);
     }
 
     layout();
     window.addEventListener('resize', layout);
     window.addEventListener('load', layout);
+    requestAnimationFrame(tick);
+  })();
+</script>
+
+<script>
+  // Open source: contribution-square transition out of Projects, scrubbed headline,
+  // count-up stats, scroll-driven marquee, and a git graph that draws itself.
+  (function () {
+    const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const clamp01 = (v) => Math.min(Math.max(v, 0), 1);
+    const ease = (t) => 1 - Math.pow(1 - t, 3);
+    const PAPER = '#efeee9', INK = '18,18,18';
+    const oss = document.getElementById('open-source');
+    const tail = document.getElementById('proj-tail');
+    const tcv = document.getElementById('proj-tail-canvas'), tctx = tcv.getContext('2d');
+    const ccv = document.getElementById('oss-cells'), cctx = ccv.getContext('2d');
+
+    // One shared grid of "contribution squares" spans the tail and the top of the section,
+    // so the transition blocks and the background pattern are the same cells.
+    const LEVELS = [0, 0.035, 0.06, 0.09, 0.13];
+    function level(c, r) {
+      let h = (c * 73856093) ^ (r * 19349663);
+      h = (h ^ (h >>> 13)) * 1274126177;
+      const v = ((h ^ (h >>> 16)) >>> 0) % 100;
+      return v < 40 ? LEVELS[0] : v < 65 ? LEVELS[1] : v < 82 ? LEVELS[2] : v < 94 ? LEVELS[3] : LEVELS[4];
+    }
+    let cols = 32, size = 40, tRows = 0, cRows = 0, tw = 0, th = 0, cw = 0, chh = 0, order = [];
+    function sizeCanvas(cv, ctx, w, h) {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    function build() {
+      tw = tail.clientWidth; th = tail.clientHeight;
+      cw = oss.clientWidth; chh = Math.min(oss.clientHeight, window.innerHeight * 1.1);
+      cols = tw > 1200 ? 32 : tw > 760 ? 22 : 12;
+      size = tw / cols;
+      tRows = Math.ceil(th / size); cRows = Math.ceil(chh / size);
+      sizeCanvas(tcv, tctx, tw, th);
+      ccv.style.height = chh + 'px';
+      sizeCanvas(ccv, cctx, cw, chh);
+      let seed = 41;
+      const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+      order = [];
+      for (let r = 0; r < tRows; r++) for (let c = 0; c < cols; c++) {
+        const fromBottom = (tRows - 1 - r) / Math.max(tRows - 1, 1);
+        order.push({ c: c, r: r, t: fromBottom * 0.7 + rnd() * 0.24 });
+      }
+      lastTail = -1;
+    }
+    function cell(ctx, x, y, lv, a) {
+      if (lv <= 0 || a <= 0) return;
+      ctx.fillStyle = 'rgba(' + INK + ',' + (lv * a).toFixed(3) + ')';
+      const inset = Math.max(size * 0.12, 2);
+      ctx.beginPath();
+      ctx.roundRect ? ctx.roundRect(x + inset, y + inset, size - inset * 2, size - inset * 2, 3) : ctx.rect(x + inset, y + inset, size - inset * 2, size - inset * 2);
+      ctx.fill();
+    }
+    let lastTail = -1;
+    function drawTail(q) {
+      tctx.clearRect(0, 0, tw, th);
+      if (q <= 0) return;
+      const yOff = th - tRows * size;      // align rows to the bottom edge, where the section begins
+      for (const b of order) {
+        const a = clamp01((q - b.t) / 0.05);
+        if (a <= 0) continue;
+        const x = b.c * size, y = yOff + b.r * size;
+        tctx.globalAlpha = a;
+        tctx.fillStyle = PAPER;
+        tctx.fillRect(x - 0.5, y - 0.5, size + 1, size + 1);
+        tctx.globalAlpha = 1;
+        cell(tctx, x, y, level(b.c, b.r - tRows), a);
+      }
+      tctx.globalAlpha = 1;
+    }
+    function drawCells() {
+      cctx.clearRect(0, 0, cw, chh);
+      const top = oss.getBoundingClientRect().top, vh = window.innerHeight;
+      for (let r = 0; r < cRows; r++) {
+        const fade = 1 - r / cRows;                       // pattern thins out going down
+        const sy = top + r * size;
+        const lit = still ? 1 : clamp01((vh - sy) / (vh * 0.6));   // squares light up as they rise
+        if (lit <= 0) continue;
+        for (let c = 0; c < cols; c++) cell(cctx, c * size, r * size, level(c, r), fade * lit);
+      }
+    }
+
+    // Graph
+    const graph = document.getElementById('graph');
+    const svg = document.getElementById('graph-svg');
+    const list = document.getElementById('prs');
+    const items = Array.from(list.querySelectorAll('.pr'));
+    const NS = 'http://www.w3.org/2000/svg';
+    const wide = window.matchMedia('(min-width: 961px)');
+    let mainPath = null, mainLen = 0, rows = [];
+    function mk(tag, attrs) { const el = document.createElementNS(NS, tag); for (const k in attrs) el.setAttribute(k, attrs[k]); svg.appendChild(el); return el; }
+    function prep(path) { const L = path.getTotalLength(); path.style.strokeDasharray = L + ' ' + L; path.style.strokeDashoffset = L; return L; }
+    function layoutGraph() {
+      let k = 0;
+      items.forEach(function (li) { if (!li.hidden) { li.classList.toggle('right', wide.matches && k % 2 === 1); k++; } });
+      while (svg.firstChild) svg.removeChild(svg.firstChild);
+      const g = graph.getBoundingClientRect(), W = g.width, H = g.height;
+      svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+      const cx = wide.matches ? W / 2 : 20;
+      mainPath = mk('path', { d: 'M' + cx + ' 0 L' + cx + ' ' + H, class: 'main' });
+      mainLen = prep(mainPath);
+      rows = [];
+      items.forEach(function (li) {
+        if (li.hidden) return;
+        const r = li.getBoundingClientRect();
+        const top = r.top - g.top, h = r.height;
+        const right = li.classList.contains('right') || !wide.matches;
+        const ex = right ? r.left - g.left : r.right - g.left;
+        const y0 = top + 22, y1 = top + h * 0.38, y2 = top + h * 0.62, y3 = top + h - 6;
+        const bend = (ex - cx) * 0.55;
+        const open = li.dataset.status === 'open';
+        const out = mk('path', { d: 'M' + cx + ' ' + y0 + ' C' + (cx + bend) + ' ' + y0 + ' ' + (ex - bend) + ' ' + y1 + ' ' + ex + ' ' + y1, class: 'br' + (open ? ' open' : '') });
+        const row = { li: li, right: right, out: out, outLen: prep(out) };
+        row.d0 = mk('circle', { cx: cx, cy: y0, r: 5, class: 'dot' });
+        if (!open) {
+          const back = mk('path', { d: 'M' + ex + ' ' + y2 + ' C' + (ex - bend) + ' ' + y2 + ' ' + (cx + bend) + ' ' + y3 + ' ' + cx + ' ' + y3, class: 'br' });
+          row.back = back; row.backLen = prep(back);
+          row.d1 = mk('circle', { cx: cx, cy: y3, r: 5, class: 'dot' });
+        } else {
+          row.d1 = mk('circle', { cx: ex, cy: y1, r: 5, class: 'dot open' });
+        }
+        rows.push(row);
+      });
+    }
+
+    // Filters
+    const buttons = Array.from(document.querySelectorAll('.oss-filter button'));
+    buttons.forEach(function (b) {
+      b.addEventListener('click', function () {
+        const f = b.dataset.filter;
+        buttons.forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); });
+        items.forEach(function (li) { li.hidden = !(f === 'all' || li.dataset.status === f); });
+        requestAnimationFrame(layoutGraph);
+      });
+    });
+
+    const statEls = Array.from(document.querySelectorAll('#oss-stats b'));
+    const statsBox = document.getElementById('oss-stats');
+    const marquee = document.getElementById('marquee-row');
+    const t0 = performance.now();
+    let lastY = -1;
+
+    function tick(now) {
+      const vh = window.innerHeight, y = window.scrollY;
+      const tr = tail.getBoundingClientRect();
+      const q = clamp01((vh - tr.top) / (vh * 0.85));
+      if (Math.abs(q - lastTail) > 0.0005) { drawTail(q); lastTail = q; }
+
+      const marqueeMoving = !still;
+      if (y !== lastY || marqueeMoving) {
+        if (y !== lastY) drawCells();
+        // stats count up as the row scrolls in
+        const st = clamp01((vh - statsBox.getBoundingClientRect().top) / (vh * 0.5));
+        statEls.forEach(function (el) { el.textContent = String(Math.round(+el.dataset.count * (still ? 1 : ease(st)))); });
+        // marquee: drifts on its own, and the page scroll pushes it further
+        if (!still) {
+          const third = marquee.scrollWidth / 3;
+          const x = ((y * 0.5 + (now - t0) * 0.03) % third + third) % third;
+          marquee.style.transform = 'translate3d(' + (-x).toFixed(1) + 'px,0,0)';
+        }
+        // graph draws with the scroll
+        if (mainPath) {
+          const gr = graph.getBoundingClientRect();
+          const mp = still ? 1 : clamp01((vh * 0.75 - gr.top) / gr.height);
+          mainPath.style.strokeDashoffset = (mainLen * (1 - mp)).toFixed(1);
+          rows.forEach(function (row) {
+            const top = row.li.getBoundingClientRect().top;
+            const t = still ? 1 : clamp01((vh * 0.92 - top) / (vh * 0.38));
+            const tOut = clamp01(t * 1.8), tBack = clamp01(t * 1.8 - 0.8);
+            row.out.style.strokeDashoffset = (row.outLen * (1 - tOut)).toFixed(1);
+            if (row.back) row.back.style.strokeDashoffset = (row.backLen * (1 - tBack)).toFixed(1);
+            row.d0.style.opacity = clamp01(t * 4).toFixed(2);
+            row.d1.style.opacity = (row.back ? clamp01(tBack * 3) : clamp01(tOut * 3 - 2)).toFixed(2);
+            const e = ease(t), dx = (row.right ? 1 : -1) * (1 - e) * 70;
+            row.li.style.opacity = e.toFixed(3);
+            row.li.style.transform = e >= 1 ? 'none' : 'translate3d(' + dx.toFixed(1) + 'px,' + ((1 - e) * 20).toFixed(1) + 'px,0)';
+          });
+        }
+        lastY = y;
+      }
+      requestAnimationFrame(tick);
+    }
+
+    function relayout() { build(); layoutGraph(); lastY = -1; }
+    relayout();
+    window.addEventListener('resize', relayout);
+    window.addEventListener('load', relayout);
     requestAnimationFrame(tick);
   })();
 </script>
