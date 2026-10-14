@@ -377,7 +377,8 @@
 </style>
 <script type="importmap">
   { "imports": {
-      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
   } }
 </script>
 </head>
@@ -470,6 +471,7 @@
   // Chrome smiley — polished chrome parts with a choreographed tumble:
   // spins, rolls upside down, somersaults, glances left and right, then settles.
   import * as THREE from 'three';
+  import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 
   const stage = document.getElementById('stage');
   let renderer;
@@ -593,6 +595,9 @@
     });
 
     const face = new THREE.Group();
+    const capMat = new THREE.MeshPhysicalMaterial({
+      color: 0x3a3a3a, metalness: 0.9, roughness: 0.38, clearcoat: 1, clearcoatRoughness: 0.2,
+    });
 
     // Lathe a closed (radius, depth) profile into a ring around the face's axis.
     function lathe(points, segs) {
@@ -600,7 +605,7 @@
       geo.rotateX(Math.PI / 2);
       return geo;
     }
-    function roundedBand(rIn, rOut, z0, z1, c, grooves) {
+    function roundedBand(rIn, rOut, z0, z1, c) {
       const prof = [];
       const corner = (cx, cy, a0, a1) => {
         for (let i = 0; i <= 8; i++) {
@@ -610,71 +615,52 @@
       };
       corner(rIn + c, z0 + c, Math.PI, Math.PI * 1.5);
       corner(rOut - c, z0 + c, -Math.PI / 2, 0);
-      if (grooves) {
-        const zs = z0 + c, ze = z1 - c, n = 120;
-        for (let i = 1; i < n; i++) {
-          const t = i / n, z = zs + (ze - zs) * t;
-          const d = Math.pow(Math.abs(Math.sin(Math.PI * t * grooves)), 8) * 0.03;
-          prof.push(new THREE.Vector2(rOut - d, z));
-        }
-      }
       corner(rOut - c, z1 - c, 0, Math.PI / 2);
       corner(rIn + c, z1 - c, Math.PI / 2, Math.PI);
       prof.push(prof[0].clone());
       return lathe(prof);
     }
+    const box = (w, h, d, x, y, z) => {
+      const m = new THREE.Mesh(new RoundedBoxGeometry(w, h, d, 4, Math.min(w, h, d) * 0.22), chrome);
+      m.position.set(x, y, z);
+      face.add(m);
+      return m;
+    };
 
-    // Bezel — a deep outer band with machined grooves, plus a slimmer inner rim
-    // set slightly forward, which gives the double-ring edge.
-    face.add(new THREE.Mesh(roundedBand(0.86, 1.0, -0.3, 0.26, 0.05, 2), chrome));
-    face.add(new THREE.Mesh(roundedBand(0.79, 0.865, -0.2, 0.32, 0.03, 0), chrome));
+    // Ring — a thick outer band with a slimmer inner rim inside it.
+    face.add(new THREE.Mesh(roundedBand(0.84, 1.0, -0.22, 0.22, 0.07), chrome));
+    face.add(new THREE.Mesh(roundedBand(0.74, 0.83, -0.16, 0.18, 0.04), chrome));
 
-    // Eyes — wide, thick-walled hollow tubes pointing out of the face.
-    const eyeOut = 0.17, eyeIn = 0.135, eyeLen = 0.52;
-    const eyeGeo = (function () {
-      const c = (eyeOut - eyeIn) / 2, z0 = -eyeLen / 2, z1 = eyeLen / 2;
-      const prof = [];
-      for (let i = 0; i <= 12; i++) {           // back lip
-        const a = Math.PI + Math.PI * (i / 12);
-        prof.push(new THREE.Vector2(eyeIn + c + Math.cos(a) * c, z0 + Math.sin(a) * c * -1));
-      }
-      for (let i = 0; i <= 12; i++) {           // front lip
-        const a = Math.PI * (i / 12);
-        prof.push(new THREE.Vector2(eyeOut - c + Math.cos(a) * c, z1 + Math.sin(a) * c));
-      }
-      prof.reverse();
-      prof.push(prof[0].clone());
-      return lathe(prof, 128);
-    })();
-    [-0.185, 0.185].forEach(function (x) {
-      const eye = new THREE.Mesh(eyeGeo, chrome);
-      eye.position.set(x, 0.28, 0.1);
+    // Eyes — short cylinders facing the viewer with dark, flat front faces,
+    // each held by a squared arm that runs out to the ring.
+    const eyeR = 0.15, eyeLen = 0.36;
+    const eyeGeo = new THREE.CylinderGeometry(eyeR, eyeR, eyeLen, 72);
+    eyeGeo.rotateX(Math.PI / 2);
+    const lipGeo = new THREE.TorusGeometry(eyeR - 0.008, 0.014, 12, 72);
+    [-1, 1].forEach(function (sx) {
+      const eye = new THREE.Mesh(eyeGeo, [chrome, capMat, capMat]);
+      eye.position.set(sx * 0.27, 0.21, 0.08);
       face.add(eye);
+      const lip = new THREE.Mesh(lipGeo, chrome);
+      lip.position.set(sx * 0.27, 0.21, 0.08 + eyeLen / 2);
+      face.add(lip);
+      box(0.44, 0.19, 0.22, sx * 0.57, 0.26, -0.02);         // arm to the ring
     });
 
-    // Smile — a slim tube along an arc. Each end finishes in a short ribbed
-    // cross-bar that runs out of the face, like the reference's serifed ends.
-    const smileR = 0.5, tubeR = 0.038, s0 = Math.PI * 1.1, s1 = Math.PI * 1.9, cy = 0.05;
+    // Smile — a chrome tube following the ring, ending in squared blocks
+    // that are tied back into the ring by short stubs.
+    const smileR = 0.58, tubeR = 0.062, s0 = Math.PI * 1.13, s1 = Math.PI * 1.87, cy = 0.08;
     class Arc extends THREE.Curve {
       getPoint(t, target = new THREE.Vector3()) {
         const a = s0 + (s1 - s0) * t;
-        return target.set(Math.cos(a) * smileR, Math.sin(a) * smileR + cy, 0.06);
+        return target.set(Math.cos(a) * smileR, Math.sin(a) * smileR + cy, 0.02);
       }
     }
     face.add(new THREE.Mesh(new THREE.TubeGeometry(new Arc(), 160, tubeR, 32, false), chrome));
-    const barGeo = new THREE.CapsuleGeometry(0.042, 0.26, 8, 32);
-    barGeo.rotateX(Math.PI / 2);
-    const ribGeo = new THREE.TorusGeometry(0.047, 0.012, 12, 48);
     [s0, s1].forEach(function (a) {
-      const end = new THREE.Group();
-      end.add(new THREE.Mesh(barGeo, chrome));
-      [-0.08, 0, 0.08].forEach(function (z) {
-        const rib = new THREE.Mesh(ribGeo, chrome);
-        rib.position.z = z;
-        end.add(rib);
-      });
-      end.position.set(Math.cos(a) * smileR, Math.sin(a) * smileR + cy, 0.08);
-      face.add(end);
+      const x = Math.cos(a) * smileR, y = Math.sin(a) * smileR + cy, sx = Math.sign(x);
+      box(0.2, 0.19, 0.22, x, y + 0.03, 0.02);              // end block
+      box(0.26, 0.12, 0.15, x + sx * 0.19, y + 0.05, 0);     // stub into the ring
     });
 
     // Rig: tumble (choreography) → sway (ambient float + pointer) → scene.
@@ -690,6 +676,7 @@
     const D = new THREE.Vector3(1, 1, 0.4).normalize();
     const TAU = Math.PI * 2;
     const moves = [
+      { axis: Y, angle: 0,            dur: 0.01, hold: 1.8 }, // start face-on
       { axis: Y, angle: TAU,          dur: 3.4, hold: 0.9 },  // full spin
       { axis: Z, angle: Math.PI / 2,  dur: 1.6, hold: 0.7 },  // lie on its side
       { axis: Z, angle: Math.PI / 2,  dur: 1.6, hold: 1.0 },  // upside down
