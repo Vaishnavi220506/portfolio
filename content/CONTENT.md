@@ -108,3 +108,16 @@ Subtitle: "Explore the interfaces, then open a project to see the thinking behin
 
 ## Old site's tech (for reference)
 React + Vite + React Router, Tailwind + shadcn/Base UI components, deployed to GitHub Pages at /portfolio-website/.
+
+## GitHub profile (checked 14 Oct 2026)
+- Display name: Devulapalli Naga Sri Vaishnavi · 53 public repositories (own builds + forks used for contributions) · 5 followers
+- Bio: CSE student at VIT learning AI/ML, Deep Learning and Generative AI; builds practical projects and contributes to open source.
+- Pinned: RescueLink. Achievements: Pair Extraordinaire, Pull Shark ×2, Quickdraw, YOLO.
+- Profile README lines: "CSE student at VIT Vellore, building things that solve real problems." · "Keep learning. Keep building. Keep it useful."
+- Own (non-fork) repos: portfolio, portfolio-website, SmartSwap, ModelForge, kavach-video-intelligence, StemPulse, RescueLink, RaceVerse, ClarityLoop-ai, Bert-Visualizer, Transformer-from-scratch, CNN_BASICS, Vaishnavi220506 (profile README)
+
+### New projects added to the site
+6. **ModelForge** — C++17 tensor compiler with Guardian-APC+ per-pass validation. Site: https://vaishnavi220506.github.io/ModelForge/ · Repo: https://github.com/Vaishnavi220506/ModelForge
+   - 99.2% of observable injected faults caught with 128 inputs (96 synthetic models, 2,160 faults) vs 75.0% uniform random; 88.2% with 8 inputs; shrink check caught 22/24 risky compressions vs 14.
+7. **SmartSwap** — Windows background-interference measurement and mitigation (Windows Stall Index, cause attribution, mitigation ladder). Repo: https://github.com/Vaishnavi220506/SmartSwap
+   - One hybrid-core laptop, synthetic workloads: WSI vs p95 latency Spearman ρ = 0.96; p95 cut 87–94% under CPU/mixed contention; 1,575/1,575 actions and 322/322 reverts verified.
