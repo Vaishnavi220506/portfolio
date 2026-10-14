@@ -1161,6 +1161,70 @@
     .status { margin-left: 0; }
   }
   @media (prefers-reduced-motion: reduce) { .status.open::before { animation: none; } }
+
+  /* ---------- Stack ---------- */
+  .stack { position: relative; z-index: 2; background: #efeee9; padding-bottom: 0; }
+  .stack-frame {
+    --s-fg: #f3f2ef; --s-body: #c9c6bf; --s-mute: #8d8b87; --s-line: rgba(243,242,239,.12);
+    --ease: cubic-bezier(.16, 1, .3, 1);
+    position: relative;
+    background: #050505;
+    color: var(--s-fg);
+    border-radius: var(--r, 0px);
+    transform: scale(var(--sc, 1));
+    transform-origin: 50% 0;
+    will-change: transform;
+    overflow: hidden;
+  }
+  .stack-frame::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+      linear-gradient(rgba(243,242,239,.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(243,242,239,.045) 1px, transparent 1px);
+    background-size: 64px 64px;
+    -webkit-mask-image: radial-gradient(120% 80% at 50% 0%, #000 30%, transparent 85%);
+    mask-image: radial-gradient(120% 80% at 50% 0%, #000 30%, transparent 85%);
+  }
+  .stack-inner { position: relative; max-width: 1500px; margin: 0 auto; padding-block: clamp(80px, 10vw, 150px); }
+  .stack .label-pill { color: var(--s-fg); border-color: var(--s-line); }
+  .stack-head { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 28px 64px; align-items: end; margin-bottom: clamp(50px, 6vw, 90px); }
+  .stack h2 { margin: 0; font-weight: 400; font-size: clamp(2.6rem, 5vw, 5.6rem); line-height: 1; letter-spacing: -0.05em; }
+  .stack h2 em { font-family: var(--serif); font-style: italic; letter-spacing: -0.02em; }
+  .stack-head p { margin: 0; max-width: 44ch; font-size: clamp(17px, 1.3vw, 20px); line-height: 1.65; color: var(--s-body); }
+
+  .srows { border-top: 1px solid var(--s-line); }
+  .srow {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: 24px 60px;
+    padding-block: clamp(30px, 3.4vw, 50px);
+    border-bottom: 1px solid var(--s-line);
+  }
+  .smeta { display: grid; grid-template-columns: 48px 1fr; gap: 10px 0; align-content: start; }
+  .snum { grid-row: span 2; padding-top: 10px; font: 500 13px/1 var(--mono); color: var(--s-mute); }
+  .smeta h3 { margin: 0; font: italic 400 clamp(34px, 3.4vw, 54px)/1 var(--serif); letter-spacing: -0.01em; }
+  .smeta p { margin: 0; max-width: 40ch; font-size: 16px; line-height: 1.6; color: var(--s-body); }
+  .pills { display: flex; flex-wrap: wrap; align-content: flex-start; gap: 10px; margin: 0; padding: 0; list-style: none; }
+  .pill {
+    padding: 13px 20px;
+    border: 1px solid rgba(243,242,239,.22);
+    border-radius: 999px;
+    font-size: clamp(15px, 1.15vw, 18px);
+    letter-spacing: -0.01em;
+    background: rgba(243,242,239,.03);
+    transform: translate3d(var(--px, 0px), var(--py, 0px), 0) rotate(var(--pr, 0deg));
+    opacity: var(--po, 1);
+    transition: background .35s, color .35s, border-color .35s;
+    cursor: default;
+  }
+  .pill:hover { background: var(--s-fg); color: #050505; border-color: var(--s-fg); }
+
+  @media (max-width: 960px) {
+    .stack-head, .srow { grid-template-columns: 1fr; }
+  }
 </style>
 </head>
 <body>
@@ -1963,6 +2027,52 @@
       </ol>
     </div>
   </section>
+
+  <section class="stack" id="stack" aria-labelledby="stack-title">
+    <div class="stack-frame" id="stack-frame">
+      <div class="stack-inner pad">
+        <div class="label-pill"><span>04</span><span class="rule"></span><span>The toolkit</span></div>
+        <div class="stack-head">
+          <h2 id="stack-title" class="split"><span class="line"><span>A stack that follows</span></span><span class="line"><span>the <em>problem.</em></span></span></h2>
+          <p class="reveal">I don’t collect tools for the sake of it. I pick the simplest set that helps an idea become clear, useful, and dependable.</p>
+        </div>
+        <div class="srows" id="srows">
+        <div class="srow">
+          <div class="smeta">
+            <span class="snum">01</span>
+            <h3>Languages</h3>
+            <p>The tools I reach for to think clearly and build from first principles.</p>
+          </div>
+          <ul class="pills" aria-label="Languages"><li class="pill">Python</li><li class="pill">C++</li><li class="pill">Java</li><li class="pill">JavaScript</li><li class="pill">TypeScript</li><li class="pill">C</li></ul>
+        </div>
+        <div class="srow">
+          <div class="smeta">
+            <span class="snum">02</span>
+            <h3>Web &amp; product</h3>
+            <p>A practical web toolkit for turning an idea into something people can use.</p>
+          </div>
+          <ul class="pills" aria-label="Web &amp; product"><li class="pill">React</li><li class="pill">Next.js</li><li class="pill">Tailwind CSS</li><li class="pill">Node.js</li><li class="pill">Express</li><li class="pill">FastAPI</li><li class="pill">Vite</li><li class="pill">REST APIs</li><li class="pill">Streamlit</li></ul>
+        </div>
+        <div class="srow">
+          <div class="smeta">
+            <span class="snum">03</span>
+            <h3>ML &amp; data</h3>
+            <p>Libraries and ideas for experiments that stay grounded in real constraints.</p>
+          </div>
+          <ul class="pills" aria-label="ML &amp; data"><li class="pill">PyTorch</li><li class="pill">Hugging Face</li><li class="pill">scikit-learn</li><li class="pill">OpenCV</li><li class="pill">Ultralytics YOLO</li><li class="pill">Transformers</li><li class="pill">NumPy</li><li class="pill">Pandas</li><li class="pill">Ollama</li></ul>
+        </div>
+        <div class="srow">
+          <div class="smeta">
+            <span class="snum">04</span>
+            <h3>Tools &amp; data</h3>
+            <p>The infrastructure around the code: shipping, testing, and making it dependable.</p>
+          </div>
+          <ul class="pills" aria-label="Tools &amp; data"><li class="pill">Git</li><li class="pill">GitHub Actions</li><li class="pill">Docker</li><li class="pill">PostgreSQL</li><li class="pill">PostGIS</li><li class="pill">MySQL</li><li class="pill">SQLite</li><li class="pill">SQLAlchemy</li><li class="pill">Vercel</li></ul>
+        </div>
+        </div>
+      </div>
+    </div>
+  </section>
 </main>
 
 <script>
@@ -2260,17 +2370,26 @@
       }
       lastE = -1;
     }
+    // Slide wipe: dark bands sweep in from the right, top band last, like the next
+    // slide of the gallery arriving. Each band carries a thin leading edge.
+    const BANDS = 7;
     function drawEdge(q) {
       ectx.clearRect(0, 0, ew, eh);
       if (q <= 0) return;
-      ectx.fillStyle = '#050505';
-      for (const b of eblocks) {
-        const a = clamp01((q - b.t) / 0.03);
-        if (a <= 0) continue;
-        ectx.globalAlpha = a;
-        ectx.fillRect(b.x - 0.5, b.y - 0.5, b.s + 1, b.s + 1);
+      const bh = eh / BANDS;
+      for (let i = 0; i < BANDS; i++) {
+        const fromBottom = BANDS - 1 - i;
+        const t = clamp01((q - fromBottom * 0.075) / 0.55);
+        const e = t < 1 ? 1 - Math.pow(1 - t, 3) : 1;
+        if (e <= 0) continue;
+        const w = ew * e, x = ew - w, y = i * bh;
+        ectx.fillStyle = '#050505';
+        ectx.fillRect(x, y - 0.5, w + 1, bh + 1);
+        if (e < 1) {
+          ectx.fillStyle = 'rgba(243,242,239,.55)';
+          ectx.fillRect(x - 2, y, 2, bh);
+        }
       }
-      ectx.globalAlpha = 1;
     }
 
     // Horizontal gallery sizing
@@ -2530,5 +2649,48 @@
   })();
 </script>
 
+<script>
+  // Stack: the dark frame grows from a card to full width, and each group's tools
+  // fly in from scattered positions and settle as you scroll.
+  (function () {
+    const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const clamp01 = (v) => Math.min(Math.max(v, 0), 1);
+    const ease = (t) => 1 - Math.pow(1 - t, 3);
+    const frame = document.getElementById('stack-frame');
+    const rows = Array.from(document.querySelectorAll('#srows .srow'));
+    let seed = 7;
+    const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+    const pills = rows.map(function (r) {
+      return Array.from(r.querySelectorAll('.pill')).map(function (el, i) {
+        return { el: el, dx: (rnd() - 0.5) * 520, dy: 120 + rnd() * 220, rot: (rnd() - 0.5) * 50, lag: i * 0.045 };
+      });
+    });
+    let lastY = -1;
+    function tick() {
+      const y = window.scrollY;
+      if (y !== lastY) {
+        const vh = window.innerHeight;
+        const top = frame.parentElement.getBoundingClientRect().top;
+        const g = still ? 1 : ease(clamp01((vh - top) / (vh * 0.85)));
+        frame.style.setProperty('--sc', (0.9 + 0.1 * g).toFixed(4));
+        frame.style.setProperty('--r', (44 * (1 - g)).toFixed(1) + 'px');
+        rows.forEach(function (r, k) {
+          const rt = r.getBoundingClientRect().top;
+          const base = clamp01((vh * 0.92 - rt) / (vh * 0.55));
+          pills[k].forEach(function (pp) {
+            const t = still ? 1 : ease(clamp01((base - pp.lag) / 0.6));
+            pp.el.style.setProperty('--px', (pp.dx * (1 - t)).toFixed(1) + 'px');
+            pp.el.style.setProperty('--py', (pp.dy * (1 - t)).toFixed(1) + 'px');
+            pp.el.style.setProperty('--pr', (pp.rot * (1 - t)).toFixed(2) + 'deg');
+            pp.el.style.setProperty('--po', clamp01(t * 1.6).toFixed(3));
+          });
+        });
+        lastY = y;
+      }
+      requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  })();
+</script>
 </body>
 </html>
