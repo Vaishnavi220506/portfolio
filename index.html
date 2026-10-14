@@ -470,15 +470,15 @@
     --mx: -999px;
     --my: -999px;
   }
-  .doodle-track { position: absolute; inset: -12% 0 0; will-change: transform; }
+  .doodle-track { position: absolute; inset: 0; }
   .doodle {
     position: absolute;
     inset: 0;
     background: url("content/assets/doodle.webp") center top / max(1500px, 110%) auto repeat-x;
-    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 14%, #000 58%, transparent 97%);
-    mask-image: linear-gradient(to bottom, transparent 0%, #000 14%, #000 58%, transparent 97%);
+    -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 58%, transparent 97%);
+    mask-image: linear-gradient(to bottom, #000 0%, #000 58%, transparent 97%);
   }
-  .doodle.base { opacity: 0.17; }
+  .doodle.base { opacity: 0.13; }
   .doodle.lit {
     opacity: 0.7;
     -webkit-mask-image: radial-gradient(240px circle at var(--mx) var(--my), #000 0%, rgba(0,0,0,.5) 45%, transparent 75%);
@@ -586,19 +586,9 @@
   }
   .focus p { margin: 0; font-size: 15.5px; line-height: 1.55; color: var(--card-mute); }
 
-  /* Scroll reveals — only when JS is running, so the page still reads without it. */
-  html.js .reveal {
-    opacity: 0;
-    transform: translateY(36px);
-    transition: opacity 1.2s var(--ease, ease), transform 1.2s var(--ease, ease);
-    transition-delay: var(--d, 0s);
-  }
-  html.js .reveal.in { opacity: 1; transform: none; }
-  html.js .split .line > span { transform: translateY(112%); transition: transform 1.3s cubic-bezier(.16, 1, .3, 1); }
-  html.js .split.in .line > span { transform: none; }
-  html.js .split .line:nth-child(2) > span { transition-delay: .08s; }
-  html.js .split .line:nth-child(3) > span { transition-delay: .16s; }
-  html.js .split .line:nth-child(4) > span { transition-delay: .24s; }
+  /* Scroll-linked reveals: JS scrubs these every frame from the scroll position. */
+  html.js .reveal { opacity: 0; will-change: transform, opacity; }
+  html.js .split .line > span { transform: translateY(112%); will-change: transform; }
 
   @media (max-width: 960px) {
     .about-grid { grid-template-columns: 1fr; }
@@ -608,7 +598,7 @@
     .focus { grid-template-columns: 1fr; }
   }
   @media (prefers-reduced-motion: reduce) {
-    html.js .reveal, html.js .split .line > span { transition: none; opacity: 1; transform: none; }
+    html.js .reveal, html.js .split .line > span { opacity: 1 !important; transform: none !important; }
   }
 </style>
 </head>
@@ -858,24 +848,83 @@
       return run > 0 ? Math.min(Math.max(y / run, 0), 1) : 0;
     }
 
+    // The blocks carry the About surface itself: paper plus the doodles, mirrored
+    // at About's top edge so the lines run straight on into the section.
+    const doodleImg = new Image();
+    doodleImg.src = 'content/assets/doodle.webp';
+    const layer = document.createElement('canvas');
+    const lctx = layer.getContext('2d');
+    function paintLayer() {
+      const dpr = canvas.width / Math.max(cw, 1);
+      if (layer.width !== canvas.width || layer.height !== canvas.height) {
+        layer.width = canvas.width; layer.height = canvas.height;
+      }
+      lctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      lctx.globalAlpha = 1;
+      lctx.fillStyle = FILL;
+      lctx.fillRect(0, 0, cw, ch);
+      if (!doodleImg.complete || !doodleImg.naturalWidth) return;
+      const hr = hero.getBoundingClientRect(), ar = about.getBoundingClientRect();
+      const seam = ar.top - hr.top;
+      if (seam <= 0) return;
+      const W = Math.max(1500, ar.width * 1.1), H = W * doodleImg.naturalHeight / doodleImg.naturalWidth;
+      let x = (ar.left - hr.left) + (ar.width - W) / 2;
+      while (x > 0) x -= W;
+      lctx.globalAlpha = 0.13;
+      lctx.save();
+      lctx.translate(0, seam);
+      lctx.scale(1, -1);
+      for (; x < cw; x += W) lctx.drawImage(doodleImg, x, 0, W, H);
+      lctx.restore();
+      lctx.globalAlpha = 1;
+    }
     function draw(p) {
       ctx.clearRect(0, 0, cw, ch);
       if (p <= 0) return;
-      ctx.fillStyle = FILL;
+      paintLayer();
+      const dpr = canvas.width / Math.max(cw, 1);
       for (const b of blocks) {
         const a = Math.min(Math.max((p - b.t) / 0.025, 0), 1);
         if (a <= 0) continue;
         ctx.globalAlpha = a;
-        ctx.fillRect(b.x - 0.5, b.y - 0.5, b.s + 1, b.s + 1);
+        const x = Math.max(b.x - 0.5, 0), y = Math.max(b.y - 0.5, 0);
+        const w = Math.min(b.s + 1, cw - x), h = Math.min(b.s + 1, ch - y);
+        if (w <= 0 || h <= 0) continue;
+        ctx.drawImage(layer, x * dpr, y * dpr, w * dpr, h * dpr, x, y, w, h);
       }
       ctx.globalAlpha = 1;
     }
+    doodleImg.addEventListener('load', function () { lastP = -1; });
 
-    // Reveals
-    const io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
-    }, { rootMargin: '0px 0px -12% 0px', threshold: 0.12 });
-    document.querySelectorAll('.reveal, .reveal-split').forEach(function (el) { io.observe(el); });
+    // Scroll-linked reveals: every element's entrance is a function of where it sits
+    // in the viewport, so the whole section flows as one continuous motion.
+    const ease = (t) => 1 - Math.pow(1 - t, 3);
+    const clamp01 = (v) => Math.min(Math.max(v, 0), 1);
+    const revealEls = Array.from(document.querySelectorAll('.reveal')).map(function (el) {
+      return { el: el, lag: (parseFloat(el.style.getPropertyValue('--d')) || 0) * 1.5 };
+    });
+    const lineEls = Array.from(document.querySelectorAll('.split .line > span'));
+    const splitEl = document.querySelector('.split');
+    function scrub() {
+      const vh = window.innerHeight;
+      revealEls.forEach(function (r) {
+        const top = r.el.getBoundingClientRect().top;
+        const t = ease(clamp01((vh - top) / (vh * 0.42) - r.lag));
+        r.el.style.opacity = t.toFixed(3);
+        r.el.style.transform = t >= 1 ? 'none' : 'translate3d(0,' + ((1 - t) * 48).toFixed(1) + 'px,0)';
+      });
+      if (splitEl) {
+        const top = splitEl.getBoundingClientRect().top;
+        lineEls.forEach(function (span, i) {
+          const t = ease(clamp01((vh - top) / (vh * 0.4) - i * 0.14));
+          span.style.transform = t >= 1 ? 'none' : 'translate3d(0,' + ((1 - t) * 112).toFixed(1) + '%,0)';
+        });
+      }
+    }
+    if (still) {
+      revealEls.forEach(function (r) { r.el.style.opacity = 1; r.el.style.transform = 'none'; });
+      lineEls.forEach(function (span) { span.style.transform = 'none'; });
+    }
 
     // Doodle spotlight follows the cursor across the About section
     const doodle = document.getElementById('about-doodle');
@@ -903,11 +952,11 @@
       headerEl.classList.toggle('is-light', p > 0.5 || aboutTop <= headerH());
 
       if (!still) {
-        track.style.transform = 'translate3d(0,' + (aboutTop * -0.12).toFixed(1) + 'px,0)';
+        scrub();
       }
       if (mx > -900) { sx += (mx - sx) * 0.14; sy += (my - sy) * 0.14; }
       doodle.style.setProperty('--mx', sx.toFixed(1) + 'px');
-      doodle.style.setProperty('--my', (sy - (still ? 0 : aboutTop * -0.12) + doodle.offsetHeight * 0.12).toFixed(1) + 'px');
+      doodle.style.setProperty('--my', sy.toFixed(1) + 'px');
       requestAnimationFrame(tick);
     }
     build();
