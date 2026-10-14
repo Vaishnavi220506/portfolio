@@ -167,7 +167,7 @@
     flex-direction: column;
     min-height: calc(100vh - var(--header-h));
     min-height: calc(100svh - var(--header-h));
-    padding-block: 28px 30px;
+    padding-block: clamp(18px, 3.2vh, 30px);
     overflow: hidden;
     isolation: isolate;
   }
@@ -253,7 +253,7 @@
     padding-top: 40px;
   }
   .kicker {
-    margin: 0 0 18px;
+    margin: 0 0 clamp(12px, 2.4vh, 22px);
     font: 400 13px/1 var(--mono);
     letter-spacing: .3em;
     text-transform: uppercase;
@@ -262,9 +262,9 @@
   h1 {
     margin: 0;
     font-weight: 400;
-    font-size: clamp(3.1rem, 7.4vw, 9.4rem);
-    line-height: .96;
-    letter-spacing: -0.055em;
+    font-size: clamp(2.8rem, min(6.4vw, 13.5vh), 8.4rem);
+    line-height: 1.02;
+    letter-spacing: -0.045em;
     text-wrap: balance;
   }
   h1 .line { display: block; overflow: hidden; padding-bottom: .08em; }
@@ -283,22 +283,22 @@
     grid-template-columns: minmax(0, 1fr) auto;
     align-items: end;
     gap: 28px 40px;
-    margin-top: clamp(26px, 3.4vw, 46px);
-    padding-top: 26px;
+    margin-top: clamp(22px, 4.5vh, 48px);
+    padding-top: clamp(20px, 3.2vh, 30px);
     border-top: 1px solid var(--line);
   }
   .intro {
     display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 22px 40px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: clamp(16px, 2.6vh, 24px);
     min-width: 0;
   }
   .intro p {
     margin: 0;
-    max-width: 54ch;
+    max-width: 58ch;
     font-size: clamp(15px, 1.05vw, 17px);
-    line-height: 1.6;
+    line-height: 1.65;
     color: color-mix(in srgb, var(--paper) 78%, var(--ink));
   }
   .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
@@ -401,6 +401,11 @@
   @media (max-width: 420px) {
     .btn { padding: 0 20px; height: 46px; font-size: 15px; }
     .icon-link { width: 46px; height: 46px; }
+  }
+  @media (max-height: 780px) and (min-width: 761px) {
+    .btn { height: 44px; padding: 0 20px; font-size: 15px; }
+    .icon-link { width: 44px; height: 44px; }
+    .meta-row { gap: 10px 18px; }
   }
   @media (prefers-reduced-motion: reduce) {
     h1 .line > span, .status::before, .scroll svg { animation: none; }
