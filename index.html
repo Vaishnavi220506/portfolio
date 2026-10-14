@@ -420,6 +420,7 @@
     --mute: #6d6a64;
     --line: rgba(20, 20, 20, 0.12);
     --chip: rgba(20, 20, 20, 0.05);
+    background: color-mix(in srgb, #efeee9 97%, transparent);
   }
 
   /* ---------- Hero pin + pixel curtain ---------- */
@@ -432,7 +433,9 @@
     pointer-events: none;
   }
   @media (min-width: 761px) {
-    .hero-pin { height: calc(100vh - var(--header-h) + 90vh); }
+    .hero-pin { height: calc(100vh - var(--header-h) + 120vh); }
+    /* About rides up over the pinned hero while the curtain fills, so there is no empty screen. */
+    .about { margin-top: calc(-100vh + var(--header-h)); }
     .hero {
       position: sticky;
       top: calc(var(--header-h) + env(safe-area-inset-top, 0px));
@@ -472,8 +475,8 @@
     position: absolute;
     inset: 0;
     background: url("content/assets/doodle.webp") center top / max(1500px, 110%) auto repeat-x;
-    -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 55%, transparent 96%);
-    mask-image: linear-gradient(to bottom, #000 0%, #000 55%, transparent 96%);
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 14%, #000 58%, transparent 97%);
+    mask-image: linear-gradient(to bottom, transparent 0%, #000 14%, #000 58%, transparent 97%);
   }
   .doodle.base { opacity: 0.17; }
   .doodle.lit {
@@ -486,7 +489,7 @@
     position: relative;
     max-width: 1500px;
     margin: 0 auto;
-    padding-block: clamp(90px, 11vw, 170px) clamp(90px, 10vw, 150px);
+    padding-block: clamp(72px, 8vw, 120px) clamp(90px, 10vw, 150px);
   }
   .about-label {
     display: flex;
@@ -531,25 +534,6 @@
     padding-right: .05em;
   }
 
-  .polaroid {
-    align-self: flex-start;
-    margin: 0;
-    width: 200px;
-    padding: 10px 10px 0;
-    background: #fff;
-    border-radius: 3px;
-    box-shadow: 0 1px 2px rgba(0,0,0,.08), 0 18px 40px -16px rgba(0,0,0,.28);
-    transform: rotate(-3.5deg);
-    transition: transform .8s var(--ease);
-  }
-  .polaroid:hover { transform: rotate(0deg) translateY(-4px); }
-  .polaroid img { display: block; width: 100%; height: auto; aspect-ratio: 1; object-fit: cover; border-radius: 1px; }
-  .polaroid figcaption {
-    padding: 10px 2px 12px;
-    font: italic 400 19px/1.2 var(--serif);
-    color: var(--about-body);
-    text-align: center;
-  }
 
   .about-copy { display: flex; flex-direction: column; gap: 28px; min-width: 0; }
   .about-copy p {
@@ -611,18 +595,13 @@
   html.js .split .line:nth-child(2) > span { transition-delay: .08s; }
   html.js .split .line:nth-child(3) > span { transition-delay: .16s; }
   html.js .split .line:nth-child(4) > span { transition-delay: .24s; }
-  html.js .polaroid.reveal { transform: translateY(36px) rotate(-8deg); }
-  html.js .polaroid.reveal.in { transform: rotate(-3.5deg); }
-  html.js .polaroid.reveal.in:hover { transform: rotate(0deg) translateY(-4px); }
 
   @media (max-width: 960px) {
     .about-grid { grid-template-columns: 1fr; }
-    .about-head { position: static; flex-direction: row; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; }
-    .polaroid { width: 160px; }
+    .about-head { position: static; }
   }
   @media (max-width: 640px) {
     .focus { grid-template-columns: 1fr; }
-    .polaroid { width: 140px; }
   }
   @media (prefers-reduced-motion: reduce) {
     html.js .reveal, html.js .split .line > span { transition: none; opacity: 1; transform: none; }
@@ -715,13 +694,9 @@
           <h2 id="about-title" class="split reveal-split">
             <span class="line"><span>Curious about</span></span>
             <span class="line"><span>how things <em>work</em></span></span>
-            <span class="line"><span>— and how to</span></span>
+            <span class="line"><span>and how to</span></span>
             <span class="line"><span>make them <em>better.</em></span></span>
           </h2>
-          <figure class="polaroid reveal" style="--d:.35s">
-            <img src="content/assets/github-avatar.jpg" alt="Vaishnavi" width="460" height="460" loading="lazy">
-            <figcaption>Vaishnavi, VIT Vellore</figcaption>
-          </figure>
         </div>
 
         <div class="about-copy">
@@ -864,7 +839,7 @@
       for (let r = 0; r < rows; r++) {
         for (let c = 0; c < cols; c++) {
           const d = ((rows - 1 - r) / Math.max(rows - 1, 1)) * 0.62 + ((cols - 1 - c) / Math.max(cols - 1, 1)) * 0.38;
-          blocks.push({ x: c * size, y: r * size, s: size, t: d * 0.78 + rnd() * 0.16 });
+          blocks.push({ x: c * size, y: r * size, s: size, t: d * 0.5 + rnd() * 0.08 });
         }
       }
       lastP = -1;
@@ -921,7 +896,7 @@
         lastP = p;
       }
       const aboutTop = about.getBoundingClientRect().top;
-      headerEl.classList.toggle('is-light', p > 0.9 || aboutTop <= headerH());
+      headerEl.classList.toggle('is-light', p > 0.5 || aboutTop <= headerH());
 
       if (!still) {
         track.style.transform = 'translate3d(0,' + (aboutTop * -0.12).toFixed(1) + 'px,0)';
