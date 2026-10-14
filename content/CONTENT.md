@@ -121,3 +121,11 @@ React + Vite + React Router, Tailwind + shadcn/Base UI components, deployed to G
    - 99.2% of observable injected faults caught with 128 inputs (96 synthetic models, 2,160 faults) vs 75.0% uniform random; 88.2% with 8 inputs; shrink check caught 22/24 risky compressions vs 14.
 7. **SmartSwap** — Windows background-interference measurement and mitigation (Windows Stall Index, cause attribution, mitigation ladder). Repo: https://github.com/Vaishnavi220506/SmartSwap
    - One hybrid-core laptop, synthetic workloads: WSI vs p95 latency Spearman ρ = 0.96; p95 cut 87–94% under CPU/mixed contention; 1,575/1,575 actions and 322/322 reverts verified.
+
+## Open source — verified on GitHub (14 Oct 2026)
+GitHub search `author:Vaishnavi220506 is:pr`: 78 PRs total → 35 merged (34 upstream + RaceVerse #1 in own repo), 27 open, 16 closed unmerged.
+The old site's list was out of date: OpenHands #4878, ersilia-os/eos-template #95 and ersilia-model-workflows #7 are closed, not open.
+
+Merged upstream (34) by project: Ultralytics 11 (#26652 #26627 #26597 #26548 #26521 #26474 #26454 #26420 #26406 #26306 #26285) · Kornia 7 (#5922 #5891 #5817 #5668 #5498 #5296 #5091) · OpenRig 3 (#1030 #662 #505) · Roboflow Supervision 2 (#2717 #2646) · Ponytail 2 (#1057 #1037) · ONNX #8448 · Microsoft PyRIT #2356 · CrewAI #6881 · MLflow #26300 · COLMAP #4842 · rea #2912 · google/skills_lint.dart #64 · VoiceStudio #2422 · OmniRoute #14594 → 14 projects.
+
+Open / in review (27): vLLM #58847 #58517 #56444 #56413 · COLMAP #4858 #4857 #4851 · Kubernetes #142917 · OpenCV #30235 · HF Datasets #8787 · AWS CLI #10722 · LangChain.js #11756 · LiteLLM #44070 · Langfuse #18024 · Ultralytics #26667 · Kornia #5776 · conda #16851 · aiohttp #14019 · fsspec #2284 · SHAP #5173 · Hyperswitch #14482 · Anyscale Terraform provider #333 · OpenRig #1147 · openworker #678 · AirLLM #363 · blind-assist #49 · threeui #42.

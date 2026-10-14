@@ -1071,18 +1071,18 @@
   .pr { grid-column: 1; will-change: transform, opacity; }
   .pr.right { grid-column: 3; }
   .pr[hidden] { display: none; }
-  .pr a {
+  .pr-card {
     display: grid;
     gap: 12px;
-    padding: 22px 24px 24px;
+    padding: 22px 24px 20px;
     border: 1px solid var(--o-line);
     border-radius: 18px;
     background: var(--o-card);
     transition: transform .5s var(--ease), border-color .5s, box-shadow .5s var(--ease);
   }
-  .pr a:hover { transform: translateY(-4px); border-color: var(--o-ink); box-shadow: 0 22px 40px -26px rgba(0,0,0,.35); }
+  .pr-card:hover { transform: translateY(-4px); border-color: var(--o-ink); box-shadow: 0 22px 40px -26px rgba(0,0,0,.35); }
   .pr-top { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; font: 500 12.5px/1 var(--mono); color: var(--o-mute); }
-  .pr-top .num { color: var(--o-ink); font-weight: 600; }
+  .pr-top .repo:hover { color: var(--o-ink); text-decoration: underline; }
   .status {
     display: inline-flex;
     align-items: center;
@@ -1095,17 +1095,26 @@
     text-transform: uppercase;
   }
   .status.merged { background: var(--o-ink); color: var(--o-bg); }
+  .status.merged::before { content: ""; width: 8px; height: 5px; margin-top: -2px; border-left: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; transform: rotate(-45deg); }
   .status.open { border: 1px solid var(--o-ink); color: var(--o-ink); }
   .status.open::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--o-ink); animation: pulse-ink 2s ease-out infinite; }
   @keyframes pulse-ink { 0% { box-shadow: 0 0 0 0 rgba(18,18,18,.45); } 70%, 100% { box-shadow: 0 0 0 7px transparent; } }
   .pr h3 { margin: 0; font: 400 clamp(26px, 2.2vw, 34px)/1.05 var(--serif); letter-spacing: -0.01em; }
   .pr p { margin: 0; font-size: 16px; line-height: 1.6; color: var(--o-body); }
-  .pr-foot { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
-  .pr-foot li { list-style: none; padding: 6px 10px; border: 1px solid var(--o-line); border-radius: 999px; font: 500 11.5px/1 var(--mono); color: var(--o-body); }
-  .pr-foot ul { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 0; }
-  .pr-foot .go { margin-left: auto; display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 500; }
-  .pr a:hover .go svg { transform: translate(2px, -2px); }
-  .pr .go svg { transition: transform .3s; }
+  .prl { display: grid; margin: 4px 0 0; padding: 0; list-style: none; border-top: 1px solid var(--o-line); }
+  .prl li { border-bottom: 1px solid var(--o-line); }
+  .prl a { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: baseline; gap: 12px; padding: 11px 2px; font-size: 15px; line-height: 1.45; color: var(--o-body); transition: color .3s, padding .3s; }
+  .prl a:hover { color: var(--o-ink); padding-left: 8px; }
+  .prl a svg { transition: transform .3s; opacity: .6; }
+  .prl a:hover svg { transform: translate(2px, -2px); opacity: 1; }
+  .prn { font: 600 12px/1 var(--mono); color: var(--o-ink); }
+  .prt { min-width: 0; overflow-wrap: anywhere; }
+  .pr details summary { cursor: pointer; padding: 12px 2px 2px; font: 600 12px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--o-mute); list-style: none; }
+  .pr details summary::-webkit-details-marker { display: none; }
+  .pr details summary::before { content: "+ "; }
+  .pr details[open] summary::before { content: "− "; }
+  .pr details summary:hover { color: var(--o-ink); }
+  .pr details .prl { border-top: 0; margin-top: 6px; }
 
   @media (max-width: 960px) {
     .oss-head { grid-template-columns: 1fr; }
@@ -1360,105 +1369,312 @@
       <div class="label-pill"><span>03</span><span class="rule"></span><span>Open source</span></div>
       <div class="oss-head">
         <h2 id="oss-title" class="split"><span class="line"><span>Small fixes can make</span></span><span class="line"><span>a <em>big difference.</em></span></span></h2>
-        <p class="reveal">I’m learning in public by working upstream. Here are a few contributions across AI, inference, accessibility, developer tooling, and compilers.</p>
+        <p class="reveal">I learn in public by working upstream. Most of my merged work lands in computer-vision libraries like Ultralytics and Kornia, alongside fixes across AI agents, inference, ML tooling and developer workflows.</p>
       </div>
 
       <div class="oss-stats" id="oss-stats">
-        <div><b data-count="3">0</b><span>Merged upstream</span></div>
-        <div><b data-count="7">0</b><span>In review</span></div>
-        <div><b data-count="9">0</b><span>Repositories touched</span></div>
+        <div><b data-count="34">0</b><span>PRs merged upstream</span></div>
+        <div><b data-count="14">0</b><span>Projects shipping my code</span></div>
+        <div><b data-count="27">0</b><span>In review right now</span></div>
       </div>
 
-      <div class="marquee" aria-hidden="true"><div class="marquee-row" id="marquee-row"><span>ONNX</span><i>·</i><span>Microsoft PyRIT</span><i>·</i><span>CrewAI</span><i>·</i><span>vLLM</span><i>·</i><span>OpenHands</span><i>·</i><span>AirLLM</span><i>·</i><span>Ersilia</span><i>·</i><span>blind-assist</span><i>·</i><span>ONNX</span><i>·</i><span>Microsoft PyRIT</span><i>·</i><span>CrewAI</span><i>·</i><span>vLLM</span><i>·</i><span>OpenHands</span><i>·</i><span>AirLLM</span><i>·</i><span>Ersilia</span><i>·</i><span>blind-assist</span><i>·</i><span>ONNX</span><i>·</i><span>Microsoft PyRIT</span><i>·</i><span>CrewAI</span><i>·</i><span>vLLM</span><i>·</i><span>OpenHands</span><i>·</i><span>AirLLM</span><i>·</i><span>Ersilia</span><i>·</i><span>blind-assist</span><i>·</i></div></div>
+      <div class="marquee" aria-hidden="true"><div class="marquee-row" id="marquee-row"><span>Ultralytics YOLO</span><i>·</i><span>Kornia</span><i>·</i><span>OpenRig</span><i>·</i><span>ONNX</span><i>·</i><span>Microsoft PyRIT</span><i>·</i><span>CrewAI</span><i>·</i><span>Roboflow Supervision</span><i>·</i><span>MLflow</span><i>·</i><span>COLMAP</span><i>·</i><span>Ponytail</span><i>·</i><span>OmniRoute</span><i>·</i><span>VoiceStudio</span><i>·</i><span>rea</span><i>·</i><span>Google skills_lint</span><i>·</i><span>Ultralytics YOLO</span><i>·</i><span>Kornia</span><i>·</i><span>OpenRig</span><i>·</i><span>ONNX</span><i>·</i><span>Microsoft PyRIT</span><i>·</i><span>CrewAI</span><i>·</i><span>Roboflow Supervision</span><i>·</i><span>MLflow</span><i>·</i><span>COLMAP</span><i>·</i><span>Ponytail</span><i>·</i><span>OmniRoute</span><i>·</i><span>VoiceStudio</span><i>·</i><span>rea</span><i>·</i><span>Google skills_lint</span><i>·</i></div></div>
 
       <div class="oss-filter" role="group" aria-label="Filter contributions">
-        <button type="button" data-filter="all" aria-pressed="true">All <small>10</small></button>
-        <button type="button" data-filter="merged" aria-pressed="false">Merged <small>03</small></button>
-        <button type="button" data-filter="open" aria-pressed="false">In review <small>07</small></button>
+        <button type="button" data-filter="merged" aria-pressed="true">Merged <small>34</small></button>
+        <button type="button" data-filter="open" aria-pressed="false">In review <small>27</small></button>
       </div>
 
       <div class="graph" id="graph">
         <svg id="graph-svg" aria-hidden="true"></svg>
         <ol class="prs" id="prs">
         <li class="pr" data-status="merged">
-          <a href="https://github.com/onnx/onnx/pull/8448" target="_blank" rel="noopener">
-            <div class="pr-top"><span>onnx/onnx</span><span class="num">#8448</span><span class="status merged">Merged</span></div>
+          <div class="pr-card">
+            <div class="pr-top"><a class="repo" href="https://github.com/ultralytics/ultralytics/pulls?q=author%3AVaishnavi220506" target="_blank" rel="noopener">ultralytics/ultralytics</a><span class="status merged">11 merged</span></div>
+            <h3>Ultralytics YOLO</h3>
+            <p>YOLO models for detection, segmentation, pose and tracking.</p>
+            <ul class="prl"><li><a href="https://github.com/ultralytics/ultralytics/pull/26652" target="_blank" rel="noopener"><span class="prn">#26652</span><span class="prt">Preserve RMSprop second moments when saving checkpoints</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a></li><li><a href="https://github.com/ultralytics/ultralytics/pull/26627" target="_blank" rel="noopener"><span class="prn">#26627</span><span class="prt">Preserve fractional and high FPS in saved videos and stream loaders</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a></li><li><a href="https://github.com/ultralytics/ultralytics/pull/26597" target="_blank" rel="noopener"><span class="prn">#26597</span><span class="prt">More reliable classification training and validation</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a></li></ul><details><summary>+8 more merged</summary><ul class="prl"><li><a href="https://github.com/ultralytics/ultralytics/pull/26548" target="_blank" rel="noopener"><span class="prn">#26548</span><span class="prt">Preserve caller random state during autosplit</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a></li><li><a href="https://github.com/ultralytics/ultralytics/pull/26521" target="_blank" rel="noopener"><span class="prn">#26521</span><span class="prt">Document per-object depth with instance segmentation</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a></li><li><a href="https://github.com/ultralytics/ultralytics/pull/26474" target="_blank" rel="noopener"><span class="prn">#26474</span><span class="prt">Fix integer crop coordinates and JPEG output collisions</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a></li><li><a href="https://github.com/ultralytics/ultralytics/pull/26454" target="_blank" rel="noopener"><span class="prn">#26454</span><span class="prt">Preserve distinct COCO polygons and keypoints sharing a box</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a></li><li><a href="https://github.com/ultralytics/ultralytics/pull/26420" target="_blank" rel="noopener"><span class="prn">#26420</span><span class="prt">Resolve relative directories and globs in prediction source lists</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a></li><li><a href="https://github.com/ultralytics/ultralytics/pull/26406" target="_blank" rel="noopener"><span class="prn">#26406</span><span class="prt">Keep originals when multispectral conversion collides or fails to write</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a></li><li><a href="https://github.com/ultralytics/ultralytics/pull/26306" target="_blank" rel="noopener"><span class="prn">#26306</span><span class="prt">Extract .tar.xz, .tar.bz2 and local .tgz dataset archives</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a></li><li><a href="https://github.com/ultralytics/ultralytics/pull/26285" target="_blank" rel="noopener"><span class="prn">#26285</span><span class="prt">Tighten export mode docs and explain static export prediction differences</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a></li></ul></details>
+          </div>
+        </li>
+        <li class="pr" data-status="merged">
+          <div class="pr-card">
+            <div class="pr-top"><a class="repo" href="https://github.com/kornia/kornia/pulls?q=author%3AVaishnavi220506" target="_blank" rel="noopener">kornia/kornia</a><span class="status merged">7 merged</span></div>
+            <h3>Kornia</h3>
+            <p>Geometric computer vision library for spatial AI.</p>
+            <ul class="prl"><li><a href="https://github.com/kornia/kornia/pull/5922" target="_blank" rel="noopener"><span class="prn">#5922</span><span class="prt">fix(contrib): assign KMeans labels using the final centers</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a></li><li><a href="https://github.com/kornia/kornia/pull/5891" target="_blank" rel="noopener"><span class="prn">#5891</span><span class="prt">fix(losses): keep mean total variation finite on singleton axes</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a></li><li><a href="https://github.com/kornia/kornia/pull/5817" target="_blank" rel="noopener"><span class="prn">#5817</span><span class="prt">fix(geometry): size pyrdown axes consistently for fractional factors</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a></li></ul><details><summary>+4 more merged</summary><ul class="prl"><li><a href="https://github.com/kornia/kornia/pull/5668" target="_blank" rel="noopener"><span class="prn">#5668</span><span class="prt">fix(calibration): preserve sensor tilt gradients at zero</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a></li><li><a href="https://github.com/kornia/kornia/pull/5498" target="_blank" rel="noopener"><span class="prn">#5498</span><span class="prt">fix(geometry): stabilize 3D line fitting across scales</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a></li><li><a href="https://github.com/kornia/kornia/pull/5296" target="_blank" rel="noopener"><span class="prn">#5296</span><span class="prt">fix(color): preserve RGBA conversion shape contracts</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a></li><li><a href="https://github.com/kornia/kornia/pull/5091" target="_blank" rel="noopener"><span class="prn">#5091</span><span class="prt">fix(color): accept odd heights in YUV422 conversion</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a></li></ul></details>
+          </div>
+        </li>
+        <li class="pr" data-status="merged">
+          <div class="pr-card">
+            <div class="pr-top"><a class="repo" href="https://github.com/mvschwarz/openrig/pulls?q=author%3AVaishnavi220506" target="_blank" rel="noopener">mvschwarz/openrig</a><span class="status merged">3 merged</span></div>
+            <h3>OpenRig</h3>
+            <p>Networks of coding agents from Claude Code, Codex and Pi.</p>
+            <ul class="prl"><li><a href="https://github.com/mvschwarz/openrig/pull/1030" target="_blank" rel="noopener"><span class="prn">#1030</span><span class="prt">fix(shutdown): capture snapshot after resume discovery failure</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a></li><li><a href="https://github.com/mvschwarz/openrig/pull/662" target="_blank" rel="noopener"><span class="prn">#662</span><span class="prt">fix(shutdown): preserve guidance still used by live seats</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a></li><li><a href="https://github.com/mvschwarz/openrig/pull/505" target="_blank" rel="noopener"><span class="prn">#505</span><span class="prt">fix(queue): preserve shared watchdogs across park transitions</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a></li></ul>
+          </div>
+        </li>
+        <li class="pr" data-status="merged">
+          <div class="pr-card">
+            <div class="pr-top"><a class="repo" href="https://github.com/onnx/onnx/pulls?q=author%3AVaishnavi220506" target="_blank" rel="noopener">onnx/onnx</a><span class="status merged">1 merged</span></div>
             <h3>ONNX</h3>
-            <p>Fixed custom callback lifetime handling in shape inference so callbacks remain valid for the full inference operation.</p>
-            <div class="pr-foot"><ul aria-label="Topics"><li>C++</li><li>ONNX</li><li>Memory safety</li></ul><span class="go">View PR <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></span></div>
-          </a>
+            <p>Open standard for machine-learning interoperability.</p>
+            <ul class="prl"><li><a href="https://github.com/onnx/onnx/pull/8448" target="_blank" rel="noopener"><span class="prn">#8448</span><span class="prt">fix(shape_inference): preserve custom callback lifetime</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a></li></ul>
+          </div>
         </li>
         <li class="pr" data-status="merged">
-          <a href="https://github.com/microsoft/PyRIT/pull/2356" target="_blank" rel="noopener">
-            <div class="pr-top"><span>microsoft/PyRIT</span><span class="num">#2356</span><span class="status merged">Merged</span></div>
-            <h3>PyRIT</h3>
-            <p>Fixed stereo audio frequency conversion so multi-channel WAV input no longer causes NumPy broadcasting failures.</p>
-            <div class="pr-foot"><ul aria-label="Topics"><li>Python</li><li>NumPy</li><li>Audio</li></ul><span class="go">View PR <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></span></div>
-          </a>
+          <div class="pr-card">
+            <div class="pr-top"><a class="repo" href="https://github.com/microsoft/PyRIT/pulls?q=author%3AVaishnavi220506" target="_blank" rel="noopener">microsoft/PyRIT</a><span class="status merged">1 merged</span></div>
+            <h3>Microsoft PyRIT</h3>
+            <p>Framework for finding risks in generative AI systems.</p>
+            <ul class="prl"><li><a href="https://github.com/microsoft/PyRIT/pull/2356" target="_blank" rel="noopener"><span class="prn">#2356</span><span class="prt">FIX: support stereo audio frequency conversion</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a></li></ul>
+          </div>
         </li>
         <li class="pr" data-status="merged">
-          <a href="https://github.com/crewAIInc/crewAI/pull/6881" target="_blank" rel="noopener">
-            <div class="pr-top"><span>crewAIInc/crewAI</span><span class="num">#6881</span><span class="status merged">Merged</span></div>
+          <div class="pr-card">
+            <div class="pr-top"><a class="repo" href="https://github.com/crewAIInc/crewAI/pulls?q=author%3AVaishnavi220506" target="_blank" rel="noopener">crewAIInc/crewAI</a><span class="status merged">1 merged</span></div>
             <h3>CrewAI</h3>
-            <p>Made the project’s pre-commit hooks portable on Windows by removing Unix-only environment activation.</p>
-            <div class="pr-foot"><ul aria-label="Topics"><li>Python</li><li>AI agents</li><li>Developer tools</li></ul><span class="go">View PR <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></span></div>
-          </a>
+            <p>Framework for orchestrating autonomous AI agents.</p>
+            <ul class="prl"><li><a href="https://github.com/crewAIInc/crewAI/pull/6881" target="_blank" rel="noopener"><span class="prn">#6881</span><span class="prt">fix: make pre-commit hooks portable on Windows</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a></li></ul>
+          </div>
         </li>
-        <li class="pr" data-status="open">
-          <a href="https://github.com/vllm-project/vllm/pull/56444" target="_blank" rel="noopener">
-            <div class="pr-top"><span>vllm-project/vllm</span><span class="num">#56444</span><span class="status open">In review</span></div>
+        <li class="pr" data-status="merged">
+          <div class="pr-card">
+            <div class="pr-top"><a class="repo" href="https://github.com/roboflow/supervision/pulls?q=author%3AVaishnavi220506" target="_blank" rel="noopener">roboflow/supervision</a><span class="status merged">2 merged</span></div>
+            <h3>Roboflow Supervision</h3>
+            <p>Reusable computer vision tools.</p>
+            <ul class="prl"><li><a href="https://github.com/roboflow/supervision/pull/2717" target="_blank" rel="noopener"><span class="prn">#2717</span><span class="prt">fix(metrics): preserve oriented-box precision in mAP</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a></li><li><a href="https://github.com/roboflow/supervision/pull/2646" target="_blank" rel="noopener"><span class="prn">#2646</span><span class="prt">fix(detection): keep off-frame fractional boxes out of masks</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a></li></ul>
+          </div>
+        </li>
+        <li class="pr" data-status="merged">
+          <div class="pr-card">
+            <div class="pr-top"><a class="repo" href="https://github.com/mlflow/mlflow/pulls?q=author%3AVaishnavi220506" target="_blank" rel="noopener">mlflow/mlflow</a><span class="status merged">1 merged</span></div>
+            <h3>MLflow</h3>
+            <p>Open source AI engineering platform.</p>
+            <ul class="prl"><li><a href="https://github.com/mlflow/mlflow/pull/26300" target="_blank" rel="noopener"><span class="prn">#26300</span><span class="prt">Honor tool_choice in Gemini and Vertex AI gateway requests</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a></li></ul>
+          </div>
+        </li>
+        <li class="pr" data-status="merged">
+          <div class="pr-card">
+            <div class="pr-top"><a class="repo" href="https://github.com/colmap/colmap/pulls?q=author%3AVaishnavi220506" target="_blank" rel="noopener">colmap/colmap</a><span class="status merged">1 merged</span></div>
+            <h3>COLMAP</h3>
+            <p>Structure-from-Motion and multi-view stereo.</p>
+            <ul class="prl"><li><a href="https://github.com/colmap/colmap/pull/4842" target="_blank" rel="noopener"><span class="prn">#4842</span><span class="prt">Reset reconstruction bookkeeping when reading a model</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a></li></ul>
+          </div>
+        </li>
+        <li class="pr" data-status="merged">
+          <div class="pr-card">
+            <div class="pr-top"><a class="repo" href="https://github.com/DietrichGebert/ponytail/pulls?q=author%3AVaishnavi220506" target="_blank" rel="noopener">DietrichGebert/ponytail</a><span class="status merged">2 merged</span></div>
+            <h3>Ponytail</h3>
+            <p>Guides AI agents toward minimal code.</p>
+            <ul class="prl"><li><a href="https://github.com/DietrichGebert/ponytail/pull/1057" target="_blank" rel="noopener"><span class="prn">#1057</span><span class="prt">fix(qoder): honor QODER_CONFIG_DIR for mode state</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a></li><li><a href="https://github.com/DietrichGebert/ponytail/pull/1037" target="_blank" rel="noopener"><span class="prn">#1037</span><span class="prt">fix(hooks): prevent project mode state collisions</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a></li></ul>
+          </div>
+        </li>
+        <li class="pr" data-status="merged">
+          <div class="pr-card">
+            <div class="pr-top"><a class="repo" href="https://github.com/diegosouzapw/OmniRoute/pulls?q=author%3AVaishnavi220506" target="_blank" rel="noopener">diegosouzapw/OmniRoute</a><span class="status merged">1 merged</span></div>
+            <h3>OmniRoute</h3>
+            <p>AI gateway with one endpoint for many model providers.</p>
+            <ul class="prl"><li><a href="https://github.com/diegosouzapw/OmniRoute/pull/14594" target="_blank" rel="noopener"><span class="prn">#14594</span><span class="prt">fix(mitm): respect SSE backpressure and cap inspector chunks</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a></li></ul>
+          </div>
+        </li>
+        <li class="pr" data-status="merged">
+          <div class="pr-card">
+            <div class="pr-top"><a class="repo" href="https://github.com/debpalash/VoiceStudio/pulls?q=author%3AVaishnavi220506" target="_blank" rel="noopener">debpalash/VoiceStudio</a><span class="status merged">1 merged</span></div>
+            <h3>VoiceStudio</h3>
+            <p>Local voice cloning, dubbing and transcription.</p>
+            <ul class="prl"><li><a href="https://github.com/debpalash/VoiceStudio/pull/2422" target="_blank" rel="noopener"><span class="prn">#2422</span><span class="prt">fix(subtitles): interpret short timestamp fields as milliseconds</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a></li></ul>
+          </div>
+        </li>
+        <li class="pr" data-status="merged">
+          <div class="pr-card">
+            <div class="pr-top"><a class="repo" href="https://github.com/morluto/rea/pulls?q=author%3AVaishnavi220506" target="_blank" rel="noopener">morluto/rea</a><span class="status merged">1 merged</span></div>
+            <h3>rea</h3>
+            <p>Reverse-engineering tool built on agents.</p>
+            <ul class="prl"><li><a href="https://github.com/morluto/rea/pull/2912" target="_blank" rel="noopener"><span class="prn">#2912</span><span class="prt">fix(managed): retain raw CIL changes in member comparison</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a></li></ul>
+          </div>
+        </li>
+        <li class="pr" data-status="merged">
+          <div class="pr-card">
+            <div class="pr-top"><a class="repo" href="https://github.com/google/skills_lint.dart/pulls?q=author%3AVaishnavi220506" target="_blank" rel="noopener">google/skills_lint.dart</a><span class="status merged">1 merged</span></div>
+            <h3>Google skills_lint</h3>
+            <p>Open-source tooling from Google.</p>
+            <ul class="prl"><li><a href="https://github.com/google/skills_lint.dart/pull/64" target="_blank" rel="noopener"><span class="prn">#64</span><span class="prt">feat(config): make parser source explicit</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a></li></ul>
+          </div>
+        </li>
+        <li class="pr" data-status="open" hidden>
+          <div class="pr-card">
+            <div class="pr-top"><a class="repo" href="https://github.com/vllm-project/vllm/pulls?q=author%3AVaishnavi220506" target="_blank" rel="noopener">vllm-project/vllm</a><span class="status open">4 in review</span></div>
             <h3>vLLM</h3>
-            <p>Proposed a bugfix for N-gram PLE with pipeline parallelism.</p>
-            <div class="pr-foot"><ul aria-label="Topics"><li>PyTorch</li><li>CUDA</li><li>Inference</li></ul><span class="go">View PR <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></span></div>
-          </a>
+            <p>High-throughput LLM inference and serving engine.</p>
+            <ul class="prl"><li><a href="https://github.com/vllm-project/vllm/pull/58847" target="_blank" rel="noopener"><span class="prn">#58847</span><span class="prt">[Bugfix][Frontend] Parse split GLM tool-call markers</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a></li><li><a href="https://github.com/vllm-project/vllm/pull/58517" target="_blank" rel="noopener"><span class="prn">#58517</span><span class="prt">[Core] Bound async GPU output synchronization</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a></li><li><a href="https://github.com/vllm-project/vllm/pull/56444" target="_blank" rel="noopener"><span class="prn">#56444</span><span class="prt">[Bugfix][Qwen4Exp] Support N-gram PLE with pipeline parallelism</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a></li></ul><details><summary>+1 more</summary><ul class="prl"><li><a href="https://github.com/vllm-project/vllm/pull/56413" target="_blank" rel="noopener"><span class="prn">#56413</span><span class="prt">[Bugfix][Offload] Avoid duplicate host allocation for UVA weights</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a></li></ul></details>
+          </div>
         </li>
-        <li class="pr" data-status="open">
-          <a href="https://github.com/vllm-project/vllm/pull/56413" target="_blank" rel="noopener">
-            <div class="pr-top"><span>vllm-project/vllm</span><span class="num">#56413</span><span class="status open">In review</span></div>
-            <h3>vLLM</h3>
-            <p>Proposed avoiding duplicate host allocation for UVA weights.</p>
-            <div class="pr-foot"><ul aria-label="Topics"><li>PyTorch</li><li>CUDA</li><li>Memory</li></ul><span class="go">View PR <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></span></div>
-          </a>
+        <li class="pr" data-status="open" hidden>
+          <div class="pr-card">
+            <div class="pr-top"><a class="repo" href="https://github.com/colmap/colmap/pulls?q=author%3AVaishnavi220506" target="_blank" rel="noopener">colmap/colmap</a><span class="status open">3 in review</span></div>
+            <h3>COLMAP</h3>
+            <p>Structure-from-Motion and multi-view stereo.</p>
+            <ul class="prl"><li><a href="https://github.com/colmap/colmap/pull/4858" target="_blank" rel="noopener"><span class="prn">#4858</span><span class="prt">Honor the declared vertex count when reading ASCII PLY</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a></li><li><a href="https://github.com/colmap/colmap/pull/4857" target="_blank" rel="noopener"><span class="prn">#4857</span><span class="prt">Keep copied reconstruction frames finalized</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a></li><li><a href="https://github.com/colmap/colmap/pull/4851" target="_blank" rel="noopener"><span class="prn">#4851</span><span class="prt">Preserve multi-camera rig geometry when merging reconstructions</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a></li></ul>
+          </div>
         </li>
-        <li class="pr" data-status="open">
-          <a href="https://github.com/OpenHands/software-agent-sdk/pull/4878" target="_blank" rel="noopener">
-            <div class="pr-top"><span>OpenHands/software-agent-sdk</span><span class="num">#4878</span><span class="status open">In review</span></div>
-            <h3>OpenHands SDK</h3>
-            <p>Proposed agent-server proxy support for cloud runtime requests.</p>
-            <div class="pr-foot"><ul aria-label="Topics"><li>TypeScript</li><li>Agentic systems</li><li>Cloud API</li></ul><span class="go">View PR <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></span></div>
-          </a>
+        <li class="pr" data-status="open" hidden>
+          <div class="pr-card">
+            <div class="pr-top"><a class="repo" href="https://github.com/kubernetes/kubernetes/pulls?q=author%3AVaishnavi220506" target="_blank" rel="noopener">kubernetes/kubernetes</a><span class="status open">1 in review</span></div>
+            <h3>Kubernetes</h3>
+            <p>Container scheduling and management.</p>
+            <ul class="prl"><li><a href="https://github.com/kubernetes/kubernetes/pull/142917" target="_blank" rel="noopener"><span class="prn">#142917</span><span class="prt">Fix CronJob catch-up runs during irregular schedule gaps</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a></li></ul>
+          </div>
         </li>
-        <li class="pr" data-status="open">
-          <a href="https://github.com/lyogavin/airllm/pull/363" target="_blank" rel="noopener">
-            <div class="pr-top"><span>lyogavin/airllm</span><span class="num">#363</span><span class="status open">In review</span></div>
+        <li class="pr" data-status="open" hidden>
+          <div class="pr-card">
+            <div class="pr-top"><a class="repo" href="https://github.com/opencv/opencv/pulls?q=author%3AVaishnavi220506" target="_blank" rel="noopener">opencv/opencv</a><span class="status open">1 in review</span></div>
+            <h3>OpenCV</h3>
+            <p>Open source computer vision library.</p>
+            <ul class="prl"><li><a href="https://github.com/opencv/opencv/pull/30235" target="_blank" rel="noopener"><span class="prn">#30235</span><span class="prt">imgproc: fix sparse alternative chi-square comparison</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a></li></ul>
+          </div>
+        </li>
+        <li class="pr" data-status="open" hidden>
+          <div class="pr-card">
+            <div class="pr-top"><a class="repo" href="https://github.com/huggingface/datasets/pulls?q=author%3AVaishnavi220506" target="_blank" rel="noopener">huggingface/datasets</a><span class="status open">1 in review</span></div>
+            <h3>Hugging Face Datasets</h3>
+            <p>Hub and tools for AI datasets.</p>
+            <ul class="prl"><li><a href="https://github.com/huggingface/datasets/pull/8787" target="_blank" rel="noopener"><span class="prn">#8787</span><span class="prt">Fix streaming map callbacks returning None</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a></li></ul>
+          </div>
+        </li>
+        <li class="pr" data-status="open" hidden>
+          <div class="pr-card">
+            <div class="pr-top"><a class="repo" href="https://github.com/aws/aws-cli/pulls?q=author%3AVaishnavi220506" target="_blank" rel="noopener">aws/aws-cli</a><span class="status open">1 in review</span></div>
+            <h3>AWS CLI</h3>
+            <p>Command line interface for AWS.</p>
+            <ul class="prl"><li><a href="https://github.com/aws/aws-cli/pull/10722" target="_blank" rel="noopener"><span class="prn">#10722</span><span class="prt">[v2] Preserve settings during configuration updates</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a></li></ul>
+          </div>
+        </li>
+        <li class="pr" data-status="open" hidden>
+          <div class="pr-card">
+            <div class="pr-top"><a class="repo" href="https://github.com/langchain-ai/langchainjs/pulls?q=author%3AVaishnavi220506" target="_blank" rel="noopener">langchain-ai/langchainjs</a><span class="status open">1 in review</span></div>
+            <h3>LangChain.js</h3>
+            <p>Agent engineering platform.</p>
+            <ul class="prl"><li><a href="https://github.com/langchain-ai/langchainjs/pull/11756" target="_blank" rel="noopener"><span class="prn">#11756</span><span class="prt">fix(core): prevent cache key collisions between inputs</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a></li></ul>
+          </div>
+        </li>
+        <li class="pr" data-status="open" hidden>
+          <div class="pr-card">
+            <div class="pr-top"><a class="repo" href="https://github.com/BerriAI/litellm/pulls?q=author%3AVaishnavi220506" target="_blank" rel="noopener">BerriAI/litellm</a><span class="status open">1 in review</span></div>
+            <h3>LiteLLM</h3>
+            <p>AI gateway for 100+ LLM APIs.</p>
+            <ul class="prl"><li><a href="https://github.com/BerriAI/litellm/pull/44070" target="_blank" rel="noopener"><span class="prn">#44070</span><span class="prt">fix(routing): retain adaptive feedback after failed flushes</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a></li></ul>
+          </div>
+        </li>
+        <li class="pr" data-status="open" hidden>
+          <div class="pr-card">
+            <div class="pr-top"><a class="repo" href="https://github.com/langfuse/langfuse/pulls?q=author%3AVaishnavi220506" target="_blank" rel="noopener">langfuse/langfuse</a><span class="status open">1 in review</span></div>
+            <h3>Langfuse</h3>
+            <p>Agent evals and observability.</p>
+            <ul class="prl"><li><a href="https://github.com/langfuse/langfuse/pull/18024" target="_blank" rel="noopener"><span class="prn">#18024</span><span class="prt">fix(worker): include clamped billing starts in usage lookback</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a></li></ul>
+          </div>
+        </li>
+        <li class="pr" data-status="open" hidden>
+          <div class="pr-card">
+            <div class="pr-top"><a class="repo" href="https://github.com/ultralytics/ultralytics/pulls?q=author%3AVaishnavi220506" target="_blank" rel="noopener">ultralytics/ultralytics</a><span class="status open">1 in review</span></div>
+            <h3>Ultralytics YOLO</h3>
+            <p>YOLO models for detection, segmentation, pose and tracking.</p>
+            <ul class="prl"><li><a href="https://github.com/ultralytics/ultralytics/pull/26667" target="_blank" rel="noopener"><span class="prn">#26667</span><span class="prt">Preserve distinct same-box grounding segmentation polygons</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a></li></ul>
+          </div>
+        </li>
+        <li class="pr" data-status="open" hidden>
+          <div class="pr-card">
+            <div class="pr-top"><a class="repo" href="https://github.com/kornia/kornia/pulls?q=author%3AVaishnavi220506" target="_blank" rel="noopener">kornia/kornia</a><span class="status open">1 in review</span></div>
+            <h3>Kornia</h3>
+            <p>Geometric computer vision library for spatial AI.</p>
+            <ul class="prl"><li><a href="https://github.com/kornia/kornia/pull/5776" target="_blank" rel="noopener"><span class="prn">#5776</span><span class="prt">fix(filters): preserve bilateral colour weights at extreme scales</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a></li></ul>
+          </div>
+        </li>
+        <li class="pr" data-status="open" hidden>
+          <div class="pr-card">
+            <div class="pr-top"><a class="repo" href="https://github.com/conda/conda/pulls?q=author%3AVaishnavi220506" target="_blank" rel="noopener">conda/conda</a><span class="status open">1 in review</span></div>
+            <h3>conda</h3>
+            <p>Package and environment manager.</p>
+            <ul class="prl"><li><a href="https://github.com/conda/conda/pull/16851" target="_blank" rel="noopener"><span class="prn">#16851</span><span class="prt">Prevent renaming environments into themselves</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a></li></ul>
+          </div>
+        </li>
+        <li class="pr" data-status="open" hidden>
+          <div class="pr-card">
+            <div class="pr-top"><a class="repo" href="https://github.com/aio-libs/aiohttp/pulls?q=author%3AVaishnavi220506" target="_blank" rel="noopener">aio-libs/aiohttp</a><span class="status open">1 in review</span></div>
+            <h3>aiohttp</h3>
+            <p>Async HTTP client and server for Python.</p>
+            <ul class="prl"><li><a href="https://github.com/aio-libs/aiohttp/pull/14019" target="_blank" rel="noopener"><span class="prn">#14019</span><span class="prt">Fix memoryview payload serialization and byte-length limits</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a></li></ul>
+          </div>
+        </li>
+        <li class="pr" data-status="open" hidden>
+          <div class="pr-card">
+            <div class="pr-top"><a class="repo" href="https://github.com/fsspec/filesystem_spec/pulls?q=author%3AVaishnavi220506" target="_blank" rel="noopener">fsspec/filesystem_spec</a><span class="status open">1 in review</span></div>
+            <h3>fsspec</h3>
+            <p>Specification for Python filesystems.</p>
+            <ul class="prl"><li><a href="https://github.com/fsspec/filesystem_spec/pull/2284" target="_blank" rel="noopener"><span class="prn">#2284</span><span class="prt">Recover background block reads after prefetch failures</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a></li></ul>
+          </div>
+        </li>
+        <li class="pr" data-status="open" hidden>
+          <div class="pr-card">
+            <div class="pr-top"><a class="repo" href="https://github.com/shap/shap/pulls?q=author%3AVaishnavi220506" target="_blank" rel="noopener">shap/shap</a><span class="status open">1 in review</span></div>
+            <h3>SHAP</h3>
+            <p>Game-theoretic explanations for ML models.</p>
+            <ul class="prl"><li><a href="https://github.com/shap/shap/pull/5173" target="_blank" rel="noopener"><span class="prn">#5173</span><span class="prt">FIX: Defer LightGBM tree parsing for native SHAP values</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a></li></ul>
+          </div>
+        </li>
+        <li class="pr" data-status="open" hidden>
+          <div class="pr-card">
+            <div class="pr-top"><a class="repo" href="https://github.com/juspay/hyperswitch/pulls?q=author%3AVaishnavi220506" target="_blank" rel="noopener">juspay/hyperswitch</a><span class="status open">1 in review</span></div>
+            <h3>Hyperswitch</h3>
+            <p>Composable open source payments platform.</p>
+            <ul class="prl"><li><a href="https://github.com/juspay/hyperswitch/pull/14482" target="_blank" rel="noopener"><span class="prn">#14482</span><span class="prt">fix(common_utils): reject a lone plus in phone country codes</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a></li></ul>
+          </div>
+        </li>
+        <li class="pr" data-status="open" hidden>
+          <div class="pr-card">
+            <div class="pr-top"><a class="repo" href="https://github.com/anyscale/terraform-provider-anyscale/pulls?q=author%3AVaishnavi220506" target="_blank" rel="noopener">anyscale/terraform-provider-anyscale</a><span class="status open">1 in review</span></div>
+            <h3>Anyscale Terraform provider</h3>
+            <p>Terraform provider for Anyscale.</p>
+            <ul class="prl"><li><a href="https://github.com/anyscale/terraform-provider-anyscale/pull/333" target="_blank" rel="noopener"><span class="prn">#333</span><span class="prt">fix: prevent infinite loops on repeated pagination cursors</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a></li></ul>
+          </div>
+        </li>
+        <li class="pr" data-status="open" hidden>
+          <div class="pr-card">
+            <div class="pr-top"><a class="repo" href="https://github.com/mvschwarz/openrig/pulls?q=author%3AVaishnavi220506" target="_blank" rel="noopener">mvschwarz/openrig</a><span class="status open">1 in review</span></div>
+            <h3>OpenRig</h3>
+            <p>Networks of coding agents from Claude Code, Codex and Pi.</p>
+            <ul class="prl"><li><a href="https://github.com/mvschwarz/openrig/pull/1147" target="_blank" rel="noopener"><span class="prn">#1147</span><span class="prt">fix(snapshots): preserve pre-down recovery during periodic refresh</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a></li></ul>
+          </div>
+        </li>
+        <li class="pr" data-status="open" hidden>
+          <div class="pr-card">
+            <div class="pr-top"><a class="repo" href="https://github.com/andrewyng/openworker/pulls?q=author%3AVaishnavi220506" target="_blank" rel="noopener">andrewyng/openworker</a><span class="status open">1 in review</span></div>
+            <h3>openworker</h3>
+            <p>Open-source project from Andrew Ng.</p>
+            <ul class="prl"><li><a href="https://github.com/andrewyng/openworker/pull/678" target="_blank" rel="noopener"><span class="prn">#678</span><span class="prt">Fix local model discovery for OpenAI-compatible Ollama endpoints</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a></li></ul>
+          </div>
+        </li>
+        <li class="pr" data-status="open" hidden>
+          <div class="pr-card">
+            <div class="pr-top"><a class="repo" href="https://github.com/lyogavin/airllm/pulls?q=author%3AVaishnavi220506" target="_blank" rel="noopener">lyogavin/airllm</a><span class="status open">1 in review</span></div>
             <h3>AirLLM</h3>
-            <p>Proposed support for PyTorch tokenizer inputs in the MLX generation pipeline.</p>
-            <div class="pr-foot"><ul aria-label="Topics"><li>PyTorch</li><li>MLX</li><li>Inference</li></ul><span class="go">View PR <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></span></div>
-          </a>
+            <p>70B-model inference on a single 4GB GPU.</p>
+            <ul class="prl"><li><a href="https://github.com/lyogavin/airllm/pull/363" target="_blank" rel="noopener"><span class="prn">#363</span><span class="prt">fix: accept PyTorch tokenizer inputs in MLX generate</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a></li></ul>
+          </div>
         </li>
-        <li class="pr" data-status="open">
-          <a href="https://github.com/violetljj/blind-assist/pull/49" target="_blank" rel="noopener">
-            <div class="pr-top"><span>violetljj/blind-assist</span><span class="num">#49</span><span class="status open">In review</span></div>
+        <li class="pr" data-status="open" hidden>
+          <div class="pr-card">
+            <div class="pr-top"><a class="repo" href="https://github.com/violetljj/blind-assist/pulls?q=author%3AVaishnavi220506" target="_blank" rel="noopener">violetljj/blind-assist</a><span class="status open">1 in review</span></div>
             <h3>blind-assist</h3>
-            <p>Proposed accessibility hardening for the default flow at large font sizes.</p>
-            <div class="pr-foot"><ul aria-label="Topics"><li>Android</li><li>Accessibility</li><li>UI</li></ul><span class="go">View PR <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></span></div>
-          </a>
+            <p>On-device assistive perception for Android.</p>
+            <ul class="prl"><li><a href="https://github.com/violetljj/blind-assist/pull/49" target="_blank" rel="noopener"><span class="prn">#49</span><span class="prt">fix: harden default flow accessibility at large font sizes</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a></li></ul>
+          </div>
         </li>
-        <li class="pr" data-status="open">
-          <a href="https://github.com/ersilia-os/eos-template/pull/95" target="_blank" rel="noopener">
-            <div class="pr-top"><span>ersilia-os/eos-template</span><span class="num">#95</span><span class="status open">In review</span></div>
-            <h3>Ersilia model template</h3>
-            <p>Proposed automatic model releases when generated outputs change.</p>
-            <div class="pr-foot"><ul aria-label="Topics"><li>GitHub Actions</li><li>Release automation</li><li>Python</li></ul><span class="go">View PR <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></span></div>
-          </a>
-        </li>
-        <li class="pr" data-status="open">
-          <a href="https://github.com/ersilia-os/ersilia-model-workflows/pull/7" target="_blank" rel="noopener">
-            <div class="pr-top"><span>ersilia-os/ersilia-model-workflows</span><span class="num">#7</span><span class="status open">In review</span></div>
-            <h3>Ersilia workflows</h3>
-            <p>Proposed reusable workflow automation for model releases when outputs change.</p>
-            <div class="pr-foot"><ul aria-label="Topics"><li>GitHub Actions</li><li>CI/CD</li><li>Automation</li></ul><span class="go">View PR <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></span></div>
-          </a>
+        <li class="pr" data-status="open" hidden>
+          <div class="pr-card">
+            <div class="pr-top"><a class="repo" href="https://github.com/MengTo/threeui/pulls?q=author%3AVaishnavi220506" target="_blank" rel="noopener">MengTo/threeui</a><span class="status open">1 in review</span></div>
+            <h3>threeui</h3>
+            <p>Community catalog of interactive UI components.</p>
+            <ul class="prl"><li><a href="https://github.com/MengTo/threeui/pull/42" target="_blank" rel="noopener"><span class="prn">#42</span><span class="prt">Fix Sylva Living World font loading in sandbox</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a></li></ul>
+          </div>
         </li>
         </ol>
       </div>
@@ -2006,6 +2222,7 @@
       });
     });
 
+    list.addEventListener('toggle', function () { requestAnimationFrame(layoutGraph); }, true);
     const statEls = Array.from(document.querySelectorAll('#oss-stats b'));
     const statsBox = document.getElementById('oss-stats');
     const marquee = document.getElementById('marquee-row');
@@ -2026,7 +2243,7 @@
         statEls.forEach(function (el) { el.textContent = String(Math.round(+el.dataset.count * (still ? 1 : ease(st)))); });
         // marquee: drifts on its own, and the page scroll pushes it further
         if (!still) {
-          const third = marquee.scrollWidth / 3;
+          const third = marquee.scrollWidth / 2;
           const x = ((y * 0.5 + (now - t0) * 0.03) % third + third) % third;
           marquee.style.transform = 'translate3d(' + (-x).toFixed(1) + 'px,0,0)';
         }
