@@ -207,7 +207,13 @@
     width: 62%;
     pointer-events: none;
   }
-  .stage canvas { display: block; width: 100%; height: 100%; }
+  .stage::before {
+    content: "";
+    position: absolute;
+    inset: 8% 6%;
+    background: radial-gradient(closest-side, rgba(243, 242, 239, 0.07), transparent 72%);
+  }
+  .stage canvas { position: relative; display: block; width: 100%; height: 100%; }
 
   .hero-body {
     position: relative;
@@ -461,7 +467,8 @@
 </script>
 
 <script type="module">
-  // Chrome smiley — rotates steadily about its vertical axis.
+  // Chrome smiley — polished chrome parts with a choreographed tumble:
+  // spins, rolls upside down, somersaults, glances left and right, then settles.
   import * as THREE from 'three';
 
   const stage = document.getElementById('stage');
@@ -476,18 +483,18 @@
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
     renderer.setClearColor(0x000000, 0);
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.05;
+    renderer.toneMappingExposure = 1.1;
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     stage.appendChild(renderer.domElement);
 
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(32, 1, 0.1, 100);
+    const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 100);
 
-    // Studio environment: black room with a few hard white strip lights,
-    // which is what gives black chrome its sharp streaky highlights.
+    // Studio environment: a black room with soft-boxes and thin strip lights,
+    // so the chrome reads as deep black with crisp white highlights.
     const envScene = new THREE.Scene();
     envScene.background = new THREE.Color(0x000000);
-    function strip(w, h, pos, rot, intensity) {
+    function panel(w, h, pos, rot, intensity) {
       const m = new THREE.Mesh(
         new THREE.PlaneGeometry(w, h),
         new THREE.MeshBasicMaterial({ color: new THREE.Color(intensity, intensity, intensity), side: THREE.DoubleSide })
@@ -496,73 +503,128 @@
       m.rotation.set(rot[0], rot[1], rot[2]);
       envScene.add(m);
     }
-    strip(16, 4.5, [0, 7, 0], [Math.PI / 2, 0, 0], 6);
-    strip(2.2, 12, [-7, 0, 1], [0, Math.PI / 2, 0], 5);
-    strip(1.2, 12, [7, 1, -2], [0, -Math.PI / 2, 0], 4);
-    strip(6, 4.5, [2.5, 2, 7], [0, Math.PI, 0], 3.5);
-    strip(12, 1.2, [0, -3.5, 7], [0, Math.PI, 0], 2.5);
-    strip(1.2, 9, [-2.5, 0, -7], [0, 0, 0.3], 3);
-    strip(9, 1, [3, -4, -6], [0, 0, -0.2], 2);
+    panel(14, 5, [0, 7, 0], [Math.PI / 2, 0, 0], 5);          // overhead soft-box
+    panel(2.4, 12, [-7, 0, 1], [0, Math.PI / 2, 0], 4.5);     // left strip
+    panel(0.8, 12, [7, 0.5, -1], [0, -Math.PI / 2, 0], 6);    // right hairline strip
+    panel(5, 3.6, [2.6, 2.2, 7], [0, Math.PI, 0], 3);         // key light, camera side
+    panel(14, 0.5, [0, -3.2, 7], [0, Math.PI, 0], 2.2);       // low rim
+    panel(1, 10, [-2.6, 0, -7], [0, 0, 0.35], 3);             // back accent
+    panel(10, 0.8, [3, -4.5, -5], [0, 0, -0.2], 1.6);         // floor bounce
     const pmrem = new THREE.PMREMGenerator(renderer);
-    scene.environment = pmrem.fromScene(envScene, 0.02).texture;
+    scene.environment = pmrem.fromScene(envScene, 0.015).texture;
 
     const chrome = new THREE.MeshPhysicalMaterial({
-      color: 0xe6e6e6,
+      color: 0xd2d2d2,
       metalness: 1,
-      roughness: 0.14,
+      roughness: 0.07,
       clearcoat: 1,
-      clearcoatRoughness: 0.04,
+      clearcoatRoughness: 0.03,
+      envMapIntensity: 1.15,
     });
 
     const face = new THREE.Group();
+    const chromeDS = chrome.clone();
+    chromeDS.side = THREE.DoubleSide;
 
-    // Outer ring — a thick extruded band with soft bevels.
-    const ringShape = new THREE.Shape();
-    ringShape.absarc(0, 0, 1, 0, Math.PI * 2, false);
-    const hole = new THREE.Path();
-    hole.absarc(0, 0, 0.83, 0, Math.PI * 2, true);
-    ringShape.holes.push(hole);
-    const ringGeo = new THREE.ExtrudeGeometry(ringShape, {
-      depth: 0.36, bevelEnabled: true, bevelThickness: 0.05, bevelSize: 0.04, bevelSegments: 8, curveSegments: 160,
-    });
-    ringGeo.center();
-    face.add(new THREE.Mesh(ringGeo, chrome));
+    // Bezel — a deep lathed band. Rounded lips, a raised front ridge,
+    // and two machined grooves around the outside.
+    const prof = [];
+    const rIn = 0.8, rOut = 1.0, half = 0.27, c = 0.05;
+    const corner = (cx, cy, a0, a1) => {
+      for (let i = 0; i <= 8; i++) {
+        const a = a0 + (a1 - a0) * (i / 8);
+        prof.push(new THREE.Vector2(cx + Math.cos(a) * c, cy + Math.sin(a) * c));
+      }
+    };
+    const groove = (z0, z1, depth) => {   // walk the outer wall from z0 to z1 with a dip in the middle
+      for (let i = 0; i <= 16; i++) {
+        const t = i / 16, z = z0 + (z1 - z0) * t;
+        const d = Math.pow(Math.sin(Math.PI * t), 6) * depth;
+        prof.push(new THREE.Vector2(rOut - d, z));
+      }
+    };
+    corner(rIn + c, -half + c, Math.PI, Math.PI * 1.5);          // back inner lip
+    corner(rOut - c, -half + c, -Math.PI / 2, 0);                // back outer lip
+    groove(-half + c, -0.06, 0.035);
+    groove(-0.06, 0.12, 0.035);
+    prof.push(new THREE.Vector2(rOut, half - c));
+    corner(rOut - c, half - c, 0, Math.PI / 2);                  // front outer lip
+    prof.push(new THREE.Vector2(0.93, half));
+    for (let i = 0; i <= 10; i++) {                              // raised ridge on the front face
+      const a = Math.PI * (i / 10);
+      prof.push(new THREE.Vector2(0.9 + Math.cos(a) * 0.03, half + Math.sin(a) * 0.03));
+    }
+    prof.push(new THREE.Vector2(rIn + c, half));
+    corner(rIn + c, half - c, Math.PI / 2, Math.PI);             // front inner lip
+    prof.push(prof[0].clone());
+    const ringGeo = new THREE.LatheGeometry(prof, 220);
+    ringGeo.rotateX(Math.PI / 2);
+    face.add(new THREE.Mesh(ringGeo, chromeDS));
 
-    // Smile — an arc with rounded ends.
-    const a0 = -Math.PI * 5 / 6, a1 = -Math.PI / 6, r1 = 0.47, r2 = 0.6;
-    const rc = (r2 - r1) / 2, rm = (r1 + r2) / 2;
-    const smile = new THREE.Shape();
-    smile.absarc(0, 0, r2, a0, a1, false);
-    smile.absarc(rm * Math.cos(a1), rm * Math.sin(a1), rc, a1, a1 + Math.PI, false);
-    smile.absarc(0, 0, r1, a1, a0, true);
-    smile.absarc(rm * Math.cos(a0), rm * Math.sin(a0), rc, a0 + Math.PI, a0 + Math.PI * 2, false);
-    const smileGeo = new THREE.ExtrudeGeometry(smile, {
-      depth: 0.24, bevelEnabled: true, bevelThickness: 0.035, bevelSize: 0.03, bevelSegments: 6, curveSegments: 96,
-    });
-    smileGeo.translate(0, 0.02, -0.08);
-    face.add(new THREE.Mesh(smileGeo, chrome));
-
-    // Eyes — short cylinders pointing out of the face.
-    const eyeGeo = new THREE.CylinderGeometry(0.105, 0.105, 0.62, 48, 1);
-    eyeGeo.rotateX(Math.PI / 2);
-    [-0.29, 0.29].forEach(function (x) {
-      const eye = new THREE.Mesh(eyeGeo, chrome);
-      eye.position.set(x, 0.27, 0.12);
+    // Eyes — wide, hollow chrome tubes pointing out of the face, with rolled lips.
+    const eyeR = 0.165, eyeLen = 0.38;
+    const tubeGeo = new THREE.CylinderGeometry(eyeR, eyeR, eyeLen, 96, 1, true);
+    tubeGeo.rotateX(Math.PI / 2);
+    const lipGeo = new THREE.TorusGeometry(eyeR, 0.016, 16, 96);
+    [-0.19, 0.19].forEach(function (x) {
+      const eye = new THREE.Group();
+      eye.add(new THREE.Mesh(tubeGeo, chromeDS));
+      [-eyeLen / 2, eyeLen / 2].forEach(function (z) {
+        const lip = new THREE.Mesh(lipGeo, chrome);
+        lip.position.z = z;
+        eye.add(lip);
+      });
+      eye.position.set(x, 0.27, 0.06);
       face.add(eye);
     });
 
-    // Same pose as the reference: face turned on its side, slightly tilted back.
-    face.rotation.z = Math.PI / 2 * 0.92;
-    const tilt = new THREE.Group();
-    tilt.rotation.x = -0.18;
-    tilt.add(face);
-    const spin = new THREE.Group();
-    spin.add(tilt);
-    scene.add(spin);
+    // Smile — a slim tube along an arc, finished with short bolt-like end pieces.
+    const smileR = 0.5, tubeR = 0.04, s0 = Math.PI * 1.12, s1 = Math.PI * 1.88, cy = 0.06;
+    class Arc extends THREE.Curve {
+      getPoint(t, target = new THREE.Vector3()) {
+        const a = s0 + (s1 - s0) * t;
+        return target.set(Math.cos(a) * smileR, Math.sin(a) * smileR + cy, 0.04);
+      }
+    }
+    face.add(new THREE.Mesh(new THREE.TubeGeometry(new Arc(), 140, tubeR, 32, false), chrome));
+    const boltGeo = new THREE.CapsuleGeometry(0.052, 0.16, 8, 32);
+    boltGeo.rotateX(Math.PI / 2);
+    [s0, s1].forEach(function (a) {
+      const bolt = new THREE.Mesh(boltGeo, chrome);
+      bolt.position.set(Math.cos(a) * smileR, Math.sin(a) * smileR + cy, 0.04);
+      face.add(bolt);
+    });
+
+    // Rig: tumble (choreography) → sway (ambient float + pointer) → scene.
+    const tumble = new THREE.Group();
+    tumble.add(face);
+    const sway = new THREE.Group();
+    sway.add(tumble);
+    scene.add(sway);
+
+    // Each move rotates about a world axis by an angle. The full set nets to zero,
+    // so the loop always comes home to an upright smile.
+    const X = new THREE.Vector3(1, 0, 0), Y = new THREE.Vector3(0, 1, 0), Z = new THREE.Vector3(0, 0, 1);
+    const D = new THREE.Vector3(1, 1, 0.4).normalize();
+    const TAU = Math.PI * 2;
+    const moves = [
+      { axis: Y, angle: TAU,          dur: 3.4, hold: 0.9 },  // full spin
+      { axis: Z, angle: Math.PI / 2,  dur: 1.6, hold: 0.7 },  // lie on its side
+      { axis: Z, angle: Math.PI / 2,  dur: 1.6, hold: 1.0 },  // upside down
+      { axis: X, angle: TAU,          dur: 3.0, hold: 0.6 },  // somersault, still upside down
+      { axis: Z, angle: -Math.PI,     dur: 2.4, hold: 0.9 },  // roll back upright
+      { axis: Y, angle: -0.75,        dur: 1.3, hold: 0.5 },  // glance left
+      { axis: Y, angle: 1.5,          dur: 1.8, hold: 0.5 },  // glance right
+      { axis: Y, angle: -0.75,        dur: 1.3, hold: 0.8 },  // back to centre
+      { axis: D, angle: TAU,          dur: 3.8, hold: 1.2 },  // diagonal tumble
+    ];
+    const ease = (t) => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+    const base = new THREE.Quaternion();
+    const step = new THREE.Quaternion();
+    let mi = 0, mt = 0;
 
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const SPEED = reduce ? 0.18 : 0.52;   // rad/s — about 12 s per full turn
-    spin.rotation.y = -0.55;
+    const timeScale = reduce ? 0.35 : 1;
 
     let px = 0, py = 0, tx = 0, ty = 0;
     window.addEventListener('pointermove', function (e) {
@@ -576,8 +638,8 @@
       renderer.setSize(w, h, false);
       camera.aspect = w / h;
       const t = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2));
-      const fitH = 2.75 / (2 * t);
-      const fitW = 2.7 / (2 * t * camera.aspect);
+      const fitH = 2.9 / (2 * t);
+      const fitW = 2.9 / (2 * t * camera.aspect);
       camera.position.set(0, 0, Math.max(fitH, fitW));
       camera.updateProjectionMatrix();
     }
@@ -588,16 +650,30 @@
     new IntersectionObserver(function (entries) { visible = entries[0].isIntersecting; }).observe(stage);
 
     const clock = new THREE.Clock();
+    let elapsed = 0;
     renderer.setAnimationLoop(function () {
-      const dt = Math.min(clock.getDelta(), 0.05);
+      const dt = Math.min(clock.getDelta(), 0.05) * timeScale;
       if (!visible) return;
-      const t = clock.elapsedTime;
-      spin.rotation.y += SPEED * dt;
+      elapsed += dt;
+
+      const m = moves[mi];
+      mt += dt;
+      const p = Math.min(mt / m.dur, 1);
+      step.setFromAxisAngle(m.axis, m.angle * ease(p));
+      tumble.quaternion.copy(step).multiply(base);
+      if (mt >= m.dur + m.hold) {
+        step.setFromAxisAngle(m.axis, m.angle);
+        base.premultiply(step).normalize();
+        mi = (mi + 1) % moves.length;
+        if (mi === 0) base.identity();
+        mt = 0;
+      }
+
       px += (tx - px) * 0.04;
       py += (ty - py) * 0.04;
-      tilt.rotation.x = -0.18 + py * 0.12;
-      tilt.rotation.z = -px * 0.08;
-      spin.position.y = Math.sin(t * 0.9) * 0.04;
+      sway.rotation.x = Math.sin(elapsed * 0.7) * 0.08 + py * 0.15;
+      sway.rotation.y = Math.cos(elapsed * 0.5) * 0.1 + px * 0.2;
+      sway.position.y = Math.sin(elapsed * 1.1) * 0.05;
       renderer.render(scene, camera);
     });
   }
