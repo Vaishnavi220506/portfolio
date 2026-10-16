@@ -9,7 +9,7 @@
 <meta name="description" content="Vaishnavi — CSE student at VIT Vellore building across AI/ML, computer vision, full-stack products, and developer tools.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..600&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Playfair+Display:wght@500&family=JetBrains+Mono:wght@400&family=Special+Elite&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..600&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Playfair+Display:wght@500&family=JetBrains+Mono:wght@400&display=swap">
 <style>
   /* Layout: full-bleed black stage — ruled header grid on top, chrome smiley spinning on the right,
      a two-line sans/serif-italic headline anchored bottom-left, meta along the bottom edge. */
@@ -1193,133 +1193,65 @@
   .ach h2 em { font-family: var(--serif); font-style: italic; letter-spacing: -0.02em; }
   .ach-head p { margin: 0; max-width: 44ch; font-size: clamp(17px, 1.3vw, 20px); line-height: 1.65; color: var(--a-body); }
 
-  /* Retro film strip: certificates develop from sepia as they pass the projector gate */
-  .film-pin { position: relative; }
-  .film-stage { position: relative; overflow: hidden; padding-block: 40px; }
-  .projector {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    z-index: 2;
-    background:
-      radial-gradient(60% 70% at 50% 50%, rgba(255, 236, 200, .16), transparent 70%),
-      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .55 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
-    mix-blend-mode: multiply;
-    opacity: .36;
-    animation: flicker 3.2s steps(1) infinite;
-  }
-  @keyframes flicker { 0%, 100% { opacity: .36; } 12% { opacity: .3; } 13% { opacity: .4; } 47% { opacity: .32; } 48% { opacity: .42; } 81% { opacity: .31; } }
-  .film-count { position: absolute; z-index: 3; top: 18px; left: 50%; transform: translateX(-50%); font: 400 13px/1 "Special Elite", "Courier New", monospace; letter-spacing: .2em; color: #5d5a54; }
-  .film-count b { font-weight: 400; color: #121212; }
-  .film {
-    --hole: 14px;
-    position: relative;
-    display: flex;
-    gap: 0;
-    width: max-content;
-    padding: 46px 0;
-    background:
-      radial-gradient(circle, transparent 0) 0 0 / 0 0,
-      #171512;
-    will-change: transform;
-    transform: translate3d(var(--fx, 0px), 0, 0);
-  }
-  .film::before, .film::after {
-    content: "";
-    position: absolute;
-    left: 0; right: 0;
-    height: 18px;
-    background: repeating-linear-gradient(90deg, transparent 0 14px, #efeee9 14px 30px, transparent 30px 44px);
-    -webkit-mask: linear-gradient(#000, #000);
-    border-radius: 3px;
-  }
-  .film::before { top: 14px; }
-  .film::after { bottom: 14px; }
-  .frame {
-    position: relative;
-    margin: 0;
-    width: min(62vw, 820px);
-    padding: 0 26px;
+  /* Achievements: big rows, a floating certificate preview follows the cursor */
+  .alist-wrap { position: relative; max-width: 1500px; margin: 0 auto; padding-block: clamp(40px, 5vw, 70px) 0; }
+  .alist { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--a-line); }
+  .arow { position: relative; border-bottom: 1px solid var(--a-line); }
+  .arow::after { content: ""; position: absolute; left: 0; bottom: -1px; height: 1px; width: 100%; background: var(--a-ink); transform-origin: left; transform: scaleX(var(--al, 0)); }
+  .arow a {
     display: grid;
-    grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
-    gap: 26px;
+    grid-template-columns: 60px minmax(0, 1fr) auto 44px;
     align-items: center;
-    border-right: 2px solid #0b0a08;
+    gap: 24px;
+    padding: clamp(26px, 3.2vw, 46px) 6px;
+    transition: padding .55s var(--ease), opacity .45s;
   }
-  .frame-mark { position: absolute; top: -40px; left: 26px; right: 26px; display: flex; justify-content: space-between; font: 400 11px/1 "Special Elite", "Courier New", monospace; letter-spacing: .24em; color: #e9a33a; opacity: .85; }
-  .frame-shot {
-    position: relative;
-    aspect-ratio: 4 / 3;
-    border-radius: 6px;
-    overflow: hidden;
-    background: #efe6d2;
-    box-shadow: inset 0 0 0 1px rgba(0,0,0,.4);
+  .alist:hover .arow a { opacity: .38; }
+  .alist:hover .arow a:hover { opacity: 1; padding-left: 26px; }
+  .a-num { font: 500 13px/1 var(--mono); color: var(--a-mute); }
+  .a-main { display: grid; gap: 12px; min-width: 0; }
+  .a-title { display: block; overflow: hidden; padding-bottom: .16em; margin-bottom: -.08em; }
+  .a-title > span {
+    display: inline-block;
+    font-weight: 400;
+    font-size: clamp(2rem, 4.6vw, 4.8rem);
+    line-height: 1;
+    letter-spacing: -0.045em;
+    transform: translate3d(0, var(--ty, 0%), 0);
   }
-  .frame-shot img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    display: block;
-    filter: sepia(var(--sp, 1)) brightness(var(--br, 1.5)) contrast(var(--ct, .7)) blur(var(--bl, 3px));
-    transform: scale(var(--zs, 1.04));
-  }
-  .frame-shot::after {
-    content: "";
-    position: absolute;
-    inset: 0;
+  .a-sub { font: 500 12.5px/1.3 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--a-mute); opacity: var(--so, 1); }
+  .a-date { font: italic 400 clamp(20px, 1.8vw, 28px)/1 var(--serif); color: var(--a-body); white-space: nowrap; opacity: var(--so, 1); }
+  .a-go { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--a-line); transition: background .4s, color .4s, transform .5s var(--ease); }
+  .arow a:hover .a-go { background: var(--a-ink); color: var(--a-bg); transform: rotate(45deg); }
+  .a-thumb { display: none; }
+  .a-float {
+    position: fixed;
+    left: 0; top: 0;
+    z-index: 15;
+    width: clamp(260px, 26vw, 400px);
     pointer-events: none;
-    background: radial-gradient(120% 90% at 50% 50%, transparent 55%, rgba(40, 24, 8, .45));
+    border-radius: 14px;
+    overflow: hidden;
+    background: #fff;
+    padding: 10px;
+    box-shadow: 0 30px 70px -30px rgba(0,0,0,.55);
+    opacity: 0;
+    transform: translate3d(var(--x, 0px), var(--y, 0px), 0) translate(-50%, -50%) rotate(var(--r, 0deg)) scale(var(--s, .6));
+    transition: opacity .35s;
+    will-change: transform;
   }
-  .stamp {
-    position: absolute;
-    right: 8%;
-    bottom: 10%;
-    z-index: 2;
-    padding: 8px 16px 6px;
-    border: 3px double #b8322a;
-    border-radius: 8px;
-    font: 400 clamp(18px, 2vw, 28px)/1 "Special Elite", "Courier New", monospace;
-    letter-spacing: .14em;
-    text-transform: uppercase;
-    color: #b8322a;
-    background: rgba(239, 230, 210, .35);
-    mix-blend-mode: multiply;
-    transform: rotate(-12deg) scale(var(--ss, 2));
-    opacity: var(--so, 0);
-  }
-  .frame figcaption { display: grid; gap: 12px; color: #efe6d2; }
-  .tw-kind { font: 400 12px/1 "Special Elite", "Courier New", monospace; letter-spacing: .2em; text-transform: uppercase; color: #e9a33a; }
-  .tw { min-height: 2.2em; font: 400 clamp(24px, 2.3vw, 34px)/1.12 "Special Elite", "Courier New", monospace; color: #f6efe0; }
-  .tw::after { content: "▍"; display: inline-block; margin-left: 2px; color: #e9a33a; animation: blink 1s steps(1) infinite; opacity: var(--cur, 1); }
-  @keyframes blink { 50% { opacity: 0; } }
-  .tw-meta { font: 400 14.5px/1.5 var(--sans); color: #b9b0a0; }
-  .ticket {
-    justify-self: start;
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    margin-top: 6px;
-    padding: 11px 18px;
-    border: 1px dashed #e9a33a;
-    border-radius: 4px;
-    font: 400 13px/1 "Special Elite", "Courier New", monospace;
-    letter-spacing: .14em;
-    text-transform: uppercase;
-    color: #f6efe0;
-    transition: background .3s, color .3s;
-  }
-  .ticket:hover { background: #e9a33a; color: #171512; }
+  .a-float.on { opacity: 1; }
+  .a-float img { display: block; width: 100%; height: auto; border-radius: 8px; }
 
-  @media (min-width: 961px) {
-    .film-pin { height: 260vh; }
-    .film-stage { position: sticky; top: calc(var(--header-h) + env(safe-area-inset-top, 0px)); height: calc(100vh - var(--header-h)); display: flex; align-items: center; }
+  @media (hover: none), (max-width: 960px) {
+    .a-float { display: none; }
+    .arow a { grid-template-columns: 34px minmax(0, 1fr) 40px; gap: 10px 14px; }
+    .a-date { grid-column: 2; grid-row: 2; }
+    .a-go { grid-column: 3; grid-row: 1; width: 40px; height: 40px; }
+    .a-thumb { display: block; grid-column: 1 / -1; width: 100%; height: auto; margin-top: 8px; border-radius: 12px; border: 1px solid var(--a-line); background: #fff; }
+    .alist:hover .arow a { opacity: 1; }
+    .alist:hover .arow a:hover { padding-left: 6px; }
   }
-  @media (max-width: 960px) {
-    .film { flex-direction: column; width: auto; margin: 0 max(var(--gutter-x), env(safe-area-inset-left, 0px)); padding: 46px 0; border-radius: 6px; }
-    .frame { width: auto; grid-template-columns: 1fr; padding: 34px 18px; border-right: 0; border-bottom: 2px solid #0b0a08; }
-    .frame-mark { top: 12px; left: 18px; right: 18px; }
-  }
-  @media (prefers-reduced-motion: reduce) { .projector, .tw::after { animation: none; } }
 
   .glance { max-width: 1500px; margin: 0 auto; padding-block: clamp(60px, 7vw, 110px) clamp(90px, 10vw, 150px); }
   .glance-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 14px 24px; margin-bottom: 22px; }
@@ -1767,55 +1699,49 @@
         <div class="label-pill"><span>05</span><span class="rule"></span><span>Achievements</span></div>
         <h2 id="ach-title" class="split"><span class="line"><span>A few milestones</span></span><span class="line"><span><em>worth keeping.</em></span></span></h2>
       </div>
-      <p class="reveal">A few certificates from programs and challenges that have shaped my journey so far. Open one to see its verification page.</p>
+      <p class="reveal">A few certificates from programs and challenges that have shaped my journey so far. Hover to see each one, and click to open its verification page.</p>
     </div>
 
-    <div class="film-pin" id="film-pin">
-      <div class="film-stage" id="film-stage">
-        <div class="projector" aria-hidden="true"></div>
-        <div class="film-count" aria-hidden="true">FRAME <b id="film-n">01</b> / 03</div>
-        <div class="film" id="film">
-          <figure class="frame">
-            <div class="frame-mark" aria-hidden="true"><span>▶ 01A</span><span>SAFETY FILM 400</span></div>
-            <div class="frame-shot">
-              <img src="content/assets/achievement-wins-aid.png" alt="WINS-AID AI Hackathon 2026 certificate of participation" loading="lazy" width="1280" height="905">
-              <span class="stamp" aria-hidden="true">Verified</span>
-            </div>
-            <figcaption>
-              <span class="tw-kind">Hackathon · Top 20 team</span>
-              <span class="tw" data-text="WINS-AID AI Hackathon 2026" aria-label="WINS-AID AI Hackathon 2026">WINS-AID AI Hackathon 2026</span>
-              <span class="tw-meta">British Council · VIT Vellore · 02–03 Sep 2026</span>
-              <a class="ticket" href="https://lnkd.in/p/d7Sxt8tw" target="_blank" rel="noopener">Open verification <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a>
-            </figcaption>
-          </figure>
-          <figure class="frame">
-            <div class="frame-mark" aria-hidden="true"><span>▶ 02A</span><span>SAFETY FILM 400</span></div>
-            <div class="frame-shot">
-              <img src="content/assets/achievement-ibm.png" alt="IBM Advanced Generative AI certificate" loading="lazy" width="1216" height="951">
-              <span class="stamp" aria-hidden="true">Verified</span>
-            </div>
-            <figcaption>
-              <span class="tw-kind">Professional certificate</span>
-              <span class="tw" data-text="Advanced Generative AI" aria-label="Advanced Generative AI">Advanced Generative AI</span>
-              <span class="tw-meta">IBM Career Education Program · 16 Jul 2026</span>
-              <a class="ticket" href="https://courses.ibmcep.cognitiveclass.ai/certificates/e6e8e6d0defb451a8b27bf824cebcfda" target="_blank" rel="noopener">Open verification <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a>
-            </figcaption>
-          </figure>
-          <figure class="frame">
-            <div class="frame-mark" aria-hidden="true"><span>▶ 03A</span><span>SAFETY FILM 400</span></div>
-            <div class="frame-shot">
-              <img src="content/assets/achievement-adobe.png" alt="Adobe University Hackathon 2026 certificate of participation" loading="lazy" width="877" height="593">
-              <span class="stamp" aria-hidden="true">Verified</span>
-            </div>
-            <figcaption>
-              <span class="tw-kind">Hackathon participation</span>
-              <span class="tw" data-text="Adobe University Hackathon 2026" aria-label="Adobe University Hackathon 2026">Adobe University Hackathon 2026</span>
-              <span class="tw-meta">Adobe · Unstop · 09 Aug 2026</span>
-              <a class="ticket" href="https://unstop.com/certificate-preview/a6807747-82df-43c7-8f64-bfcc3b6952f2" target="_blank" rel="noopener">Open verification <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a>
-            </figcaption>
-          </figure>
-        </div>
-      </div>
+    <div class="alist-wrap pad">
+      <ol class="alist" id="alist">
+        <li class="arow" data-img="content/assets/achievement-wins-aid.png">
+          <a href="https://lnkd.in/p/d7Sxt8tw" target="_blank" rel="noopener">
+            <span class="a-num">01</span>
+            <span class="a-main">
+              <span class="a-title"><span>WINS-AID AI Hackathon 2026</span></span>
+              <span class="a-sub">Hackathon · Top 20 team · British Council · VIT Vellore</span>
+            </span>
+            <span class="a-date">Sep 2026</span>
+            <span class="a-go"><svg width="18" height="18" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.2"/></svg></span>
+            <img class="a-thumb" src="content/assets/achievement-wins-aid.png" alt="WINS-AID AI Hackathon 2026 certificate of participation" loading="lazy" width="1280" height="905">
+          </a>
+        </li>
+        <li class="arow" data-img="content/assets/achievement-ibm.png">
+          <a href="https://courses.ibmcep.cognitiveclass.ai/certificates/e6e8e6d0defb451a8b27bf824cebcfda" target="_blank" rel="noopener">
+            <span class="a-num">02</span>
+            <span class="a-main">
+              <span class="a-title"><span>Advanced Generative AI</span></span>
+              <span class="a-sub">Professional certificate · IBM Career Education Program</span>
+            </span>
+            <span class="a-date">Jul 2026</span>
+            <span class="a-go"><svg width="18" height="18" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.2"/></svg></span>
+            <img class="a-thumb" src="content/assets/achievement-ibm.png" alt="IBM Advanced Generative AI certificate" loading="lazy" width="1216" height="951">
+          </a>
+        </li>
+        <li class="arow" data-img="content/assets/achievement-adobe.png">
+          <a href="https://unstop.com/certificate-preview/a6807747-82df-43c7-8f64-bfcc3b6952f2" target="_blank" rel="noopener">
+            <span class="a-num">03</span>
+            <span class="a-main">
+              <span class="a-title"><span>Adobe University Hackathon 2026</span></span>
+              <span class="a-sub">Hackathon participation · Adobe · Unstop</span>
+            </span>
+            <span class="a-date">Aug 2026</span>
+            <span class="a-go"><svg width="18" height="18" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.2"/></svg></span>
+            <img class="a-thumb" src="content/assets/achievement-adobe.png" alt="Adobe University Hackathon 2026 certificate of participation" loading="lazy" width="877" height="593">
+          </a>
+        </li>
+      </ol>
+      <div class="a-float" id="a-float" aria-hidden="true"><img alt="" id="a-float-img"></div>
     </div>
 
     <div class="glance pad">
@@ -2546,57 +2472,43 @@
 </script>
 
 <script>
-  // Achievements film strip: vertical scroll drives the strip sideways through the
-  // projector gate; the frame in the gate develops, gets stamped, and its title types out.
+  // Achievements list: titles rise out of their rows as they scroll in, and a
+  // floating certificate preview follows the cursor, leaning with its speed.
   (function () {
     const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const clamp01 = (v) => Math.min(Math.max(v, 0), 1);
     const ease = (t) => 1 - Math.pow(1 - t, 3);
-    const wide = window.matchMedia('(min-width: 961px)');
-    const header = document.querySelector('.site-header');
-    const pin = document.getElementById('film-pin');
-    const film = document.getElementById('film');
-    const counter = document.getElementById('film-n');
-    const frames = Array.from(film.querySelectorAll('.frame')).map(function (f) {
-      const tw = f.querySelector('.tw');
-      return { f: f, img: f.querySelector('img'), stamp: f.querySelector('.stamp'), tw: tw, text: tw.dataset.text, shown: -1 };
+    const list = document.getElementById('alist');
+    const rows = Array.from(list.querySelectorAll('.arow'));
+    const float = document.getElementById('a-float');
+    const fimg = document.getElementById('a-float-img');
+    let tx = 0, ty = 0, x = 0, y = 0, vx = 0, scale = 0.6, target = 0.6, active = null;
+    rows.forEach(function (r) {
+      r.addEventListener('pointerenter', function (e) {
+        if (active !== r) { fimg.src = r.dataset.img; active = r; }
+        if (!float.classList.contains('on')) { x = tx = e.clientX; y = ty = e.clientY; }
+        float.classList.add('on'); target = 1;
+      });
     });
-    let last = -1;
+    list.addEventListener('pointerleave', function () { float.classList.remove('on'); target = 0.6; active = null; });
+    window.addEventListener('pointermove', function (e) { tx = e.clientX; ty = e.clientY; }, { passive: true });
+
     function tick() {
-      const vw = window.innerWidth, vh = window.innerHeight, y = window.scrollY;
-      if (y !== last) {
-        last = y;
-        if (wide.matches) {
-          const hh = header.getBoundingClientRect().height;
-          const run = pin.offsetHeight - (vh - hh);
-          const q = run > 0 ? clamp01((hh - pin.getBoundingClientRect().top) / run) : 0;
-          const fw = frames[0].f.offsetWidth;
-          const start = vw / 2 - fw / 2, end = vw / 2 - film.scrollWidth + fw / 2;
-          film.style.setProperty('--fx', (start + (end - start) * q).toFixed(1) + 'px');
-        } else {
-          film.style.setProperty('--fx', '0px');
-        }
-        let best = 0, bestD = 9;
-        frames.forEach(function (fr, i) {
-          const r = fr.f.getBoundingClientRect();
-          const off = wide.matches ? Math.abs(r.left + r.width / 2 - vw / 2) / (r.width * 0.75)
-                                   : Math.abs(r.top + r.height / 2 - vh / 2) / (vh * 0.55);
-          const d = still ? 1 : ease(clamp01(1 - off));
-          if (off < bestD) { bestD = off; best = i; }
-          fr.img.style.setProperty('--sp', (1 - d).toFixed(3));
-          fr.img.style.setProperty('--br', (1 + 0.55 * (1 - d)).toFixed(3));
-          fr.img.style.setProperty('--ct', (0.7 + 0.3 * d).toFixed(3));
-          fr.img.style.setProperty('--bl', (3.2 * (1 - d)).toFixed(2) + 'px');
-          fr.img.style.setProperty('--zs', (1.04 - 0.04 * d).toFixed(4));
-          const s = clamp01((d - 0.82) / 0.14);
-          fr.stamp.style.setProperty('--so', s.toFixed(3));
-          fr.stamp.style.setProperty('--ss', (2 - s).toFixed(3));
-          const n = Math.round(fr.text.length * clamp01((d - 0.35) / 0.5));
-          if (n !== fr.shown) { fr.tw.textContent = fr.text.slice(0, n); fr.shown = n; }
-          fr.tw.style.setProperty('--cur', n > 0 && n < fr.text.length ? '1' : (n === 0 ? '.4' : '1'));
-        });
-        counter.textContent = String(best + 1).padStart(2, '0');
-      }
+      const vh = window.innerHeight;
+      rows.forEach(function (r, i) {
+        const top = r.getBoundingClientRect().top;
+        const k = still ? 1 : clamp01((vh * 0.96 - top) / (vh * 0.32) - i * 0.04);
+        r.style.setProperty('--al', ease(clamp01(k * 1.2)).toFixed(3));
+        r.querySelector('.a-title > span').style.setProperty('--ty', ((1 - ease(clamp01(k * 1.25 - 0.15))) * 110).toFixed(1) + '%');
+        r.querySelectorAll('.a-sub, .a-date').forEach(function (el) { el.style.setProperty('--so', clamp01(k * 1.6 - 0.6).toFixed(3)); });
+      });
+      const nx = x + (tx - x) * 0.14, ny = y + (ty - y) * 0.14;
+      vx = vx * 0.8 + (nx - x) * 0.2; x = nx; y = ny;
+      scale += (target - scale) * 0.12;
+      float.style.setProperty('--x', (x + 40).toFixed(1) + 'px');
+      float.style.setProperty('--y', y.toFixed(1) + 'px');
+      float.style.setProperty('--r', Math.max(-12, Math.min(12, vx * 0.6)).toFixed(2) + 'deg');
+      float.style.setProperty('--s', scale.toFixed(3));
       requestAnimationFrame(tick);
     }
     requestAnimationFrame(tick);
