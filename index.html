@@ -1009,701 +1009,7 @@
 
   .oss-stats {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    margin-top: clamp(40px, 5vw, 70px);
-    border-top: 1px solid var(--o-line);
-    border-bottom: 1px solid var(--o-line);
-  }
-  .oss-stats div { padding: clamp(18px, 2.4vw, 32px) 0; }
-  .oss-stats div + div { padding-left: clamp(16px, 2.4vw, 36px); border-left: 1px solid var(--o-line); }
-  .oss-stats b { display: block; font-weight: 400; font-size: clamp(3rem, 7vw, 7rem); line-height: .9; letter-spacing: -0.06em; font-variant-numeric: tabular-nums; }
-  .oss-stats span { display: block; margin-top: 10px; font: 600 12.5px/1.3 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--o-mute); }
-
-  .marquee {
-    position: relative;
-    margin: clamp(36px, 4vw, 60px) calc(-1 * max(var(--gutter-x), env(safe-area-inset-left, 0px)));
-    overflow: hidden;
-    white-space: nowrap;
-    -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
-    mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
-  }
-  .marquee-row { display: inline-flex; gap: 0.5em; will-change: transform; font: italic 400 clamp(3rem, 7vw, 7.5rem)/1.05 var(--serif); letter-spacing: -0.02em; }
-  .marquee-row span { color: transparent; -webkit-text-stroke: 1px rgba(18,18,18,.42); }
-  .marquee-row span:nth-child(odd) { color: var(--o-ink); -webkit-text-stroke: 0; }
-  .marquee-row i { font-style: normal; color: var(--o-mute); }
-
-  .status { display: inline-flex; align-items: center; gap: 10px; color: var(--mute); }
-  .status::before {
-    content: "";
-    width: 7px; height: 7px;
-    border-radius: 50%;
-    background: var(--live);
-    box-shadow: 0 0 0 0 color-mix(in srgb, var(--live) 60%, transparent);
-    animation: pulse 2.4s ease-out infinite;
-  }
-  .scroll { display: inline-flex; align-items: center; gap: 14px; }
-  .scroll svg { animation: nudge 2s ease-in-out infinite; }
-
-  @keyframes rise { from { transform: translateY(105%); } to { transform: none; } }
-  @keyframes pulse {
-    0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--live) 55%, transparent); }
-    70%, 100% { box-shadow: 0 0 0 9px transparent; }
-  }
-  @keyframes nudge { 0%, 100% { transform: none; } 50% { transform: translateY(4px); } }
-
-  /* ---------- Responsive ---------- */
-  @media (max-width: 1180px) {
-    .nav ol a { font-size: 15px; }
-    .nav ol a i { display: none; }
-  }
-  @media (max-width: 960px) {
-    .site-header { grid-template-columns: 1fr auto; }
-    .brand { border-right: 0; }
-    .nav { padding-left: 0; gap: 10px; }
-    .menu-btn { display: inline-flex; }
-    .nav ol {
-      position: absolute;
-      top: 100%;
-      left: 0; right: 0;
-      flex-direction: column;
-      gap: 0;
-      max-width: none;
-      padding: 8px max(var(--gutter-x), env(safe-area-inset-right, 0px)) 18px max(var(--gutter-x), env(safe-area-inset-left, 0px));
-      background: var(--ink);
-      border-bottom: 1px solid var(--line);
-    }
-    .nav ol[hidden] { display: none !important; }
-    .nav ol a { width: 100%; padding: 14px 0; font-size: 22px; border-bottom: 1px solid var(--line); }
-    .nav ol a i { display: inline; font-size: 18px; }
-    .nav ol a::after { display: none; }
-    .hero-foot { grid-template-columns: 1fr; }
-    .aside { flex-direction: row; justify-content: space-between; align-items: center; }
-  }
-  @media (max-width: 760px) {
-    .hero { min-height: 0; }
-    .stage {
-      position: relative;
-      width: auto;
-      height: min(92vw, 420px);
-      margin: 10px calc(-1 * max(var(--gutter-x), env(safe-area-inset-left, 0px))) -20px;
-    }
-    .hero-body { margin-top: 0; padding-top: 0; }
-    .cta span { display: none; }
-    .cta { width: 40px; padding: 0; justify-content: center; }
-    .scroll { display: none; }
-  }
-  @media (max-width: 420px) {
-    .btn { padding: 0 20px; height: 46px; font-size: 15px; }
-    .icon-link { width: 46px; height: 46px; }
-  }
-  @media (max-height: 780px) and (min-width: 761px) {
-    .btn { height: 44px; padding: 0 20px; font-size: 15px; }
-    .icon-link { width: 44px; height: 44px; }
-    .meta-row { gap: 10px 18px; }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    h1 .line > span, .status::before, .scroll svg { animation: none; }
-  }
-
-  /* ---------- Smooth scroll (Lenis) ---------- */
-  html.lenis, html.lenis body { height: auto; }
-  .lenis.lenis-smooth { scroll-behavior: auto !important; }
-  .lenis.lenis-stopped { overflow: hidden; }
-
-  /* ---------- Header on light sections ---------- */
-  .site-header { color: var(--paper); transition: background-color .6s, color .6s, border-color .6s; }
-  .site-header .cta, .site-header .menu-btn { transition: background-color .6s, color .6s, border-color .6s, transform .3s; }
-  .site-header.is-light {
-    --ink: #efeee9;
-    --paper: #141414;
-    --mute: #6d6a64;
-    --line: rgba(20, 20, 20, 0.12);
-    --chip: rgba(20, 20, 20, 0.05);
-    background: color-mix(in srgb, #efeee9 97%, transparent);
-  }
-
-  /* ---------- Hero pin + pixel curtain ---------- */
-  .curtain {
-    position: absolute;
-    inset: 0;
-    z-index: 6;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-  }
-  @media (min-width: 761px) {
-    .hero-pin { height: calc(100vh - var(--header-h) + 120vh); }
-    /* About rides up over the pinned hero while the curtain fills, so there is no empty screen. */
-    .about { margin-top: calc(-100vh + var(--header-h)); }
-    .hero {
-      position: sticky;
-      top: calc(var(--header-h) + env(safe-area-inset-top, 0px));
-      height: calc(100vh - var(--header-h));
-      min-height: 0;
-    }
-  }
-
-  /* ---------- About ---------- */
-  .about {
-    --about-bg: #efeee9;
-    --about-ink: #121212;
-    --about-body: #2b2a27;
-    --about-mute: #66625b;
-    --about-accent: #c4213a;
-    --card: #151514;
-    --card-fg: #f3f2ef;
-    --card-mute: #a9a59d;
-    --ease: cubic-bezier(.16, 1, .3, 1);
-
-    position: relative;
-    z-index: 1;
-    overflow: hidden;
-    background: var(--about-bg);
-    color: var(--about-ink);
-    color-scheme: light;
-  }
-  .about-doodle {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    --mx: -999px;
-    --my: -999px;
-  }
-  .doodle-track { position: absolute; inset: 0; }
-  .doodle {
-    position: absolute;
-    inset: 0;
-    background: url("content/assets/doodle.webp") center top / max(1500px, 110%) auto repeat-x;
-    -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 58%, transparent 97%);
-    mask-image: linear-gradient(to bottom, #000 0%, #000 58%, transparent 97%);
-  }
-  .doodle.base { opacity: 0.13; }
-  .doodle.lit {
-    opacity: 0.7;
-    -webkit-mask-image: radial-gradient(240px circle at var(--mx) var(--my), #000 0%, rgba(0,0,0,.5) 45%, transparent 75%);
-    mask-image: radial-gradient(240px circle at var(--mx) var(--my), #000 0%, rgba(0,0,0,.5) 45%, transparent 75%);
-  }
-
-  .about-inner {
-    position: relative;
-    max-width: 1500px;
-    margin: 0 auto;
-    padding-block: clamp(72px, 8vw, 120px) clamp(90px, 10vw, 150px);
-  }
-  .about-label {
-    display: inline-flex;
-    align-items: center;
-    gap: 14px;
-    margin-bottom: clamp(40px, 5vw, 72px);
-    padding: 10px 18px;
-    border: 1px solid rgba(18, 18, 18, 0.14);
-    border-radius: 999px;
-    background: var(--about-bg);
-    font: 600 14px/1 var(--mono);
-    letter-spacing: .2em;
-    text-transform: uppercase;
-    color: var(--about-ink);
-  }
-  .about-label .num { letter-spacing: .06em; }
-  .about-label .rule { width: 36px; height: 1.5px; background: var(--about-ink); }
-
-  .about-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
-    gap: clamp(40px, 6vw, 110px);
-    align-items: start;
-  }
-  .about-head {
-    position: sticky;
-    top: calc(var(--header-h) + 48px);
-    display: flex;
-    flex-direction: column;
-    gap: clamp(36px, 4vw, 56px);
-  }
-  .about h2 {
-    margin: 0;
-    font-weight: 400;
-    font-size: clamp(2.7rem, 5.2vw, 5.8rem);
-    line-height: 1;
-    letter-spacing: -0.05em;
-    color: var(--about-ink);
-  }
-  .about h2 .line { display: block; overflow: hidden; padding-bottom: .1em; margin-bottom: -.04em; }
-  .about h2 .line > span { display: inline-block; }
-  .about h2 em {
-    font-family: var(--serif);
-    font-style: italic;
-    letter-spacing: -0.02em;
-    padding-right: .05em;
-  }
-
-
-  .about-copy { display: flex; flex-direction: column; gap: 28px; min-width: 0; }
-  .about-copy p {
-    margin: 0;
-    max-width: 60ch;
-    font-size: clamp(17px, 1.3vw, 20px);
-    line-height: 1.7;
-    color: var(--about-body);
-  }
-  .about-copy p.lead {
-    font-size: clamp(20px, 1.75vw, 26px);
-    line-height: 1.5;
-    letter-spacing: -0.015em;
-    color: var(--about-ink);
-  }
-  .about-copy p.sign {
-    font: italic 400 clamp(24px, 2vw, 30px)/1 var(--serif);
-    color: var(--about-ink);
-  }
-
-  .focus {
-    display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 14px;
-    margin: clamp(24px, 3vw, 44px) 0 0;
-    padding: 0;
-    list-style: none;
-  }
-  .focus li {
-    position: relative;
-    display: grid;
-    grid-template-columns: auto 1fr;
-    gap: 6px 16px;
-    padding: 26px 26px 28px 22px;
-    border-radius: 18px;
-    background: var(--card);
-    color: var(--card-fg);
-    transition: transform .6s var(--ease), box-shadow .6s var(--ease);
-  }
-  .focus li:hover { transform: translateY(-4px); box-shadow: 0 22px 40px -22px rgba(0,0,0,.55); }
-  .focus .fnum { grid-row: span 2; padding-top: 6px; font: 500 12px/1 var(--mono); color: #b9b5ad; }
-  .focus h3 {
-    margin: 0;
-    font: 400 clamp(25px, 2vw, 30px)/1.1 var(--serif);
-    letter-spacing: -0.01em;
-  }
-  .focus p { margin: 0; font-size: 15.5px; line-height: 1.55; color: var(--card-mute); }
-
-  /* Scroll-linked reveals: JS scrubs these every frame from the scroll position. */
-  html.js .reveal { opacity: 0; will-change: transform, opacity; }
-  html.js .split .line > span { transform: translateY(112%); will-change: transform; }
-
-  @media (max-width: 960px) {
-    .about-grid { grid-template-columns: 1fr; }
-    .about-head { position: static; }
-  }
-  @media (max-width: 640px) {
-    .focus { grid-template-columns: 1fr; }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    html.js .reveal, html.js .split .line > span { opacity: 1 !important; transform: none !important; }
-  }
-
-  /* ---------- About → Projects pixel edge ---------- */
-  .about-edge {
-    position: absolute;
-    left: 0; right: 0; bottom: 0;
-    height: 38vh;
-    z-index: 3;
-    width: 100%;
-    pointer-events: none;
-  }
-  .about-inner { padding-bottom: calc(38vh + 70px); }
-
-  /* ---------- Projects ---------- */
-  .projects {
-    --p-ink: #050505;
-    --p-panel: #0e0e0d;
-    --p-line: rgba(243, 242, 239, 0.12);
-    --p-fg: #f3f2ef;
-    --p-body: #c9c6bf;
-    --p-mute: #8d8b87;
-    --ease: cubic-bezier(.16, 1, .3, 1);
-    position: relative;
-    z-index: 2;
-    background: var(--p-ink);
-    color: var(--p-fg);
-  }
-  .proj-head {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    align-items: end;
-    gap: 28px 48px;
-    max-width: 1500px;
-    margin: 0 auto;
-    padding-block: clamp(40px, 5vw, 70px) clamp(30px, 3.5vw, 48px);
-  }
-  .label-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 14px;
-    margin-bottom: 30px;
-    padding: 10px 18px;
-    border: 1px solid var(--p-line);
-    border-radius: 999px;
-    font: 600 14px/1 var(--mono);
-    letter-spacing: .2em;
-    text-transform: uppercase;
-    color: var(--p-fg);
-  }
-  .label-pill .rule { width: 36px; height: 1.5px; background: currentColor; }
-  .proj-head h2 {
-    margin: 0;
-    font-weight: 400;
-    font-size: clamp(2.6rem, 5vw, 5.6rem);
-    line-height: 1;
-    letter-spacing: -0.05em;
-  }
-  .proj-head h2 em { font-family: var(--serif); font-style: italic; letter-spacing: -0.02em; }
-  .proj-head p { margin: 18px 0 0; max-width: 52ch; font-size: clamp(16px, 1.2vw, 19px); line-height: 1.6; color: var(--p-body); }
-  .ghost-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    height: 48px;
-    padding: 0 22px;
-    border: 1px solid var(--p-line);
-    border-radius: 999px;
-    font-size: 15px;
-    font-weight: 500;
-    white-space: nowrap;
-    transition: border-color .3s, background .3s;
-  }
-  .ghost-link:hover { border-color: var(--p-fg); background: rgba(243,242,239,.05); }
-  .ghost-link svg { transition: transform .3s; }
-  .ghost-link:hover svg { transform: translate(2px, -2px); }
-
-  .proj-pin { position: relative; }
-  .proj-sticky { position: relative; }
-  .proj-track {
-    display: flex;
-    gap: clamp(28px, 4vw, 70px);
-    padding-left: max(var(--gutter-x), env(safe-area-inset-left, 0px));
-    padding-right: max(var(--gutter-x), env(safe-area-inset-right, 0px));
-    will-change: transform;
-  }
-
-  .panel {
-    flex: 0 0 auto;
-    display: grid;
-    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
-    gap: clamp(26px, 3vw, 54px);
-    width: min(1240px, 86vw);
-    padding: clamp(22px, 2.4vw, 36px);
-    border: 1px solid var(--p-line);
-    border-radius: 26px;
-    background:
-      radial-gradient(120% 90% at 100% 0%, rgba(243,242,239,.05), transparent 55%),
-      var(--p-panel);
-    will-change: transform, opacity;
-    transform-origin: 50% 50%;
-  }
-
-  .media {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
-    border-radius: 16px;
-    overflow: hidden;
-    background: #1a1a19;
-    border: 1px solid var(--p-line);
-    transform: perspective(1400px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
-    transition: transform .5s var(--ease), box-shadow .5s var(--ease);
-    box-shadow: 0 30px 60px -30px rgba(0,0,0,.8);
-    align-self: center;
-  }
-  .media:hover { box-shadow: 0 40px 80px -30px rgba(0,0,0,.9); }
-  .frame-bar {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    height: 36px;
-    padding: 0 14px;
-    border-bottom: 1px solid var(--p-line);
-    background: #141413;
-    font: 400 12px/1 var(--mono);
-    color: var(--p-mute);
-  }
-  .frame-bar i { width: 9px; height: 9px; border-radius: 50%; background: #3a3a38; }
-  .frame-bar span { margin-left: 10px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
-  .shot { position: relative; overflow: hidden; aspect-ratio: 16 / 10; }
-  .shot img {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    max-width: none;
-    object-fit: cover;
-    object-position: top center;
-    transform: translate3d(var(--px, 0px), 0, 0) scale(1.1);
-    will-change: transform;
-  }
-  .glare {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background: radial-gradient(500px circle at var(--gx, 50%) var(--gy, 0%), rgba(255,255,255,.14), transparent 45%);
-    opacity: 0;
-    transition: opacity .4s;
-  }
-  .media:hover .glare { opacity: 1; }
-  .view-chip {
-    position: absolute;
-    right: 16px; bottom: 16px;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    height: 36px;
-    padding: 0 14px;
-    border-radius: 999px;
-    background: rgba(5,5,5,.72);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    font: 500 12px/1 var(--mono);
-    letter-spacing: .12em;
-    text-transform: uppercase;
-    color: var(--p-fg);
-    transform: translateY(8px);
-    opacity: 0;
-    transition: opacity .4s var(--ease), transform .4s var(--ease);
-  }
-  .media:hover .view-chip { opacity: 1; transform: none; }
-
-  /* STEMPulse keeps the cover from the original site */
-  .old-surface {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    gap: .75rem;
-    padding: clamp(1.25rem, 3.5vw, 2.25rem);
-    overflow: hidden;
-    color: #fff7ed;
-    background:
-      radial-gradient(circle at 82% 18%, rgba(251,113,133,.42), transparent 22%),
-      radial-gradient(circle at 12% 80%, rgba(196,181,253,.32), transparent 26%),
-      linear-gradient(135deg, #371631, #20152f 58%, #132c2b);
-  }
-  .old-surface::before, .old-surface::after {
-    content: "";
-    position: absolute;
-    border: 1px solid rgba(255,247,237,.22);
-    border-radius: 999px;
-  }
-  .old-surface::before { width: 19rem; height: 19rem; right: -7rem; top: -7rem; }
-  .old-surface::after { width: 10rem; height: 10rem; left: -4rem; bottom: -4rem; }
-  .os-kicker, .os-steps {
-    position: relative;
-    z-index: 1;
-    font: 10px "JetBrains Mono", ui-monospace, monospace;
-    letter-spacing: .16em;
-    text-transform: uppercase;
-  }
-  .os-kicker { color: #fda4af; }
-  .old-surface strong {
-    position: relative;
-    z-index: 1;
-    max-width: 15rem;
-    font: 500 clamp(2.15rem, 4.3vw, 3.25rem)/.88 "Playfair Display", Georgia, serif;
-    letter-spacing: -.045em;
-  }
-  .os-steps {
-    align-self: flex-end;
-    display: flex;
-    flex-wrap: wrap;
-    gap: .55rem;
-    justify-content: flex-end;
-    max-width: min(100%, 31rem);
-    margin-top: auto;
-    margin-bottom: 2.8rem;
-    color: #e7e5e4;
-    letter-spacing: .08em;
-  }
-  .os-steps span {
-    white-space: nowrap;
-    padding: .5rem .65rem;
-    border: 1px solid rgba(255,247,237,.24);
-    border-radius: 999px;
-    background: #04120e3d;
-  }
-  .os-shade { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(180deg, #040c0a05 30%, #040c0ab3); }
-  .os-label {
-    position: absolute;
-    left: 16px; bottom: 16px;
-    padding: 8px 10px;
-    border: 1px solid rgba(255,255,255,.4);
-    border-radius: 999px;
-    background: #040c0ab8;
-    -webkit-backdrop-filter: blur(8px);
-    backdrop-filter: blur(8px);
-    color: #fafaf9;
-    font: 10px "JetBrains Mono", ui-monospace, monospace;
-    letter-spacing: .14em;
-    text-transform: uppercase;
-  }
-
-  /* Drawn covers for builds that have no screenshot */
-  .cover {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    padding: clamp(20px, 2.8vw, 36px);
-    overflow: hidden;
-    background:
-      radial-gradient(circle at 85% 15%, rgba(243,242,239,.10), transparent 30%),
-      linear-gradient(160deg, #161615, #0b0b0a 70%);
-    color: #f3f2ef;
-  }
-  .cover .ck { font: 500 11px/1 var(--mono); letter-spacing: .22em; color: #8d8b87; }
-  .cover .stat { margin-top: auto; font-weight: 400; font-size: clamp(3rem, 6vw, 5.6rem); line-height: .9; letter-spacing: -0.05em; }
-  .cover .cap { max-width: 30ch; font-size: 14px; line-height: 1.45; color: #c9c6bf; }
-  .pipe { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font: 500 11.5px/1 var(--mono); color: #c9c6bf; }
-  .pipe span { padding: 8px 10px; border: 1px solid rgba(243,242,239,.18); border-radius: 8px; background: rgba(243,242,239,.04); }
-  .pipe i { font-style: normal; color: #6d6a64; }
-
-  .info { display: flex; flex-direction: column; gap: 16px; min-width: 0; position: relative; }
-  .info .idx {
-    position: absolute;
-    top: -6px; right: 0;
-    font: italic 400 clamp(64px, 7vw, 120px)/.8 var(--serif);
-    color: transparent;
-    -webkit-text-stroke: 1px rgba(243,242,239,.28);
-    pointer-events: none;
-  }
-  .eyebrow { font: 500 12.5px/1 var(--mono); letter-spacing: .2em; text-transform: uppercase; color: var(--p-mute); }
-  .info h3 {
-    margin: 4px 0 0;
-    font-weight: 400;
-    font-size: clamp(2.4rem, 4vw, 4.4rem);
-    line-height: .95;
-    letter-spacing: -0.05em;
-  }
-  .info .desc { margin: 0; font-size: clamp(16px, 1.15vw, 18.5px); line-height: 1.55; color: var(--p-fg); }
-  .info .detail { margin: 0; font-size: 15px; line-height: 1.6; color: var(--p-body); }
-  .hl { display: grid; gap: 8px; margin: 2px 0 0; padding: 0; list-style: none; }
-  .hl li { display: flex; gap: 12px; align-items: baseline; font-size: 15px; line-height: 1.45; color: var(--p-fg); }
-  .hl li::before { content: ""; flex: 0 0 7px; height: 7px; transform: translateY(-1px); background: var(--p-fg); }
-  .tags { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
-  .tags li {
-    padding: 7px 12px;
-    border: 1px solid var(--p-line);
-    border-radius: 999px;
-    font: 500 12px/1 var(--mono);
-    letter-spacing: .06em;
-    color: var(--p-body);
-  }
-  .links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: auto; padding-top: 6px; }
-  .links a {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    height: 46px;
-    padding: 0 20px;
-    border-radius: 999px;
-    font-size: 15px;
-    font-weight: 500;
-    white-space: nowrap;
-    transition: transform .3s, background .3s, border-color .3s;
-  }
-  .links a:hover { transform: translateY(-2px); }
-  .links a svg { transition: transform .3s; }
-  .links a:hover svg { transform: translate(2px, -2px); }
-  .links .solid { background: var(--p-fg); color: var(--p-ink); }
-  .links .line { border: 1px solid var(--p-line); }
-  .links .line:hover { border-color: var(--p-fg); }
-
-  .panel.end {
-    grid-template-columns: 1fr;
-    align-content: center;
-    justify-items: start;
-    width: min(620px, 80vw);
-    gap: 22px;
-    background: transparent;
-    border-style: dashed;
-  }
-  .panel.end .big { font-weight: 400; font-size: clamp(4rem, 9vw, 9rem); line-height: .85; letter-spacing: -0.06em; }
-  .panel.end .big em { font-family: var(--serif); font-style: italic; }
-  .panel.end p { margin: 0; max-width: 36ch; font-size: 18px; line-height: 1.55; color: var(--p-body); }
-
-  .proj-progress {
-    display: flex;
-    align-items: center;
-    gap: 18px;
-    padding-block: 22px 0;
-    font: 500 13px/1 var(--mono);
-    letter-spacing: .14em;
-    text-transform: uppercase;
-    color: var(--p-mute);
-  }
-  .proj-progress b { color: var(--p-fg); font-weight: 600; }
-  .proj-progress .bar { position: relative; flex: 1; max-width: 420px; height: 2px; background: var(--p-line); overflow: hidden; }
-  .proj-progress .bar i { position: absolute; inset: 0; transform-origin: left; transform: scaleX(0); background: var(--p-fg); }
-  .proj-progress .name { color: var(--p-fg); }
-
-  @media (min-width: 961px) {
-    .proj-sticky {
-      position: sticky;
-      top: calc(var(--header-h) + env(safe-area-inset-top, 0px));
-      height: calc(100vh - var(--header-h));
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      overflow: hidden;
-      padding-block: 18px 26px;
-    }
-    .panel { height: min(calc(100vh - var(--header-h) - 120px), 760px); align-items: center; }
-    .info { max-height: 100%; }
-  }
-  @media (max-width: 960px) {
-    .proj-head { grid-template-columns: 1fr; }
-    .proj-track { flex-direction: column; padding-bottom: 80px; }
-    .panel { width: auto; grid-template-columns: 1fr; }
-    .proj-progress { display: none; }
-    .panel.end { width: auto; }
-  }
-  @media (max-width: 520px) {
-    .steps span { padding: 9px 10px; font-size: 13px; }
-    .info .idx { font-size: 56px; }
-  }
-
-  /* ---------- Projects → Open source pixel edge ---------- */
-  .proj-tail { position: relative; height: 40vh; }
-  .proj-tail canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
-
-  /* ---------- Open source ---------- */
-  .oss {
-    --o-bg: #efeee9;
-    --o-ink: #121212;
-    --o-body: #2b2a27;
-    --o-mute: #66625b;
-    --o-line: rgba(18, 18, 18, 0.14);
-    --o-card: #f8f7f3;
-    --ease: cubic-bezier(.16, 1, .3, 1);
-    position: relative;
-    z-index: 2;
-    overflow: hidden;
-    background: var(--o-bg);
-    color: var(--o-ink);
-    color-scheme: light;
-  }
-  .oss-cells { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
-  .oss-inner { position: relative; max-width: 1500px; margin: 0 auto; padding-block: clamp(30px, 4vw, 60px) clamp(90px, 10vw, 150px); }
-  .oss .label-pill { color: var(--o-ink); border-color: var(--o-line); background: var(--o-bg); }
-  .oss-head { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 32px 64px; align-items: end; }
-  .oss h2 { margin: 0; font-weight: 400; font-size: clamp(2.6rem, 5vw, 5.6rem); line-height: 1; letter-spacing: -0.05em; }
-  .split .line { display: block; overflow: hidden; padding-bottom: .1em; margin-bottom: -.04em; }
-  .split .line > span { display: inline-block; }
-  .oss h2 em { font-family: var(--serif); font-style: italic; letter-spacing: -0.02em; }
-  .oss-head p { margin: 0; max-width: 46ch; font-size: clamp(17px, 1.3vw, 20px); line-height: 1.65; color: var(--o-body); }
-
-  .oss-stats {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
     margin-top: clamp(40px, 5vw, 70px);
     border-top: 1px solid var(--o-line);
     border-bottom: 1px solid var(--o-line);
@@ -1726,110 +1032,52 @@
   .marquee-row span:nth-child(odd) { color: var(--o-ink); -webkit-text-stroke: 0; }
   .marquee-row i { font-style: normal; color: var(--o-mute); }
 
-  .oss-filter { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: clamp(30px, 3.5vw, 50px); }
-  .oss-filter button {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    height: 42px;
-    padding: 0 18px;
-    border: 1px solid var(--o-line);
-    border-radius: 999px;
-    background: transparent;
-    color: var(--o-ink);
-    font: 500 15px/1 var(--sans);
-    cursor: pointer;
-    transition: background .35s, color .35s, border-color .35s;
-  }
-  .oss-filter button small { font: 600 11px/1 var(--mono); color: var(--o-mute); transition: color .35s; }
-  .oss-filter button:hover { border-color: var(--o-ink); }
-  .oss-filter button[aria-pressed="true"] { background: var(--o-ink); color: var(--o-bg); border-color: var(--o-ink); }
-  .oss-filter button[aria-pressed="true"] small { color: #b9b5ad; }
 
-  .bento {
-    display: grid;
-    grid-template-columns: repeat(12, minmax(0, 1fr));
-    grid-auto-rows: minmax(190px, auto);
-    gap: 14px;
-  }
-  .tile {
-    --rx: 0deg; --ry: 0deg;
-    position: relative;
+  .feats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: clamp(40px, 5vw, 70px); }
+  .feat {
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    min-width: 0;
-    padding: clamp(18px, 1.8vw, 26px);
-    border-radius: 22px;
-    background: #141413;
-    color: #f3f2ef;
-    overflow: hidden;
-    isolation: isolate;
-    transform: perspective(1200px) translate3d(0, var(--ty, 0px), 0) scale(var(--ts, 1)) rotateX(var(--rx)) rotateY(var(--ry));
-    opacity: var(--to, 1);
-    transition: box-shadow .5s var(--ease);
-    will-change: transform, opacity;
-  }
-  .tile:hover { box-shadow: 0 30px 60px -30px rgba(0,0,0,.6); }
-  .t-glare { position: absolute; inset: 0; z-index: -1; pointer-events: none; opacity: 0; transition: opacity .4s;
-    background: radial-gradient(420px circle at var(--gx, 50%) var(--gy, 0%), rgba(255,255,255,.12), transparent 50%); }
-  .tile:hover .t-glare { opacity: 1; }
-  .t-xl { grid-column: span 6; grid-row: span 2; }
-  .t-l  { grid-column: span 3; grid-row: span 2; }
-  .t-m  { grid-column: span 3; }
-  .t-s3 { grid-column: span 3; }
-  .t-s2 { grid-column: span 2; }
-  .t-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
-  .t-repo { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: 500 11.5px/1 var(--mono); color: #8d8b87; }
-  .t-go { display: grid; place-items: center; flex: 0 0 30px; height: 30px; border-radius: 50%; border: 1px solid rgba(243,242,239,.2); transition: background .35s, color .35s, transform .35s; }
-  .tile:hover .t-go { background: #f3f2ef; color: #141413; transform: rotate(45deg); }
-  .t-count { display: flex; align-items: baseline; gap: 10px; margin-top: auto; }
-  .t-count b { font-weight: 400; font-size: clamp(3rem, 4.6vw, 4.6rem); line-height: .85; letter-spacing: -0.06em; font-variant-numeric: tabular-nums; }
-  .t-xl .t-count b { font-size: clamp(6rem, 12vw, 12rem); }
-  .t-l .t-count b { font-size: clamp(4.5rem, 8vw, 8rem); }
-  .t-count small { font: 500 11px/1.2 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: #8d8b87; }
-  .t-sq { display: flex; gap: 4px; flex-wrap: wrap; }
-  .t-sq i { width: 10px; height: 10px; border-radius: 2px; background: #f3f2ef; opacity: var(--sqo, 1); }
-  .t-name { font: 400 clamp(24px, 2.2vw, 34px)/1.05 var(--serif); letter-spacing: -0.01em; }
-  .t-xl .t-name { font-size: clamp(34px, 3.6vw, 56px); }
-  .t-blurb { font-size: 14px; line-height: 1.5; color: #b3b0a8; }
-  .t-s2 .t-blurb, .t-s3 .t-blurb, .t-m .t-blurb { display: none; }
-  .t-prs { display: grid; gap: 0; margin: 4px 0 0; padding: 0; list-style: none; }
-  .t-prs li { padding: 9px 0; border-top: 1px solid rgba(243,242,239,.12); font-size: 14px; line-height: 1.4; color: #d9d6cf; overflow-wrap: anywhere; }
-  .t-prs li span { font: 600 11.5px/1 var(--mono); color: #fff; margin-right: 6px; }
-  .t-s2 .t-prs, .t-s3 .t-prs, .t-m .t-prs { max-height: 0; overflow: hidden; opacity: 0; transition: max-height .5s var(--ease), opacity .4s; }
-  .tile:hover .t-prs { max-height: 120px; opacity: 1; }
-  .t-more { font: 600 11.5px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: #8d8b87; }
-
-  .review { margin-top: clamp(56px, 6vw, 90px); }
-  .review-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px 16px; margin-bottom: 22px; }
-  .review-head h3 { margin: 0; font: italic 400 clamp(30px, 3vw, 46px)/1 var(--serif); }
-  .review-head span:last-child { font-size: 15px; color: var(--o-mute); }
-  .live-dot { width: 9px; height: 9px; border-radius: 50%; background: #3ddc84; transform: translateY(-4px); animation: pulse 2.4s ease-out infinite; }
-  .ticker {
-    overflow: hidden;
-    margin: 0 calc(-1 * max(var(--gutter-x), env(safe-area-inset-left, 0px)));
-    padding-block: 6px;
-    -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
-    mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
-  }
-  .ticker-row { display: inline-flex; gap: 10px; white-space: nowrap; will-change: transform; }
-  .chip {
-    display: inline-flex;
-    align-items: baseline;
-    gap: 10px;
-    padding: 14px 18px;
+    gap: 14px;
+    padding: clamp(24px, 2.6vw, 38px);
     border: 1px solid var(--o-line);
-    border-radius: 999px;
+    border-radius: 22px;
     background: var(--o-card);
-    font-size: 15px;
-    transition: background .35s, color .35s, border-color .35s;
+    transition: border-color .4s, box-shadow .5s var(--ease), translate .5s var(--ease);
   }
-  .chip b { font-weight: 500; }
-  .chip span { font: 600 12px/1 var(--mono); color: var(--o-mute); }
-  .chip em { font-style: normal; color: var(--o-body); }
-  .chip:hover { background: var(--o-ink); color: var(--o-bg); border-color: var(--o-ink); }
-  .chip:hover span, .chip:hover em { color: #c9c6bf; }
+  .feat:hover { border-color: rgba(18,18,18,.45); box-shadow: 0 24px 50px -30px rgba(0,0,0,.3); translate: 0 -4px; }
+  .feat-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .feat-repo { font: 500 12.5px/1 var(--mono); color: var(--o-mute); }
+  .badge { display: inline-flex; align-items: center; gap: 6px; padding: 7px 11px; border-radius: 999px; background: var(--o-ink); color: var(--o-bg); font: 600 11px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; }
+  .feat h3 { margin: 4px 0 0; font: 400 clamp(32px, 3vw, 46px)/1 var(--serif); letter-spacing: -0.01em; }
+  .feat-pr { margin: 0; font: 500 13.5px/1.5 var(--mono); color: var(--o-ink); }
+  .feat-pr span { font-weight: 600; }
+  .feat-story { margin: 0; max-width: 58ch; font-size: 16.5px; line-height: 1.65; color: var(--o-body); }
+  .feat-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-top: auto; padding-top: 8px; }
+  .feat-foot ul { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 0; list-style: none; }
+  .feat-foot li { padding: 6px 11px; border: 1px solid var(--o-line); border-radius: 999px; font: 500 12px/1 var(--mono); color: var(--o-body); }
+  .feat-foot a { display: inline-flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 500; }
+  .feat-foot a svg, .all-link svg, .mr-go svg { transition: transform .3s; }
+  .feat-foot a:hover svg, .all-link:hover svg, .more-list a:hover .mr-go svg { transform: translate(2px, -2px); }
+
+  .more { margin-top: clamp(56px, 6vw, 90px); }
+  .more-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 12px 24px; margin-bottom: 18px; }
+  .more-head h3 { margin: 0; font: italic 400 clamp(30px, 3vw, 44px)/1 var(--serif); }
+  .all-link { display: inline-flex; align-items: center; gap: 8px; height: 44px; padding: 0 20px; border: 1px solid var(--o-line); border-radius: 999px; font-size: 15px; font-weight: 500; transition: border-color .3s, background .3s; }
+  .all-link:hover { border-color: var(--o-ink); }
+  .more-list { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--o-line); }
+  .more-list li { border-bottom: 1px solid var(--o-line); }
+  .more-list a {
+    display: grid;
+    grid-template-columns: minmax(0, 200px) 80px minmax(0, 1fr) 24px;
+    align-items: baseline;
+    gap: 20px;
+    padding: 18px 4px;
+    transition: padding .4s var(--ease), background .4s;
+  }
+  .more-list a:hover { padding-left: 14px; background: rgba(18,18,18,.035); }
+  .mr-proj { font-weight: 500; }
+  .mr-num { font: 600 12.5px/1 var(--mono); color: var(--o-mute); }
+  .mr-title { color: var(--o-body); }
 
   .prl { display: grid; margin: 4px 0 0; padding: 0; list-style: none; border-top: 1px solid var(--o-line); }
   .prl li { border-bottom: 1px solid var(--o-line); }
@@ -1842,16 +1090,11 @@
 
   @media (max-width: 960px) {
     .oss-head { grid-template-columns: 1fr; }
-    .bento { grid-template-columns: repeat(6, minmax(0, 1fr)); }
-    .t-xl { grid-column: span 6; }
-    .t-l { grid-column: span 6; grid-row: span 1; }
-    .t-m, .t-s3 { grid-column: span 3; }
-    .t-s2 { grid-column: span 2; }
+    .feats { grid-template-columns: 1fr; }
+    .more-list a { grid-template-columns: minmax(0, 1fr) auto 20px; gap: 6px 14px; }
+    .mr-title { grid-column: 1 / -1; grid-row: 2; }
   }
   @media (max-width: 560px) {
-    .bento { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: minmax(160px, auto); }
-    .t-xl, .t-l { grid-column: span 2; }
-    .t-m, .t-s3, .t-s2 { grid-column: span 1; }
     .oss-stats { grid-template-columns: 1fr; }
     .oss-stats div + div { padding-left: 0; border-left: 0; border-top: 1px solid var(--o-line); }
     .status { margin-left: 0; }
@@ -2169,144 +1412,54 @@
       <div class="oss-stats" id="oss-stats">
         <div><b data-count="34">0</b><span>PRs merged upstream</span></div>
         <div><b data-count="14">0</b><span>Projects shipping my code</span></div>
-        <div><b data-count="27">0</b><span>In review right now</span></div>
       </div>
 
-      <div class="marquee" aria-hidden="true"><div class="marquee-row" id="marquee-row"><span>Ultralytics YOLO</span><i>·</i><span>Kornia</span><i>·</i><span>OpenRig</span><i>·</i><span>ONNX</span><i>·</i><span>Microsoft PyRIT</span><i>·</i><span>CrewAI</span><i>·</i><span>Roboflow Supervision</span><i>·</i><span>MLflow</span><i>·</i><span>COLMAP</span><i>·</i><span>Ponytail</span><i>·</i><span>OmniRoute</span><i>·</i><span>VoiceStudio</span><i>·</i><span>rea</span><i>·</i><span>Google skills_lint</span><i>·</i><span>Ultralytics YOLO</span><i>·</i><span>Kornia</span><i>·</i><span>OpenRig</span><i>·</i><span>ONNX</span><i>·</i><span>Microsoft PyRIT</span><i>·</i><span>CrewAI</span><i>·</i><span>Roboflow Supervision</span><i>·</i><span>MLflow</span><i>·</i><span>COLMAP</span><i>·</i><span>Ponytail</span><i>·</i><span>OmniRoute</span><i>·</i><span>VoiceStudio</span><i>·</i><span>rea</span><i>·</i><span>Google skills_lint</span><i>·</i></div></div>
-
-      <div class="bento" id="bento">
-        <a class="tile t-xl" href="https://github.com/ultralytics/ultralytics/pulls?q=is%3Apr+author%3AVaishnavi220506+is%3Amerged" target="_blank" rel="noopener">
-          <span class="t-glare" aria-hidden="true"></span>
-          <span class="t-top"><span class="t-repo">ultralytics/ultralytics</span><span class="t-go"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></span></span>
-          <span class="t-count"><b data-count="11">11</b><small>merged PRs</small></span>
-          <span class="t-sq" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
-          <span class="t-name">Ultralytics YOLO</span>
-          <span class="t-blurb">YOLO models for detection, segmentation, pose and tracking.</span>
-          <ul class="t-prs"><li><span>#26652</span> Preserve RMSprop second moments when saving checkpoints</li><li><span>#26627</span> Preserve fractional and high FPS in saved videos and stream loaders</li><li><span>#26597</span> More reliable classification training and validation</li><li><span>#26548</span> Preserve caller random state during autosplit</li></ul><span class="t-more">+7 more</span>
-        </a>
-        <a class="tile t-l" href="https://github.com/kornia/kornia/pulls?q=is%3Apr+author%3AVaishnavi220506+is%3Amerged" target="_blank" rel="noopener">
-          <span class="t-glare" aria-hidden="true"></span>
-          <span class="t-top"><span class="t-repo">kornia/kornia</span><span class="t-go"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></span></span>
-          <span class="t-count"><b data-count="7">7</b><small>merged PRs</small></span>
-          <span class="t-sq" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
-          <span class="t-name">Kornia</span>
-          <span class="t-blurb">Geometric computer vision library for spatial AI.</span>
-          <ul class="t-prs"><li><span>#5922</span> fix(contrib): assign KMeans labels using the final centers</li><li><span>#5891</span> fix(losses): keep mean total variation finite on singleton axes</li><li><span>#5817</span> fix(geometry): size pyrdown axes consistently for fractional factors</li></ul><span class="t-more">+4 more</span>
-        </a>
-        <a class="tile t-m" href="https://github.com/mvschwarz/openrig/pulls?q=is%3Apr+author%3AVaishnavi220506+is%3Amerged" target="_blank" rel="noopener">
-          <span class="t-glare" aria-hidden="true"></span>
-          <span class="t-top"><span class="t-repo">mvschwarz/openrig</span><span class="t-go"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></span></span>
-          <span class="t-count"><b data-count="3">3</b><small>merged PRs</small></span>
-          <span class="t-sq" aria-hidden="true"><i></i><i></i><i></i></span>
-          <span class="t-name">OpenRig</span>
-          <span class="t-blurb">Networks of coding agents from Claude Code, Codex and Pi.</span>
-          <ul class="t-prs"><li><span>#1030</span> fix(shutdown): capture snapshot after resume discovery failure</li></ul>
-        </a>
-        <a class="tile t-m" href="https://github.com/roboflow/supervision/pulls?q=is%3Apr+author%3AVaishnavi220506+is%3Amerged" target="_blank" rel="noopener">
-          <span class="t-glare" aria-hidden="true"></span>
-          <span class="t-top"><span class="t-repo">roboflow/supervision</span><span class="t-go"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></span></span>
-          <span class="t-count"><b data-count="2">2</b><small>merged PRs</small></span>
-          <span class="t-sq" aria-hidden="true"><i></i><i></i></span>
-          <span class="t-name">Roboflow Supervision</span>
-          <span class="t-blurb">Reusable computer vision tools.</span>
-          <ul class="t-prs"><li><span>#2717</span> fix(metrics): preserve oriented-box precision in mAP</li></ul>
-        </a>
-        <a class="tile t-s3" href="https://github.com/onnx/onnx/pulls?q=is%3Apr+author%3AVaishnavi220506+is%3Amerged" target="_blank" rel="noopener">
-          <span class="t-glare" aria-hidden="true"></span>
-          <span class="t-top"><span class="t-repo">onnx/onnx</span><span class="t-go"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></span></span>
-          <span class="t-count"><b data-count="1">1</b><small>merged PR</small></span>
-          <span class="t-sq" aria-hidden="true"><i></i></span>
-          <span class="t-name">ONNX</span>
-          <span class="t-blurb">Open standard for machine-learning interoperability.</span>
-          <ul class="t-prs"><li><span>#8448</span> fix(shape_inference): preserve custom callback lifetime</li></ul>
-        </a>
-        <a class="tile t-s3" href="https://github.com/microsoft/PyRIT/pulls?q=is%3Apr+author%3AVaishnavi220506+is%3Amerged" target="_blank" rel="noopener">
-          <span class="t-glare" aria-hidden="true"></span>
-          <span class="t-top"><span class="t-repo">microsoft/PyRIT</span><span class="t-go"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></span></span>
-          <span class="t-count"><b data-count="1">1</b><small>merged PR</small></span>
-          <span class="t-sq" aria-hidden="true"><i></i></span>
-          <span class="t-name">Microsoft PyRIT</span>
-          <span class="t-blurb">Framework for finding risks in generative AI systems.</span>
-          <ul class="t-prs"><li><span>#2356</span> FIX: support stereo audio frequency conversion</li></ul>
-        </a>
-        <a class="tile t-s3" href="https://github.com/crewAIInc/crewAI/pulls?q=is%3Apr+author%3AVaishnavi220506+is%3Amerged" target="_blank" rel="noopener">
-          <span class="t-glare" aria-hidden="true"></span>
-          <span class="t-top"><span class="t-repo">crewAIInc/crewAI</span><span class="t-go"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></span></span>
-          <span class="t-count"><b data-count="1">1</b><small>merged PR</small></span>
-          <span class="t-sq" aria-hidden="true"><i></i></span>
-          <span class="t-name">CrewAI</span>
-          <span class="t-blurb">Framework for orchestrating autonomous AI agents.</span>
-          <ul class="t-prs"><li><span>#6881</span> fix: make pre-commit hooks portable on Windows</li></ul>
-        </a>
-        <a class="tile t-s3" href="https://github.com/DietrichGebert/ponytail/pulls?q=is%3Apr+author%3AVaishnavi220506+is%3Amerged" target="_blank" rel="noopener">
-          <span class="t-glare" aria-hidden="true"></span>
-          <span class="t-top"><span class="t-repo">DietrichGebert/ponytail</span><span class="t-go"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></span></span>
-          <span class="t-count"><b data-count="2">2</b><small>merged PRs</small></span>
-          <span class="t-sq" aria-hidden="true"><i></i><i></i></span>
-          <span class="t-name">Ponytail</span>
-          <span class="t-blurb">Guides AI agents toward minimal code.</span>
-          <ul class="t-prs"><li><span>#1057</span> fix(qoder): honor QODER_CONFIG_DIR for mode state</li></ul>
-        </a>
-        <a class="tile t-s2" href="https://github.com/mlflow/mlflow/pulls?q=is%3Apr+author%3AVaishnavi220506+is%3Amerged" target="_blank" rel="noopener">
-          <span class="t-glare" aria-hidden="true"></span>
-          <span class="t-top"><span class="t-repo">mlflow/mlflow</span><span class="t-go"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></span></span>
-          <span class="t-count"><b data-count="1">1</b><small>merged PR</small></span>
-          <span class="t-sq" aria-hidden="true"><i></i></span>
-          <span class="t-name">MLflow</span>
-          <span class="t-blurb">Open source AI engineering platform.</span>
-          <ul class="t-prs"><li><span>#26300</span> Honor tool_choice in Gemini and Vertex AI gateway requests</li></ul>
-        </a>
-        <a class="tile t-s2" href="https://github.com/colmap/colmap/pulls?q=is%3Apr+author%3AVaishnavi220506+is%3Amerged" target="_blank" rel="noopener">
-          <span class="t-glare" aria-hidden="true"></span>
-          <span class="t-top"><span class="t-repo">colmap/colmap</span><span class="t-go"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></span></span>
-          <span class="t-count"><b data-count="1">1</b><small>merged PR</small></span>
-          <span class="t-sq" aria-hidden="true"><i></i></span>
-          <span class="t-name">COLMAP</span>
-          <span class="t-blurb">Structure-from-Motion and multi-view stereo.</span>
-          <ul class="t-prs"><li><span>#4842</span> Reset reconstruction bookkeeping when reading a model</li></ul>
-        </a>
-        <a class="tile t-s2" href="https://github.com/diegosouzapw/OmniRoute/pulls?q=is%3Apr+author%3AVaishnavi220506+is%3Amerged" target="_blank" rel="noopener">
-          <span class="t-glare" aria-hidden="true"></span>
-          <span class="t-top"><span class="t-repo">diegosouzapw/OmniRoute</span><span class="t-go"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></span></span>
-          <span class="t-count"><b data-count="1">1</b><small>merged PR</small></span>
-          <span class="t-sq" aria-hidden="true"><i></i></span>
-          <span class="t-name">OmniRoute</span>
-          <span class="t-blurb">AI gateway with one endpoint for many model providers.</span>
-          <ul class="t-prs"><li><span>#14594</span> fix(mitm): respect SSE backpressure and cap inspector chunks</li></ul>
-        </a>
-        <a class="tile t-s2" href="https://github.com/debpalash/VoiceStudio/pulls?q=is%3Apr+author%3AVaishnavi220506+is%3Amerged" target="_blank" rel="noopener">
-          <span class="t-glare" aria-hidden="true"></span>
-          <span class="t-top"><span class="t-repo">debpalash/VoiceStudio</span><span class="t-go"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></span></span>
-          <span class="t-count"><b data-count="1">1</b><small>merged PR</small></span>
-          <span class="t-sq" aria-hidden="true"><i></i></span>
-          <span class="t-name">VoiceStudio</span>
-          <span class="t-blurb">Local voice cloning, dubbing and transcription.</span>
-          <ul class="t-prs"><li><span>#2422</span> fix(subtitles): interpret short timestamp fields as milliseconds</li></ul>
-        </a>
-        <a class="tile t-s2" href="https://github.com/morluto/rea/pulls?q=is%3Apr+author%3AVaishnavi220506+is%3Amerged" target="_blank" rel="noopener">
-          <span class="t-glare" aria-hidden="true"></span>
-          <span class="t-top"><span class="t-repo">morluto/rea</span><span class="t-go"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></span></span>
-          <span class="t-count"><b data-count="1">1</b><small>merged PR</small></span>
-          <span class="t-sq" aria-hidden="true"><i></i></span>
-          <span class="t-name">rea</span>
-          <span class="t-blurb">Reverse-engineering tool built on agents.</span>
-          <ul class="t-prs"><li><span>#2912</span> fix(managed): retain raw CIL changes in member comparison</li></ul>
-        </a>
-        <a class="tile t-s2" href="https://github.com/google/skills_lint.dart/pulls?q=is%3Apr+author%3AVaishnavi220506+is%3Amerged" target="_blank" rel="noopener">
-          <span class="t-glare" aria-hidden="true"></span>
-          <span class="t-top"><span class="t-repo">google/skills_lint.dart</span><span class="t-go"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></span></span>
-          <span class="t-count"><b data-count="1">1</b><small>merged PR</small></span>
-          <span class="t-sq" aria-hidden="true"><i></i></span>
-          <span class="t-name">Google skills_lint</span>
-          <span class="t-blurb">Open-source tooling from Google.</span>
-          <ul class="t-prs"><li><span>#64</span> feat(config): make parser source explicit</li></ul>
-        </a>
+      <div class="feats">
+        <article class="feat reveal">
+          <div class="feat-top"><span class="feat-repo">onnx/onnx</span><span class="badge"><svg width="11" height="11" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 6.5 4.8 9 10 3" stroke="currentColor" stroke-width="1.6"/></svg> Merged</span></div>
+          <h3>ONNX</h3>
+          <p class="feat-pr"><span>#8448</span> fix(shape_inference): preserve custom callback lifetime</p>
+          <p class="feat-story">Custom shape-inference callbacks could be freed while inference was still running. I kept guarded ownership of the callback for the full operation and added regression tests for short-lived registrations and garbage collection.</p>
+          <div class="feat-foot"><ul><li>C++</li><li>ONNX</li><li>Memory safety</li></ul><a href="https://github.com/onnx/onnx/pull/8448" target="_blank" rel="noopener">View PR <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a></div>
+        </article>
+        <article class="feat reveal" style="--d:.08s">
+          <div class="feat-top"><span class="feat-repo">microsoft/PyRIT</span><span class="badge"><svg width="11" height="11" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 6.5 4.8 9 10 3" stroke="currentColor" stroke-width="1.6"/></svg> Merged</span></div>
+          <h3>Microsoft PyRIT</h3>
+          <p class="feat-pr"><span>#2356</span> FIX: support stereo audio frequency conversion</p>
+          <p class="feat-story">Multi-channel WAV input broke the audio frequency converter with NumPy broadcasting errors. I updated the conversion to handle stereo audio and validated it against 1,095 tests and Ruff checks.</p>
+          <div class="feat-foot"><ul><li>Python</li><li>NumPy</li><li>Audio</li></ul><a href="https://github.com/microsoft/PyRIT/pull/2356" target="_blank" rel="noopener">View PR <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a></div>
+        </article>
+        <article class="feat reveal">
+          <div class="feat-top"><span class="feat-repo">crewAIInc/crewAI</span><span class="badge"><svg width="11" height="11" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 6.5 4.8 9 10 3" stroke="currentColor" stroke-width="1.6"/></svg> Merged</span></div>
+          <h3>CrewAI</h3>
+          <p class="feat-pr"><span>#6881</span> fix: make pre-commit hooks portable on Windows</p>
+          <p class="feat-story">The pre-commit hooks relied on Unix-only environment activation, so they failed on Windows. I replaced it with direct uv commands for Ruff, mypy, pip-audit and pytest, with regression coverage.</p>
+          <div class="feat-foot"><ul><li>Python</li><li>AI agents</li><li>Developer tools</li></ul><a href="https://github.com/crewAIInc/crewAI/pull/6881" target="_blank" rel="noopener">View PR <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a></div>
+        </article>
+        <article class="feat reveal" style="--d:.08s">
+          <div class="feat-top"><span class="feat-repo">ultralytics/ultralytics</span><span class="badge"><svg width="11" height="11" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 6.5 4.8 9 10 3" stroke="currentColor" stroke-width="1.6"/></svg> Merged</span></div>
+          <h3>Ultralytics YOLO</h3>
+          <p class="feat-pr"><span>#26652</span> Preserve RMSprop second moments when saving checkpoints</p>
+          <p class="feat-story">My most active upstream project, with 11 merged PRs in the YOLO library. Recent ones keep RMSprop optimizer state in saved checkpoints and preserve fractional and high FPS in saved videos and stream loaders.</p>
+          <div class="feat-foot"><ul><li>Python</li><li>PyTorch</li><li>Computer vision</li></ul><a href="https://github.com/ultralytics/ultralytics/pull/26652" target="_blank" rel="noopener">View PR <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a></div>
+        </article>
       </div>
 
-      <div class="review">
-        <div class="review-head"><span class="live-dot" aria-hidden="true"></span><h3>In review right now</h3><span>27 open pull requests across vLLM, Kubernetes, OpenCV, AWS CLI and more</span></div>
-        <div class="ticker"><div class="ticker-row" data-dir="1"><a class="chip" href="https://github.com/vllm-project/vllm/pull/58847" target="_blank" rel="noopener"><b>vLLM</b><span>#58847</span><em>[Bugfix][Frontend] Parse split GLM tool-call markers</em></a><a class="chip" href="https://github.com/vllm-project/vllm/pull/58517" target="_blank" rel="noopener"><b>vLLM</b><span>#58517</span><em>[Core] Bound async GPU output synchronization</em></a><a class="chip" href="https://github.com/vllm-project/vllm/pull/56444" target="_blank" rel="noopener"><b>vLLM</b><span>#56444</span><em>[Bugfix][Qwen4Exp] Support N-gram PLE with pipeline parallelism</em></a><a class="chip" href="https://github.com/vllm-project/vllm/pull/56413" target="_blank" rel="noopener"><b>vLLM</b><span>#56413</span><em>[Bugfix][Offload] Avoid duplicate host allocation for UVA weights</em></a><a class="chip" href="https://github.com/colmap/colmap/pull/4858" target="_blank" rel="noopener"><b>COLMAP</b><span>#4858</span><em>Honor the declared vertex count when reading ASCII PLY</em></a><a class="chip" href="https://github.com/colmap/colmap/pull/4857" target="_blank" rel="noopener"><b>COLMAP</b><span>#4857</span><em>Keep copied reconstruction frames finalized</em></a><a class="chip" href="https://github.com/colmap/colmap/pull/4851" target="_blank" rel="noopener"><b>COLMAP</b><span>#4851</span><em>Preserve multi-camera rig geometry when merging reconstructions</em></a><a class="chip" href="https://github.com/kubernetes/kubernetes/pull/142917" target="_blank" rel="noopener"><b>Kubernetes</b><span>#142917</span><em>Fix CronJob catch-up runs during irregular schedule gaps</em></a><a class="chip" href="https://github.com/opencv/opencv/pull/30235" target="_blank" rel="noopener"><b>OpenCV</b><span>#30235</span><em>imgproc: fix sparse alternative chi-square comparison</em></a><a class="chip" href="https://github.com/huggingface/datasets/pull/8787" target="_blank" rel="noopener"><b>Hugging Face Datasets</b><span>#8787</span><em>Fix streaming map callbacks returning None</em></a><a class="chip" href="https://github.com/aws/aws-cli/pull/10722" target="_blank" rel="noopener"><b>AWS CLI</b><span>#10722</span><em>[v2] Preserve settings during configuration updates</em></a><a class="chip" href="https://github.com/langchain-ai/langchainjs/pull/11756" target="_blank" rel="noopener"><b>LangChain.js</b><span>#11756</span><em>fix(core): prevent cache key collisions between inputs</em></a><a class="chip" href="https://github.com/BerriAI/litellm/pull/44070" target="_blank" rel="noopener"><b>LiteLLM</b><span>#44070</span><em>fix(routing): retain adaptive feedback after failed flushes</em></a><a class="chip" href="https://github.com/langfuse/langfuse/pull/18024" target="_blank" rel="noopener"><b>Langfuse</b><span>#18024</span><em>fix(worker): include clamped billing starts in usage lookback</em></a><a class="chip" href="https://github.com/vllm-project/vllm/pull/58847" target="_blank" rel="noopener"><b>vLLM</b><span>#58847</span><em>[Bugfix][Frontend] Parse split GLM tool-call markers</em></a><a class="chip" href="https://github.com/vllm-project/vllm/pull/58517" target="_blank" rel="noopener"><b>vLLM</b><span>#58517</span><em>[Core] Bound async GPU output synchronization</em></a><a class="chip" href="https://github.com/vllm-project/vllm/pull/56444" target="_blank" rel="noopener"><b>vLLM</b><span>#56444</span><em>[Bugfix][Qwen4Exp] Support N-gram PLE with pipeline parallelism</em></a><a class="chip" href="https://github.com/vllm-project/vllm/pull/56413" target="_blank" rel="noopener"><b>vLLM</b><span>#56413</span><em>[Bugfix][Offload] Avoid duplicate host allocation for UVA weights</em></a><a class="chip" href="https://github.com/colmap/colmap/pull/4858" target="_blank" rel="noopener"><b>COLMAP</b><span>#4858</span><em>Honor the declared vertex count when reading ASCII PLY</em></a><a class="chip" href="https://github.com/colmap/colmap/pull/4857" target="_blank" rel="noopener"><b>COLMAP</b><span>#4857</span><em>Keep copied reconstruction frames finalized</em></a><a class="chip" href="https://github.com/colmap/colmap/pull/4851" target="_blank" rel="noopener"><b>COLMAP</b><span>#4851</span><em>Preserve multi-camera rig geometry when merging reconstructions</em></a><a class="chip" href="https://github.com/kubernetes/kubernetes/pull/142917" target="_blank" rel="noopener"><b>Kubernetes</b><span>#142917</span><em>Fix CronJob catch-up runs during irregular schedule gaps</em></a><a class="chip" href="https://github.com/opencv/opencv/pull/30235" target="_blank" rel="noopener"><b>OpenCV</b><span>#30235</span><em>imgproc: fix sparse alternative chi-square comparison</em></a><a class="chip" href="https://github.com/huggingface/datasets/pull/8787" target="_blank" rel="noopener"><b>Hugging Face Datasets</b><span>#8787</span><em>Fix streaming map callbacks returning None</em></a><a class="chip" href="https://github.com/aws/aws-cli/pull/10722" target="_blank" rel="noopener"><b>AWS CLI</b><span>#10722</span><em>[v2] Preserve settings during configuration updates</em></a><a class="chip" href="https://github.com/langchain-ai/langchainjs/pull/11756" target="_blank" rel="noopener"><b>LangChain.js</b><span>#11756</span><em>fix(core): prevent cache key collisions between inputs</em></a><a class="chip" href="https://github.com/BerriAI/litellm/pull/44070" target="_blank" rel="noopener"><b>LiteLLM</b><span>#44070</span><em>fix(routing): retain adaptive feedback after failed flushes</em></a><a class="chip" href="https://github.com/langfuse/langfuse/pull/18024" target="_blank" rel="noopener"><b>Langfuse</b><span>#18024</span><em>fix(worker): include clamped billing starts in usage lookback</em></a></div></div>
-        <div class="ticker"><div class="ticker-row" data-dir="-1"><a class="chip" href="https://github.com/ultralytics/ultralytics/pull/26667" target="_blank" rel="noopener"><b>Ultralytics YOLO</b><span>#26667</span><em>Preserve distinct same-box grounding segmentation polygons</em></a><a class="chip" href="https://github.com/kornia/kornia/pull/5776" target="_blank" rel="noopener"><b>Kornia</b><span>#5776</span><em>fix(filters): preserve bilateral colour weights at extreme scales</em></a><a class="chip" href="https://github.com/conda/conda/pull/16851" target="_blank" rel="noopener"><b>conda</b><span>#16851</span><em>Prevent renaming environments into themselves</em></a><a class="chip" href="https://github.com/aio-libs/aiohttp/pull/14019" target="_blank" rel="noopener"><b>aiohttp</b><span>#14019</span><em>Fix memoryview payload serialization and byte-length limits</em></a><a class="chip" href="https://github.com/fsspec/filesystem_spec/pull/2284" target="_blank" rel="noopener"><b>fsspec</b><span>#2284</span><em>Recover background block reads after prefetch failures</em></a><a class="chip" href="https://github.com/shap/shap/pull/5173" target="_blank" rel="noopener"><b>SHAP</b><span>#5173</span><em>FIX: Defer LightGBM tree parsing for native SHAP values</em></a><a class="chip" href="https://github.com/juspay/hyperswitch/pull/14482" target="_blank" rel="noopener"><b>Hyperswitch</b><span>#14482</span><em>fix(common_utils): reject a lone plus in phone country codes</em></a><a class="chip" href="https://github.com/anyscale/terraform-provider-anyscale/pull/333" target="_blank" rel="noopener"><b>Anyscale Terraform provider</b><span>#333</span><em>fix: prevent infinite loops on repeated pagination cursors</em></a><a class="chip" href="https://github.com/mvschwarz/openrig/pull/1147" target="_blank" rel="noopener"><b>OpenRig</b><span>#1147</span><em>fix(snapshots): preserve pre-down recovery during periodic refresh</em></a><a class="chip" href="https://github.com/andrewyng/openworker/pull/678" target="_blank" rel="noopener"><b>openworker</b><span>#678</span><em>Fix local model discovery for OpenAI-compatible Ollama endpoints</em></a><a class="chip" href="https://github.com/lyogavin/airllm/pull/363" target="_blank" rel="noopener"><b>AirLLM</b><span>#363</span><em>fix: accept PyTorch tokenizer inputs in MLX generate</em></a><a class="chip" href="https://github.com/violetljj/blind-assist/pull/49" target="_blank" rel="noopener"><b>blind-assist</b><span>#49</span><em>fix: harden default flow accessibility at large font sizes</em></a><a class="chip" href="https://github.com/MengTo/threeui/pull/42" target="_blank" rel="noopener"><b>threeui</b><span>#42</span><em>Fix Sylva Living World font loading in sandbox</em></a><a class="chip" href="https://github.com/ultralytics/ultralytics/pull/26667" target="_blank" rel="noopener"><b>Ultralytics YOLO</b><span>#26667</span><em>Preserve distinct same-box grounding segmentation polygons</em></a><a class="chip" href="https://github.com/kornia/kornia/pull/5776" target="_blank" rel="noopener"><b>Kornia</b><span>#5776</span><em>fix(filters): preserve bilateral colour weights at extreme scales</em></a><a class="chip" href="https://github.com/conda/conda/pull/16851" target="_blank" rel="noopener"><b>conda</b><span>#16851</span><em>Prevent renaming environments into themselves</em></a><a class="chip" href="https://github.com/aio-libs/aiohttp/pull/14019" target="_blank" rel="noopener"><b>aiohttp</b><span>#14019</span><em>Fix memoryview payload serialization and byte-length limits</em></a><a class="chip" href="https://github.com/fsspec/filesystem_spec/pull/2284" target="_blank" rel="noopener"><b>fsspec</b><span>#2284</span><em>Recover background block reads after prefetch failures</em></a><a class="chip" href="https://github.com/shap/shap/pull/5173" target="_blank" rel="noopener"><b>SHAP</b><span>#5173</span><em>FIX: Defer LightGBM tree parsing for native SHAP values</em></a><a class="chip" href="https://github.com/juspay/hyperswitch/pull/14482" target="_blank" rel="noopener"><b>Hyperswitch</b><span>#14482</span><em>fix(common_utils): reject a lone plus in phone country codes</em></a><a class="chip" href="https://github.com/anyscale/terraform-provider-anyscale/pull/333" target="_blank" rel="noopener"><b>Anyscale Terraform provider</b><span>#333</span><em>fix: prevent infinite loops on repeated pagination cursors</em></a><a class="chip" href="https://github.com/mvschwarz/openrig/pull/1147" target="_blank" rel="noopener"><b>OpenRig</b><span>#1147</span><em>fix(snapshots): preserve pre-down recovery during periodic refresh</em></a><a class="chip" href="https://github.com/andrewyng/openworker/pull/678" target="_blank" rel="noopener"><b>openworker</b><span>#678</span><em>Fix local model discovery for OpenAI-compatible Ollama endpoints</em></a><a class="chip" href="https://github.com/lyogavin/airllm/pull/363" target="_blank" rel="noopener"><b>AirLLM</b><span>#363</span><em>fix: accept PyTorch tokenizer inputs in MLX generate</em></a><a class="chip" href="https://github.com/violetljj/blind-assist/pull/49" target="_blank" rel="noopener"><b>blind-assist</b><span>#49</span><em>fix: harden default flow accessibility at large font sizes</em></a><a class="chip" href="https://github.com/MengTo/threeui/pull/42" target="_blank" rel="noopener"><b>threeui</b><span>#42</span><em>Fix Sylva Living World font loading in sandbox</em></a></div></div>
+      <div class="more">
+        <div class="more-head reveal">
+          <h3>More merged work</h3>
+          <a class="all-link" href="https://github.com/search?q=author%3AVaishnavi220506+is%3Apr+is%3Amerged&amp;type=pullrequests" target="_blank" rel="noopener">See all 34 on GitHub <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a>
+        </div>
+        <ul class="more-list">
+          <li class="reveal"><a href="https://github.com/kornia/kornia/pull/5922" target="_blank" rel="noopener"><span class="mr-proj">Kornia</span><span class="mr-num">#5922</span><span class="mr-title">Assign KMeans labels using the final centers</span><span class="mr-go"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></span></a></li>
+          <li class="reveal"><a href="https://github.com/kornia/kornia/pull/5498" target="_blank" rel="noopener"><span class="mr-proj">Kornia</span><span class="mr-num">#5498</span><span class="mr-title">Stabilize 3D line fitting across scales</span><span class="mr-go"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></span></a></li>
+          <li class="reveal"><a href="https://github.com/ultralytics/ultralytics/pull/26627" target="_blank" rel="noopener"><span class="mr-proj">Ultralytics</span><span class="mr-num">#26627</span><span class="mr-title">Preserve fractional and high FPS in saved videos and stream loaders</span><span class="mr-go"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></span></a></li>
+          <li class="reveal"><a href="https://github.com/ultralytics/ultralytics/pull/26454" target="_blank" rel="noopener"><span class="mr-proj">Ultralytics</span><span class="mr-num">#26454</span><span class="mr-title">Preserve distinct COCO polygons and keypoints sharing a box</span><span class="mr-go"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></span></a></li>
+          <li class="reveal"><a href="https://github.com/mlflow/mlflow/pull/26300" target="_blank" rel="noopener"><span class="mr-proj">MLflow</span><span class="mr-num">#26300</span><span class="mr-title">Honor tool_choice in Gemini and Vertex AI gateway requests</span><span class="mr-go"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></span></a></li>
+          <li class="reveal"><a href="https://github.com/roboflow/supervision/pull/2717" target="_blank" rel="noopener"><span class="mr-proj">Roboflow Supervision</span><span class="mr-num">#2717</span><span class="mr-title">Preserve oriented-box precision in mAP</span><span class="mr-go"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></span></a></li>
+          <li class="reveal"><a href="https://github.com/colmap/colmap/pull/4842" target="_blank" rel="noopener"><span class="mr-proj">COLMAP</span><span class="mr-num">#4842</span><span class="mr-title">Reset reconstruction bookkeeping when reading a model</span><span class="mr-go"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></span></a></li>
+          <li class="reveal"><a href="https://github.com/mvschwarz/openrig/pull/1030" target="_blank" rel="noopener"><span class="mr-proj">OpenRig</span><span class="mr-num">#1030</span><span class="mr-title">Capture snapshot after resume discovery failure</span><span class="mr-go"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></span></a></li>
+        </ul>
       </div>
     </div>
   </section>
@@ -2853,25 +2006,10 @@
       }
     }
 
-    // Bento tiles: tilt + glare toward the cursor
-    const tiles = Array.from(document.querySelectorAll('#bento .tile'));
-    tiles.forEach(function (t) {
-      t.addEventListener('pointermove', function (ev) {
-        const r = t.getBoundingClientRect();
-        const x = (ev.clientX - r.left) / r.width, y = (ev.clientY - r.top) / r.height;
-        t.style.setProperty('--ry', ((x - 0.5) * 8).toFixed(2) + 'deg');
-        t.style.setProperty('--rx', ((0.5 - y) * 6).toFixed(2) + 'deg');
-        t.style.setProperty('--gx', (x * 100).toFixed(1) + '%');
-        t.style.setProperty('--gy', (y * 100).toFixed(1) + '%');
-      });
-      t.addEventListener('pointerleave', function () { t.style.setProperty('--rx', '0deg'); t.style.setProperty('--ry', '0deg'); });
-    });
-    const tickers = Array.from(document.querySelectorAll('.ticker-row'));
     function layoutGraph() {}
 
     const statEls = Array.from(document.querySelectorAll('#oss-stats b'));
     const statsBox = document.getElementById('oss-stats');
-    const marquee = document.getElementById('marquee-row');
     const t0 = performance.now();
     let lastY = -1;
 
@@ -2881,39 +2019,11 @@
       const q = clamp01((vh - tr.top) / (vh * 0.85));
       if (Math.abs(q - lastTail) > 0.0005) { drawTail(q); lastTail = q; }
 
-      const marqueeMoving = !still;
-      if (y !== lastY || marqueeMoving) {
+      if (y !== lastY) {
         if (y !== lastY) drawCells();
         // stats count up as the row scrolls in
         const st = clamp01((vh - statsBox.getBoundingClientRect().top) / (vh * 0.5));
         statEls.forEach(function (el) { el.textContent = String(Math.round(+el.dataset.count * (still ? 1 : ease(st)))); });
-        tickers.forEach(function (row) {
-          const half = row.scrollWidth / 2, dir = +row.dataset.dir;
-          if (!half || still) return;
-          let x = ((y * 0.35 + (now - t0) * 0.04) % half + half) % half;
-          if (dir < 0) x = half - x;
-          row.style.transform = 'translate3d(' + (-x).toFixed(1) + 'px,0,0)';
-        });
-        // marquee: drifts on its own, and the page scroll pushes it further
-        if (!still) {
-          const third = marquee.scrollWidth / 2;
-          const x = ((y * 0.5 + (now - t0) * 0.03) % third + third) % third;
-          marquee.style.transform = 'translate3d(' + (-x).toFixed(1) + 'px,0,0)';
-        }
-        // tiles rise and scale in, staggered by position; their squares and counts fill up
-        tiles.forEach(function (t, i) {
-          const r = t.getBoundingClientRect();
-          const k = still ? 1 : clamp01((vh * 0.98 - r.top) / (vh * 0.42) - (i % 4) * 0.06);
-          const e2 = ease(k);
-          t.style.setProperty('--ty', ((1 - e2) * 70).toFixed(1) + 'px');
-          t.style.setProperty('--ts', (0.92 + 0.08 * e2).toFixed(4));
-          t.style.setProperty('--to', clamp01(k * 1.5).toFixed(3));
-          const b = t.querySelector('.t-count b');
-          b.textContent = String(Math.max(1, Math.round(+b.dataset.count * e2)));
-          const sq = t.querySelectorAll('.t-sq i');
-          const lit = sq.length * clamp01(k * 1.3 - 0.2);
-          sq.forEach(function (q, j) { q.style.setProperty('--sqo', j < lit ? '1' : '.15'); });
-        });
         lastY = y;
       }
       requestAnimationFrame(tick);
