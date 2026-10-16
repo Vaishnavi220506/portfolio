@@ -129,3 +129,6 @@ The old site's list was out of date: OpenHands #4878, ersilia-os/eos-template #9
 Merged upstream (34) by project: Ultralytics 11 (#26652 #26627 #26597 #26548 #26521 #26474 #26454 #26420 #26406 #26306 #26285) · Kornia 7 (#5922 #5891 #5817 #5668 #5498 #5296 #5091) · OpenRig 3 (#1030 #662 #505) · Roboflow Supervision 2 (#2717 #2646) · Ponytail 2 (#1057 #1037) · ONNX #8448 · Microsoft PyRIT #2356 · CrewAI #6881 · MLflow #26300 · COLMAP #4842 · rea #2912 · google/skills_lint.dart #64 · VoiceStudio #2422 · OmniRoute #14594 → 14 projects.
 
 Open / in review (27): vLLM #58847 #58517 #56444 #56413 · COLMAP #4858 #4857 #4851 · Kubernetes #142917 · OpenCV #30235 · HF Datasets #8787 · AWS CLI #10722 · LangChain.js #11756 · LiteLLM #44070 · Langfuse #18024 · Ultralytics #26667 · Kornia #5776 · conda #16851 · aiohttp #14019 · fsspec #2284 · SHAP #5173 · Hyperswitch #14482 · Anyscale Terraform provider #333 · OpenRig #1147 · openworker #678 · AirLLM #363 · blind-assist #49 · threeui #42.
+
+### Update 16 Oct 2026
+Merged upstream (excluding own repos): 44 across 16 projects. New since 14 Oct: OpenCV #30235, blind-assist #49, Ultralytics #26694 #26682 #26667 (now 14), COLMAP #4860 #4858 #4857 #4851 (now 5), Roboflow Supervision #2734 (now 3).
