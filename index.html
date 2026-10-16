@@ -9,7 +9,7 @@
 <meta name="description" content="Vaishnavi — CSE student at VIT Vellore building across AI/ML, computer vision, full-stack products, and developer tools.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..600&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Playfair+Display:wght@500&family=JetBrains+Mono:wght@400&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..600&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Playfair+Display:wght@500&family=JetBrains+Mono:wght@400&family=Special+Elite&display=swap">
 <style>
   /* Layout: full-bleed black stage — ruled header grid on top, chrome smiley spinning on the right,
      a two-line sans/serif-italic headline anchored bottom-left, meta along the bottom edge. */
@@ -1193,43 +1193,133 @@
   .ach h2 em { font-family: var(--serif); font-style: italic; letter-spacing: -0.02em; }
   .ach-head p { margin: 0; max-width: 44ch; font-size: clamp(17px, 1.3vw, 20px); line-height: 1.65; color: var(--a-body); }
 
-  .deck-pin { position: relative; }
-  .deck-stage { position: relative; }
-  .deck {
-    position: relative;
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: clamp(16px, 2vw, 30px);
-    max-width: 1500px;
-    margin: 0 auto;
-    perspective: 1600px;
+  /* Retro film strip: certificates develop from sepia as they pass the projector gate */
+  .film-pin { position: relative; }
+  .film-stage { position: relative; overflow: hidden; padding-block: 40px; }
+  .projector {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 2;
+    background:
+      radial-gradient(60% 70% at 50% 50%, rgba(255, 236, 200, .16), transparent 70%),
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .55 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    mix-blend-mode: multiply;
+    opacity: .36;
+    animation: flicker 3.2s steps(1) infinite;
   }
-  .cert {
-    --rx: 0deg; --ry: 0deg;
+  @keyframes flicker { 0%, 100% { opacity: .36; } 12% { opacity: .3; } 13% { opacity: .4; } 47% { opacity: .32; } 48% { opacity: .42; } 81% { opacity: .31; } }
+  .film-count { position: absolute; z-index: 3; top: 18px; left: 50%; transform: translateX(-50%); font: 400 13px/1 "Special Elite", "Courier New", monospace; letter-spacing: .2em; color: #5d5a54; }
+  .film-count b { font-weight: 400; color: #121212; }
+  .film {
+    --hole: 14px;
     position: relative;
     display: flex;
-    flex-direction: column;
-    gap: 14px;
-    padding: 12px 12px 18px;
-    border-radius: 18px;
-    background: #fff;
-    box-shadow: 0 1px 2px rgba(0,0,0,.06), 0 28px 60px -34px rgba(0,0,0,.45);
-    transform: translate3d(var(--dx, 0px), var(--dy, 0px), 0) rotate(var(--dr, 0deg)) rotateX(var(--rx)) rotateY(var(--ry));
-    transform-style: preserve-3d;
+    gap: 0;
+    width: max-content;
+    padding: 46px 0;
+    background:
+      radial-gradient(circle, transparent 0) 0 0 / 0 0,
+      #171512;
     will-change: transform;
-    z-index: var(--dz, 1);
+    transform: translate3d(var(--fx, 0px), 0, 0);
   }
-  .cert-img { position: relative; overflow: hidden; border-radius: 10px; aspect-ratio: 4 / 3; background: #f4f3ef; }
-  .cert-img img { width: 100%; height: 100%; object-fit: contain; display: block; }
-  .cert-img::after { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity .4s;
-    background: radial-gradient(380px circle at var(--gx, 50%) var(--gy, 0%), rgba(255,255,255,.55), transparent 55%); }
-  .cert:hover .cert-img::after { opacity: 1; }
-  .cert-info { display: grid; gap: 6px; padding: 0 6px; opacity: var(--ci, 1); transform: translateY(calc((1 - var(--ci, 1)) * 12px)); }
-  .cert-kind { font: 600 11.5px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--a-mute); }
-  .cert h3 { margin: 0; font: 400 clamp(24px, 2vw, 32px)/1.05 var(--serif); letter-spacing: -0.01em; }
-  .cert-meta { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px 14px; font-size: 14.5px; color: var(--a-body); }
-  .cert-meta a { display: inline-flex; align-items: center; gap: 8px; height: 38px; padding: 0 16px; border-radius: 999px; background: var(--a-ink); color: var(--a-bg); font-size: 14px; font-weight: 500; transition: transform .3s; }
-  .cert-meta a:hover { transform: translateY(-2px); }
+  .film::before, .film::after {
+    content: "";
+    position: absolute;
+    left: 0; right: 0;
+    height: 18px;
+    background: repeating-linear-gradient(90deg, transparent 0 14px, #efeee9 14px 30px, transparent 30px 44px);
+    -webkit-mask: linear-gradient(#000, #000);
+    border-radius: 3px;
+  }
+  .film::before { top: 14px; }
+  .film::after { bottom: 14px; }
+  .frame {
+    position: relative;
+    margin: 0;
+    width: min(62vw, 820px);
+    padding: 0 26px;
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+    gap: 26px;
+    align-items: center;
+    border-right: 2px solid #0b0a08;
+  }
+  .frame-mark { position: absolute; top: -40px; left: 26px; right: 26px; display: flex; justify-content: space-between; font: 400 11px/1 "Special Elite", "Courier New", monospace; letter-spacing: .24em; color: #e9a33a; opacity: .85; }
+  .frame-shot {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    border-radius: 6px;
+    overflow: hidden;
+    background: #efe6d2;
+    box-shadow: inset 0 0 0 1px rgba(0,0,0,.4);
+  }
+  .frame-shot img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    filter: sepia(var(--sp, 1)) brightness(var(--br, 1.5)) contrast(var(--ct, .7)) blur(var(--bl, 3px));
+    transform: scale(var(--zs, 1.04));
+  }
+  .frame-shot::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(120% 90% at 50% 50%, transparent 55%, rgba(40, 24, 8, .45));
+  }
+  .stamp {
+    position: absolute;
+    right: 8%;
+    bottom: 10%;
+    z-index: 2;
+    padding: 8px 16px 6px;
+    border: 3px double #b8322a;
+    border-radius: 8px;
+    font: 400 clamp(18px, 2vw, 28px)/1 "Special Elite", "Courier New", monospace;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: #b8322a;
+    background: rgba(239, 230, 210, .35);
+    mix-blend-mode: multiply;
+    transform: rotate(-12deg) scale(var(--ss, 2));
+    opacity: var(--so, 0);
+  }
+  .frame figcaption { display: grid; gap: 12px; color: #efe6d2; }
+  .tw-kind { font: 400 12px/1 "Special Elite", "Courier New", monospace; letter-spacing: .2em; text-transform: uppercase; color: #e9a33a; }
+  .tw { min-height: 2.2em; font: 400 clamp(24px, 2.3vw, 34px)/1.12 "Special Elite", "Courier New", monospace; color: #f6efe0; }
+  .tw::after { content: "▍"; display: inline-block; margin-left: 2px; color: #e9a33a; animation: blink 1s steps(1) infinite; opacity: var(--cur, 1); }
+  @keyframes blink { 50% { opacity: 0; } }
+  .tw-meta { font: 400 14.5px/1.5 var(--sans); color: #b9b0a0; }
+  .ticket {
+    justify-self: start;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 6px;
+    padding: 11px 18px;
+    border: 1px dashed #e9a33a;
+    border-radius: 4px;
+    font: 400 13px/1 "Special Elite", "Courier New", monospace;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: #f6efe0;
+    transition: background .3s, color .3s;
+  }
+  .ticket:hover { background: #e9a33a; color: #171512; }
+
+  @media (min-width: 961px) {
+    .film-pin { height: 260vh; }
+    .film-stage { position: sticky; top: calc(var(--header-h) + env(safe-area-inset-top, 0px)); height: calc(100vh - var(--header-h)); display: flex; align-items: center; }
+  }
+  @media (max-width: 960px) {
+    .film { flex-direction: column; width: auto; margin: 0 max(var(--gutter-x), env(safe-area-inset-left, 0px)); padding: 46px 0; border-radius: 6px; }
+    .frame { width: auto; grid-template-columns: 1fr; padding: 34px 18px; border-right: 0; border-bottom: 2px solid #0b0a08; }
+    .frame-mark { top: 12px; left: 18px; right: 18px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .projector, .tw::after { animation: none; } }
 
   .glance { max-width: 1500px; margin: 0 auto; padding-block: clamp(60px, 7vw, 110px) clamp(90px, 10vw, 150px); }
   .glance-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 14px 24px; margin-bottom: 22px; }
@@ -1243,14 +1333,8 @@
   .glance-grid b { display: block; margin: 12px 0 6px; font-weight: 400; font-size: clamp(2rem, 3.4vw, 3.4rem); line-height: 1; letter-spacing: -0.04em; }
   .glance-grid p { margin: 0; font-size: 15px; line-height: 1.5; color: var(--a-body); }
 
-  @media (min-width: 961px) {
-    .deck-pin { height: 210vh; }
-    .deck-stage { position: sticky; top: calc(var(--header-h) + env(safe-area-inset-top, 0px)); height: calc(100vh - var(--header-h)); display: flex; align-items: center; }
-    .deck { width: 100%; }
-  }
   @media (max-width: 960px) {
     .ach-head { grid-template-columns: 1fr; }
-    .deck { grid-template-columns: 1fr; max-width: 560px; padding-block: 40px 0; }
     .glance-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .glance-grid div:nth-child(3) { border-left: 0; }
     .glance-grid div:nth-child(n+3) { border-top: 1px solid var(--a-line); }
@@ -1686,33 +1770,50 @@
       <p class="reveal">A few certificates from programs and challenges that have shaped my journey so far. Open one to see its verification page.</p>
     </div>
 
-    <div class="deck-pin" id="deck-pin">
-      <div class="deck-stage pad">
-        <div class="deck" id="deck">
-          <article class="cert">
-            <div class="cert-img"><img src="content/assets/achievement-wins-aid.png" alt="WINS-AID AI Hackathon 2026 certificate of participation" loading="lazy" width="1280" height="905"></div>
-            <div class="cert-info">
-              <span class="cert-kind">Hackathon · Top 20 team</span>
-              <h3>WINS-AID AI Hackathon 2026</h3>
-              <div class="cert-meta"><span>British Council · VIT Vellore · 02–03 Sep 2026</span><a href="https://lnkd.in/p/d7Sxt8tw" target="_blank" rel="noopener">Verify <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a></div>
+    <div class="film-pin" id="film-pin">
+      <div class="film-stage" id="film-stage">
+        <div class="projector" aria-hidden="true"></div>
+        <div class="film-count" aria-hidden="true">FRAME <b id="film-n">01</b> / 03</div>
+        <div class="film" id="film">
+          <figure class="frame">
+            <div class="frame-mark" aria-hidden="true"><span>▶ 01A</span><span>SAFETY FILM 400</span></div>
+            <div class="frame-shot">
+              <img src="content/assets/achievement-wins-aid.png" alt="WINS-AID AI Hackathon 2026 certificate of participation" loading="lazy" width="1280" height="905">
+              <span class="stamp" aria-hidden="true">Verified</span>
             </div>
-          </article>
-          <article class="cert">
-            <div class="cert-img"><img src="content/assets/achievement-ibm.png" alt="IBM Advanced Generative AI certificate" loading="lazy" width="1216" height="951"></div>
-            <div class="cert-info">
-              <span class="cert-kind">Professional certificate</span>
-              <h3>Advanced Generative AI</h3>
-              <div class="cert-meta"><span>IBM Career Education Program · 16 Jul 2026</span><a href="https://courses.ibmcep.cognitiveclass.ai/certificates/e6e8e6d0defb451a8b27bf824cebcfda" target="_blank" rel="noopener">Verify <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a></div>
+            <figcaption>
+              <span class="tw-kind">Hackathon · Top 20 team</span>
+              <span class="tw" data-text="WINS-AID AI Hackathon 2026" aria-label="WINS-AID AI Hackathon 2026">WINS-AID AI Hackathon 2026</span>
+              <span class="tw-meta">British Council · VIT Vellore · 02–03 Sep 2026</span>
+              <a class="ticket" href="https://lnkd.in/p/d7Sxt8tw" target="_blank" rel="noopener">Open verification <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a>
+            </figcaption>
+          </figure>
+          <figure class="frame">
+            <div class="frame-mark" aria-hidden="true"><span>▶ 02A</span><span>SAFETY FILM 400</span></div>
+            <div class="frame-shot">
+              <img src="content/assets/achievement-ibm.png" alt="IBM Advanced Generative AI certificate" loading="lazy" width="1216" height="951">
+              <span class="stamp" aria-hidden="true">Verified</span>
             </div>
-          </article>
-          <article class="cert">
-            <div class="cert-img"><img src="content/assets/achievement-adobe.png" alt="Adobe University Hackathon 2026 certificate of participation" loading="lazy" width="877" height="593"></div>
-            <div class="cert-info">
-              <span class="cert-kind">Hackathon participation</span>
-              <h3>Adobe University Hackathon 2026</h3>
-              <div class="cert-meta"><span>Adobe · Unstop · 09 Aug 2026</span><a href="https://unstop.com/certificate-preview/a6807747-82df-43c7-8f64-bfcc3b6952f2" target="_blank" rel="noopener">Verify <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a></div>
+            <figcaption>
+              <span class="tw-kind">Professional certificate</span>
+              <span class="tw" data-text="Advanced Generative AI" aria-label="Advanced Generative AI">Advanced Generative AI</span>
+              <span class="tw-meta">IBM Career Education Program · 16 Jul 2026</span>
+              <a class="ticket" href="https://courses.ibmcep.cognitiveclass.ai/certificates/e6e8e6d0defb451a8b27bf824cebcfda" target="_blank" rel="noopener">Open verification <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a>
+            </figcaption>
+          </figure>
+          <figure class="frame">
+            <div class="frame-mark" aria-hidden="true"><span>▶ 03A</span><span>SAFETY FILM 400</span></div>
+            <div class="frame-shot">
+              <img src="content/assets/achievement-adobe.png" alt="Adobe University Hackathon 2026 certificate of participation" loading="lazy" width="877" height="593">
+              <span class="stamp" aria-hidden="true">Verified</span>
             </div>
-          </article>
+            <figcaption>
+              <span class="tw-kind">Hackathon participation</span>
+              <span class="tw" data-text="Adobe University Hackathon 2026" aria-label="Adobe University Hackathon 2026">Adobe University Hackathon 2026</span>
+              <span class="tw-meta">Adobe · Unstop · 09 Aug 2026</span>
+              <a class="ticket" href="https://unstop.com/certificate-preview/a6807747-82df-43c7-8f64-bfcc3b6952f2" target="_blank" rel="noopener">Open verification <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.4"/></svg></a>
+            </figcaption>
+          </figure>
         </div>
       </div>
     </div>
@@ -2368,7 +2469,7 @@
   })();
 </script>
 <script>
-  // Achievements deck, contact iris, floating smiley, copy, mail draft, local time.
+  // Contact iris, floating smiley, copy, mail draft, local time.
   (function () {
     const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const clamp01 = (v) => Math.min(Math.max(v, 0), 1);
@@ -2377,23 +2478,6 @@
     const wide = window.matchMedia('(min-width: 961px)');
     const header = document.querySelector('.site-header');
     const hh = () => header.getBoundingClientRect().height;
-
-    // Deck: certificates start as a messy stack in the middle and get dealt into a row.
-    const pin = document.getElementById('deck-pin');
-    const cards = Array.from(document.querySelectorAll('#deck .cert'));
-    const PILE = [{ r: -9, x: 1, y: 30 }, { r: 4, x: 0, y: 0 }, { r: 12, x: -1, y: 20 }];
-    const FINAL = [-2.5, 0, 2.5];
-    cards.forEach(function (c) {
-      c.addEventListener('pointermove', function (e) {
-        const r = c.getBoundingClientRect();
-        const x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
-        c.style.setProperty('--ry', ((x - 0.5) * 10).toFixed(2) + 'deg');
-        c.style.setProperty('--rx', ((0.5 - y) * 8).toFixed(2) + 'deg');
-        c.style.setProperty('--gx', (x * 100).toFixed(1) + '%');
-        c.style.setProperty('--gy', (y * 100).toFixed(1) + '%');
-      });
-      c.addEventListener('pointerleave', function () { c.style.setProperty('--rx', '0deg'); c.style.setProperty('--ry', '0deg'); });
-    });
 
     // Contact
     const contact = document.getElementById('contact');
@@ -2409,28 +2493,6 @@
 
     function tick() {
       const vh = window.innerHeight, vw = window.innerWidth;
-
-      cards.forEach(function (c, i) {
-        let q;
-        if (wide.matches) {
-          const run = pin.offsetHeight - (vh - hh());
-          q = run > 0 ? clamp01((hh() - pin.getBoundingClientRect().top) / run) : 1;
-        } else {
-          q = clamp01((vh * 0.95 - c.getBoundingClientRect().top) / (vh * 0.6));
-        }
-        if (still) q = 1;
-        const deal = easeIO(clamp01((q - i * 0.12) / 0.62));
-        const cw = c.offsetWidth + 30;
-        const px = wide.matches ? (1 - i) * cw + PILE[i].x * 18 : 0;  // pile sits on the middle card
-        const dx = px * (1 - deal), dy = (wide.matches ? PILE[i].y : 60) * (1 - deal);
-        const rot = (wide.matches ? PILE[i].r : PILE[i].r * 0.6) * (1 - deal) + FINAL[i] * deal * (wide.matches ? 1 : 0);
-        c.style.setProperty('--dx', dx.toFixed(1) + 'px');
-        c.style.setProperty('--dy', dy.toFixed(1) + 'px');
-        c.style.setProperty('--dr', rot.toFixed(2) + 'deg');
-        c.style.setProperty('--dz', String(deal > 0.5 ? 1 : 3 - i));
-        c.style.setProperty('--ci', clamp01((deal - 0.65) / 0.35).toFixed(3));
-        if (!wide.matches) c.style.opacity = clamp01(q * 1.4).toFixed(3); else c.style.opacity = '';
-      });
 
       // Iris: a dark circle opens from the middle of the section as it rises.
       const ct = contact.getBoundingClientRect();
@@ -2483,5 +2545,62 @@
   })();
 </script>
 
+<script>
+  // Achievements film strip: vertical scroll drives the strip sideways through the
+  // projector gate; the frame in the gate develops, gets stamped, and its title types out.
+  (function () {
+    const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const clamp01 = (v) => Math.min(Math.max(v, 0), 1);
+    const ease = (t) => 1 - Math.pow(1 - t, 3);
+    const wide = window.matchMedia('(min-width: 961px)');
+    const header = document.querySelector('.site-header');
+    const pin = document.getElementById('film-pin');
+    const film = document.getElementById('film');
+    const counter = document.getElementById('film-n');
+    const frames = Array.from(film.querySelectorAll('.frame')).map(function (f) {
+      const tw = f.querySelector('.tw');
+      return { f: f, img: f.querySelector('img'), stamp: f.querySelector('.stamp'), tw: tw, text: tw.dataset.text, shown: -1 };
+    });
+    let last = -1;
+    function tick() {
+      const vw = window.innerWidth, vh = window.innerHeight, y = window.scrollY;
+      if (y !== last) {
+        last = y;
+        if (wide.matches) {
+          const hh = header.getBoundingClientRect().height;
+          const run = pin.offsetHeight - (vh - hh);
+          const q = run > 0 ? clamp01((hh - pin.getBoundingClientRect().top) / run) : 0;
+          const fw = frames[0].f.offsetWidth;
+          const start = vw / 2 - fw / 2, end = vw / 2 - film.scrollWidth + fw / 2;
+          film.style.setProperty('--fx', (start + (end - start) * q).toFixed(1) + 'px');
+        } else {
+          film.style.setProperty('--fx', '0px');
+        }
+        let best = 0, bestD = 9;
+        frames.forEach(function (fr, i) {
+          const r = fr.f.getBoundingClientRect();
+          const off = wide.matches ? Math.abs(r.left + r.width / 2 - vw / 2) / (r.width * 0.75)
+                                   : Math.abs(r.top + r.height / 2 - vh / 2) / (vh * 0.55);
+          const d = still ? 1 : ease(clamp01(1 - off));
+          if (off < bestD) { bestD = off; best = i; }
+          fr.img.style.setProperty('--sp', (1 - d).toFixed(3));
+          fr.img.style.setProperty('--br', (1 + 0.55 * (1 - d)).toFixed(3));
+          fr.img.style.setProperty('--ct', (0.7 + 0.3 * d).toFixed(3));
+          fr.img.style.setProperty('--bl', (3.2 * (1 - d)).toFixed(2) + 'px');
+          fr.img.style.setProperty('--zs', (1.04 - 0.04 * d).toFixed(4));
+          const s = clamp01((d - 0.82) / 0.14);
+          fr.stamp.style.setProperty('--so', s.toFixed(3));
+          fr.stamp.style.setProperty('--ss', (2 - s).toFixed(3));
+          const n = Math.round(fr.text.length * clamp01((d - 0.35) / 0.5));
+          if (n !== fr.shown) { fr.tw.textContent = fr.text.slice(0, n); fr.shown = n; }
+          fr.tw.style.setProperty('--cur', n > 0 && n < fr.text.length ? '1' : (n === 0 ? '.4' : '1'));
+        });
+        counter.textContent = String(best + 1).padStart(2, '0');
+      }
+      requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  })();
+</script>
 </body>
 </html>
